@@ -1,1 +1,0 @@
-# Imgur API PHP Client
