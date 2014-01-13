@@ -38,4 +38,15 @@ interface HttpClientInterface {
      * @return array
      */
     public function performRequest($url, $parameters, $httpMethod = 'GET');    
+    
+    /**
+     * Create the request object
+     * 
+     * @param string $url         URL to which the request should point
+     * @param array  $parameters  Request parameters
+     * @param string $httpMethod  HTTP method to use
+     * 
+     * @return Request object
+     */
+    public function createRequest($url, $parameters, $httpMethod = 'GET');
 }

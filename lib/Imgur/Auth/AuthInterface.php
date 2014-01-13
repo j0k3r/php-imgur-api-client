@@ -19,11 +19,10 @@ interface AuthInterface {
     public function getAuthenticationUrl($responseType = 'code', $state = null);
 
     public function getAccessToken();
-    public function requestAccessToken($code, $responseType);
+    public function requestAccessToken($code, $responseType, $client);
     public function setAccessToken($accessToken);
 
-    public function authenticate($service);
-    public function sign($request);
+    public function sign($httpClient);
 
     public function refreshToken($refreshToken);
     public function revokeToken();

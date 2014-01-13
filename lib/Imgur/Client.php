@@ -4,6 +4,8 @@ namespace Imgur;
 
 require_once __DIR__.'/Auth/AuthInterface.php';
 require_once __DIR__.'/Auth/OAuth2.php';
+require_once __DIR__.'/HttpClient/HttpClientInterface.php';
+require_once __DIR__.'/HttpClient/HttpClient.php';
 
 use Imgur\Auth;
 use Imgur\HttpClient;
@@ -67,6 +69,9 @@ class Client {
      */
     public function api($name) {
         switch ($name) {
+            case 'test':
+                $this->httpClient->get('http://www.google.com');
+                break;
             case 'me':
             case 'current_user':
                 $api = new Api\CurrentUser($this);
@@ -136,7 +141,7 @@ class Client {
      */
     public function getHttpClient() {
         if (null === $this->httpClient) {
-            $this->httpClient = new HttpClient($this->options);
+            $this->httpClient = new \Imgur\HttpClient\HttpClient($this->options);
         }
 
         return $this->httpClient;
@@ -188,7 +193,7 @@ class Client {
      */
     public function getAuthenticationClient() {
         if(empty($this->authenticationClient)) {
-            $this->authenticationClient = new Auth\OAuth2($this->getOption('client_id'));
+            $this->authenticationClient = new Auth\OAuth2($this->getOption('client_id'), $this->getOption('client_secret'));
         }
         
         return $this->authenticationClient;
