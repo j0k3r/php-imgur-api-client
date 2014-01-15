@@ -64,68 +64,40 @@ class Client {
      */
     public function api($name) {
         switch ($name) {
-            case 'test':
-                $this->httpClient->get('http://www.google.com');
+            case 'account':
+                $api = new Api\Account($this);
                 break;
-            case 'me':
-            case 'current_user':
-                $api = new Api\CurrentUser($this);
+            
+            case 'album':
+                $api = new Api\Album($this);
                 break;
-
-            case 'git':
-            case 'git_data':
-                $api = new Api\GitData($this);
+            
+            case 'comment':
+                $api = new Api\Comment($this);
                 break;
-
-            case 'gist':
-            case 'gists':
-                $api = new Api\Gists($this);
+            
+            case 'gallery':
+                $api = new Api\Gallery($this);
                 break;
-
-            case 'issue':
-            case 'issues':
-                $api = new Api\Issue($this);
+            
+            case 'image':
+                $api = new Api\Image($this);
                 break;
-
-            case 'markdown':
-                $api = new Api\Markdown($this);
+            
+            case 'conversation':
+                $api = new Api\Conversation($this);
                 break;
-
-            case 'organization':
-            case 'organizations':
-                $api = new Api\Organization($this);
+            
+            case 'notification':
+                $api = new Api\Notification($this);
                 break;
-
-            case 'pr':
-            case 'pull_request':
-            case 'pull_requests':
-                $api = new Api\PullRequest($this);
+            
+            case 'memegen':
+                $api = new Api\Memegen($this);
                 break;
-
-            case 'repo':
-            case 'repos':
-            case 'repository':
-            case 'repositories':
-                $api = new Api\Repo($this);
-                break;
-
-            case 'team':
-            case 'teams':
-                $api = new Api\Organization\Teams($this);
-                break;
-
-            case 'user':
-            case 'users':
-                $api = new Api\User($this);
-                break;
-
-            case 'authorization':
-            case 'authorizations':
-                $api = new Api\Authorizations($this);
-                break;
-
+            
             default:
-                throw new InvalidArgumentException(sprintf('Undefined api instance called: "%s"', $name));
+                throw new InvalidArgumentException('API Method not supported: '.$name);
         }
 
         return $api;
