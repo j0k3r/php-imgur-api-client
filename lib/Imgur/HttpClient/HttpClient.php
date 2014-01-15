@@ -98,7 +98,7 @@ class HttpClient implements \Imgur\HttpClient\HttpClientInterface {
         $responseBody = $response->getBody(true);
         $responseBody = json_decode($responseBody, true);
         
-        return $response;
+        return $responseBody;
     }
     
     /**
