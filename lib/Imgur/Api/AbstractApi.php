@@ -28,7 +28,7 @@ abstract class AbstractApi {
      * @param string $url
      * @return array
      */
-    public function get($url, $parameters) {
+    public function get($url, $parameters = array()) {
         $httpClient = $this->client->getHttpClient();
         
         $response = $httpClient->get($url, $parameters);
@@ -42,7 +42,7 @@ abstract class AbstractApi {
      * @param string $url
      * @return array
      */
-    public function post($url, $parameters) {
+    public function post($url, $parameters = array()) {
         $httpClient = $this->client->getHttpClient();
         
         $response = $httpClient->post($url, $parameters);
