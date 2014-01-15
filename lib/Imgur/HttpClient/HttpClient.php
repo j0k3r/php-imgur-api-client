@@ -7,6 +7,9 @@ use Guzzle\Http\ClientInterface;
 use Guzzle\Http\Message\Request;
 use Guzzle\Http\Message\Response;
 use Imgur\Exception;
+
+use Imgur\Listener\ErrorListener;
+
 /**
  * Basic client for performing HTTP requests
  *
@@ -38,6 +41,11 @@ class HttpClient implements \Imgur\HttpClient\HttpClientInterface {
     public function __construct(array $options = array()) {
         $this->options = array_merge($options, $this->options);
         $this->client = new GuzzleClient($this->options['base_url']);
+        
+        $this->addListener('request.error', array(
+                            new ErrorListener($this->options), 
+                            'onRequestError')
+                );
     }
     
     /**
@@ -82,12 +90,17 @@ class HttpClient implements \Imgur\HttpClient\HttpClientInterface {
 
         return $this->client->createRequest($httpMethod, $url, $this->options['headers'], $parameters);
     }
-    
-    
-    public function sign($request) {
-        
-    }    
 
+    /**
+     * {@inheritDoc}
+     */
+    public function parseResponse($response) {
+        $responseBody = $response->getBody(true);
+        $responseBody = json_decode($responseBody, true);
+        
+        return $response;
+    }
+    
     /**
      * Attaches a listener to a HttpClient event
      * 

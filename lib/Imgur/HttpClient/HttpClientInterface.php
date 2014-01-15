@@ -49,4 +49,12 @@ interface HttpClientInterface {
      * @return Request object
      */
     public function createRequest($url, $parameters, $httpMethod = 'GET');
+    
+    /**
+     * Parses the Imgur server response
+     * 
+     * @param object $response
+     * @return array
+     */
+    public function parseResponse($response);
 }

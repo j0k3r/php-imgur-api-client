@@ -21,13 +21,8 @@ class Client {
     private $options = array(
         'base_url' => 'https://api.imgur.com/3/',
 
-        'timeout' => 10,
-        
         'client_id' => null,
-        'client_secret' => null,
-        
-        'api_upload_limit' => 1250,
-        'api_call_limit' => 12500
+        'client_secret' => null
     );
 
     /**
