@@ -2,11 +2,6 @@
 
 namespace Imgur;
 
-require_once __DIR__.'/Auth/AuthInterface.php';
-require_once __DIR__.'/Auth/OAuth2.php';
-require_once __DIR__.'/HttpClient/HttpClientInterface.php';
-require_once __DIR__.'/HttpClient/HttpClient.php';
-
 use Imgur\Auth;
 use Imgur\HttpClient;
 
@@ -224,4 +219,16 @@ class Client {
         
         return $authenticationClient->requestAccessToken($code, $responseType, $this->getHttpClient());
     }
+
+    
+    /**
+     * Proxy method for retrieving the access token
+     * 
+     * @return array
+     */
+    public function getAccessToken() {
+        $authenticationClient = $this->getAuthenticationClient();
+        
+        return $authenticationClient->getAccessToken();
+    }    
 }

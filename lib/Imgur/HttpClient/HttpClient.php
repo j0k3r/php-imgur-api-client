@@ -2,10 +2,6 @@
 
 namespace Imgur\HttpClient;
 
-require_once __DIR__.'/HttpClientInterface.php';
-require_once __DIR__.'/../Exception/ExceptionInterface.php';
-require_once __DIR__.'/../Exception/RuntimeException.php';
-
 use Guzzle\Http\Client as GuzzleClient;
 use Guzzle\Http\ClientInterface;
 use Guzzle\Http\Message\Request;
@@ -69,9 +65,9 @@ class HttpClient implements \Imgur\HttpClient\HttpClientInterface {
         try {
             $response = $this->client->send($request);
         } catch (\LogicException $e) {
-            //throw new ErrorException($e->getMessage());
+            throw new ErrorException($e->getMessage());
         } catch (\RuntimeException $e) {
-            //throw new RuntimeException($e->getMessage());
+            throw new RuntimeException($e->getMessage());
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }

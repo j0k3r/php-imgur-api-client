@@ -2,9 +2,6 @@
 
 namespace Imgur\Auth;
 
-require_once __DIR__.'/AuthInterface.php';
-require_once __DIR__.'/../Listener/AuthListener.php';
-
 use Imgur\HttpClient\Listener\AuthListener;
 
 /**
@@ -85,7 +82,7 @@ class OAuth2 implements \Imgur\Auth\AuthInterface {
                                       ));
 
         $responseBody = $response->getBody(true);
-        $responseBody = json_decode($responseBody);
+        $responseBody = json_decode($responseBody, true);
         
         if($response->getStatusCode() == 200) {
             $this->setAccessToken($responseBody);
@@ -103,10 +100,6 @@ class OAuth2 implements \Imgur\Auth\AuthInterface {
         
     }
 
-    public function getAccessToken() {
-        
-    }
-
     public function refreshToken($refreshToken) {
         
     }
@@ -118,26 +111,34 @@ class OAuth2 implements \Imgur\Auth\AuthInterface {
     /**
      * Stores the access token, refresh token and expiration date
      * 
-     * @param string $response
+     * @param array $token
      * @throws AuthException
      * @return array
      */
-    public function setAccessToken($response) {
+    public function setAccessToken($token) {
         $latency = 30; //number of seconds which will be substracted from the token expiration time, to compensate for any request latency before getting a new token
         
-        $token = json_decode($response, true);
-        
         if ($token == null) {
-          //throw new AuthException('Token is not a valid json string.');
+          throw new AuthException('Token is not a valid json string.');
         }
         
         if (! isset($token['access_token'])) {
-          //throw new AuthException('Access token could not be retrieved from the decoded json response.');
+          throw new AuthException('Access token could not be retrieved from the decoded json response.');
         }
-        
+
         $this->token = $token;  
         $this->token['created_at'] = time();
         $this->token['expires_in'] = $this->token['expires_in'] - $latency;
+    }
+
+    /**
+     * Getter for the current access token
+     * 
+     * @return array
+     */
+    public function getAccessToken() {
+        
+        return $this->token;
     }
     
     /**
