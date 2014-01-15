@@ -73,7 +73,7 @@ class HttpClient implements \Imgur\HttpClient\HttpClientInterface {
         try {
             $response = $this->client->send($request);
         } catch (\Imgur\Exception\RuntimeException $e) {
-            throw new Imgur\Exception\ErrorException($e->getMessage());
+            throw new \Imgur\Exception\ErrorException($e->getMessage());
         } catch (\Imgur\Exception\RuntimeException $e) {
             throw new \Imgur\Exception\RuntimeException($e->getMessage());
         } catch (Exception $e) {
