@@ -1,6 +1,7 @@
 {
     "name": "adyg/imgur-api",
     "type": "library",
+    "version": "dev-master",
     "description": "Imgur API v3 client",
     "homepage": "https://bitbucket.org/adrian_ghiuta/php-imgur-api",
     "keywords": ["imgur", "api"],
