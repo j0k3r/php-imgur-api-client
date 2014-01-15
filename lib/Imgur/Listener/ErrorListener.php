@@ -42,13 +42,13 @@ class ErrorListener {
             $applicationTotalCallsAvailable = $response->getHeader('X-RateLimit-ClientRemaining');
             
             if(empty($userAvailableCallsCount) || $userAvailableCallsCount < 1) {
-                throw new Imgur\Exception\RateLimitException('No user credits available. The limit is '.$userTotalCallsAvailable);
+                throw new \Imgur\Exception\RateLimitException('No user credits available. The limit is '.$userTotalCallsAvailable);
             }
             
             if(empty($applicationAvailableCallsCount) || $applicationTotalCallsAvailable < 1) {
                 $applicationTotalCallsResetTime = $response->getHeader('X-RateLimit-UserReset'); // unix epoch
                 $applicationTotalCallsResetTime = date('Y-m-d H:i:s', $applicationTotalCallsResetTime);
-                throw new Imgur\Exception\RateLimitException('No application credits available. The limit is '.$applicationTotalCallsAvailable.' '
+                throw new \Imgur\Exception\RateLimitException('No application credits available. The limit is '.$applicationTotalCallsAvailable.' '
                         . 'and will be reset at '.$applicationTotalCallsResetTime);
             }
 
