@@ -2,7 +2,7 @@
 
 namespace Imgur\Auth;
 
-use Imgur\HttpClient\Listener\AuthListener;
+use Imgur\Listener;
 
 /**
  * Authentication class used for handling OAuth2
@@ -161,7 +161,7 @@ class OAuth2 implements \Imgur\Auth\AuthInterface {
         $token = $this->getAccessToken();
         
         $this->addListener($httpClient, 'request.before_send', array(
-            new AuthListener($token), 'onRequestBeforeSend'
+            new Listener\AuthListener($token), 'onRequestBeforeSend'
         ));        
     }
     

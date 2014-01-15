@@ -1,6 +1,6 @@
 <?php
 
-namespace Imgur\HttpClient\Listener;
+namespace Imgur\Listener;
 
 use Guzzle\Common\Event;
 
