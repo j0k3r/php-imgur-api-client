@@ -49,4 +49,18 @@ abstract class AbstractApi {
         
         return $httpClient->parseResponse($response);
     }
+    
+    /**
+     * Perform a DELETE request and return the parsed response
+     * 
+     * @param string $url
+     * @return array
+     */
+    public function delete($url, $parameters = array()) {
+        $httpClient = $this->client->getHttpClient();
+        
+        $response = $httpClient->delete($url, $parameters);
+        
+        return $httpClient->parseResponse($response);
+    }    
 }

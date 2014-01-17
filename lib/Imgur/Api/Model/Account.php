@@ -2,8 +2,6 @@
 
 namespace Imgur\Api\Model;
 
-use Imgur\Api\AbstractApi;
-
 /**
  * Model for Accounts
  * 
@@ -11,7 +9,7 @@ use Imgur\Api\AbstractApi;
  * @author Adrian Ghiuta <adrian.ghiuta@gmail.com>
  */
 
-class Account extends AbstractApi {
+class Account {
     /**
      * The account id for the username requested.
      * 
@@ -54,8 +52,16 @@ class Account extends AbstractApi {
      */
     private $proExpiration; 
     
-    public function __construct($username) {
-        $accountInfo = $this->get('account/'.$this->username);
+    /**
+     * Build the Account object based on an array
+     * 
+     * @param array $accountInfo
+     * @return \Imgur\Api\Model\Account
+     */
+    public function __construct($accountInfo) {
+        if(!empty($accountInfo['data'])) {
+            $accountInfo = $accountInfo['data'];
+        }
         
         $this->setId($accountInfo['id'])
              ->setUrl($accountInfo['url'])
@@ -70,7 +76,7 @@ class Account extends AbstractApi {
     /**
      * The account id for the username requested.
      * 
-     * @var integer 
+     * @param integer $id
      */    
     public function setId($id) {
         $this->id = $id; 
@@ -91,7 +97,7 @@ class Account extends AbstractApi {
     /**
      * The account username
      * 
-     * @var string
+     * @param string $url
      */    
     public function setUrl($url) {
         $this->url = $url;
@@ -113,7 +119,7 @@ class Account extends AbstractApi {
     /**
      * A basic description the user has filled out
      * 
-     * @var string 
+     * @param string $bio
      */
     public function setBio($bio) {
         $this->bio = $bio;
@@ -134,7 +140,7 @@ class Account extends AbstractApi {
     /**
      * The reputation for the account, in it's numerical format.
      * 
-     * @var float 
+     * @param float $reputation
      */
     public function setReputation($reputation) {
         $this->reputation = $reputation;
@@ -155,7 +161,7 @@ class Account extends AbstractApi {
     /**
      * The epoch time of account creation
      *  
-     * @var integer
+     * @param integer $created
      */
     public function setCreated($created) {
         $this->created = $created;
@@ -176,7 +182,7 @@ class Account extends AbstractApi {
     /**
      * False if not a pro user, their expiration date if they are.
      * 
-     * @var integer|boolean 
+     * @param integer|boolean $proExpiration
      */
     public function setProExpiration($proExpiration) {
         $this->proExpiration = $proExpiration;
