@@ -15,7 +15,7 @@ class Account extends AbstractApi {
     
     public function base($username = 'me') {
         
-        return $this->get('account/'.$username);
+        return new Account($username);
     }
     
 }
