@@ -160,4 +160,10 @@ class Account extends AbstractApi {
         
         return new Model\AccountStatistics($parameters);
     }
+    
+    public function accountGalleryProfile($username = 'me') {
+        $parameters = $this->get('account/'.$username.'/gallery_profile');
+        
+        return new Model\GalleryProfile($parameters);
+    }
 }
