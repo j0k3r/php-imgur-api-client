@@ -52,7 +52,7 @@ class GalleryProfile {
         if(!empty($parameters['trophies'])) {
             $trophies = array();
             foreach($parameters['trophies'] as $trophyData) {
-                $trophies[] = new Model\Trophy($trophyData);
+                $trophies[] = new Trophy($trophyData);
             }
             
             $this->setTrophies($trophies);

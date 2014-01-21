@@ -47,6 +47,8 @@ class Basic {
      */    
     public function setData($data) {
         $this->data = $data;
+        
+        return $this;
     }
 
     /**
@@ -67,6 +69,8 @@ class Basic {
      */    
     public function setSuccess($success) {
         $this->success = $success;
+        
+        return $this;        
     }
     
     /**
@@ -86,6 +90,8 @@ class Basic {
      */    
     public function setStatus($status) {
         $this->status = $status;
+        
+        return $this;        
     }
     
     /**

@@ -116,6 +116,14 @@ class Album {
             $this->setDeletehash($parameters['deletehash']);
         }
         
+        if(!empty($parameters['images'])) {
+            $images = array();
+            foreach($parameters['images'] as $image) {
+                $images[] = new Image($image);
+            }
+            $this->setImages($images);
+        }
+        
         return $this;        
     }
     

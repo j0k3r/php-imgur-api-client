@@ -125,7 +125,6 @@ class Comment {
              ->setAuthor($parameters['author'])
              ->setAuthorId($parameters['author_id'])
              ->setCaption($parameters['caption'])
-             ->setChildren($parameters['children'])
              ->setDatetime($parameters['datetime'])
              ->setDeleted($parameters['deleted'])
              ->setDowns($parameters['downs'])
@@ -135,6 +134,14 @@ class Comment {
              ->setParentId($parameters['parent_id'])
              ->setPoints($parameters['points'])
              ->setUps($parameters['ups']);
+
+        if(!empty($parameters['children'])) {
+            $children = array();
+            foreach($parameters['children'] as $comment) {
+                $children[] = new Comment($comment);
+            }
+            $this->setComments($children);
+        }        
         
         return $this;
     }
