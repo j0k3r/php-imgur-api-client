@@ -67,6 +67,12 @@ class Image extends AbstractApi {
         return new Model\Basic($parameters);
     }
     
+    /**
+     * Favorite an image with the given ID. The user is required to be logged in to favorite the image.
+     * 
+     * @param string $imageIdOrDeleteHash
+     * @return \Imgur\Api\Model\Basic
+     */
     public function favorite($imageIdOrDeleteHash) {
         $parameters = $this->post('image/'.$imageIdOrDeleteHash.'/favorite');
         
