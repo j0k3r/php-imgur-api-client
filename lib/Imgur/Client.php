@@ -232,4 +232,15 @@ class Client {
         
         $authenticationClient->setAccessToken($token, $httpClient);        
     }
+    
+    /**
+     * Proxy method for signing a request
+     * 
+     */
+    public function sign() {
+        $authenticationClient = $this->getAuthenticationClient();
+        $httpClient = $this->getHttpClient();
+        
+        $authenticationClient->sign($httpClient);        
+    }
 }

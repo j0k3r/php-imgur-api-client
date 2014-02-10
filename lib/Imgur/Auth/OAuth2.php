@@ -185,7 +185,7 @@ class OAuth2 implements \Imgur\Auth\AuthInterface {
         $token = $this->getAccessToken();
         
         $this->addListener($httpClient, 'request.before_send', array(
-            new Listener\AuthListener($token), 'onRequestBeforeSend'
+            new Listener\AuthListener($token, $this->clientId), 'onRequestBeforeSend'
         ));        
     }
     
