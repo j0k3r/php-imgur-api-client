@@ -72,15 +72,20 @@ class HttpClient implements \Imgur\HttpClient\HttpClientInterface {
 
         try {
             $response = $this->client->send($request);
-        } catch (\Imgur\Exception\LogicException $e) {
-            throw new \Imgur\Exception\LogicException($e->getMessage());
-        } catch (\Imgur\Exception\RuntimeException $e) {
-            throw new \Imgur\Exception\RuntimeException($e->getMessage());
-        } catch (Exception $e) {
-            throw new Exception($e->getMessage());
-        }
 
-        return $response;        
+            return $response;        
+        } catch (\Imgur\Exception\LogicException $e) {
+            error_log($e->getMessage());
+        } catch (\Imgur\Exception\RuntimeException $e) {
+            error_log($e->getMessage());
+        } catch (\Guzzle\Http\Exception\ClientErrorResponseException $e) {
+            $responseData = $e->getResponse()->json();
+            error_log('Request to: '.$responseData['data']['request'].' failed with: ['.$responseData['status'].']"'.$responseData['data']['error'].'"');
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+        }
+        
+        return false;
     }
     
     /**
@@ -95,8 +100,11 @@ class HttpClient implements \Imgur\HttpClient\HttpClientInterface {
      * {@inheritDoc}
      */
     public function parseResponse($response) {
-        $responseBody = $response->getBody(true);
-        $responseBody = json_decode($responseBody, true);
+        $responseBody = array('data' => array(), 'success' => false);
+        
+        if($response) {
+            $responseBody = json_decode($response->getBody(true), true);
+        }
         
         return $responseBody;
     }

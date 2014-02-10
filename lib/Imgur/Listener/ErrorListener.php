@@ -51,7 +51,12 @@ class ErrorListener {
                 throw new \Imgur\Exception\RateLimitException('No application credits available. The limit is '.$applicationTotalCallsAvailable.' '
                         . 'and will be reset at '.$applicationTotalCallsResetTime);
             }
-
+            
+            $responseData = $response->json();
+            
+            if(!empty($responseData['data']) && !empty($responseData['error'])) {
+                throw new \Imgur\Exception\RateLimitException('Request to: '.$responseData['data']['request'].' failed with: "'.$responseData['data']['error'].'"');
+            }
         }
     }
 }

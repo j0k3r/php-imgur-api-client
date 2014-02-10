@@ -187,7 +187,6 @@ class Client {
         return $authenticationClient->requestAccessToken($code, $responseType, $this->getHttpClient());
     }
 
-    
     /**
      * Proxy method for retrieving the access token
      * 
@@ -198,4 +197,39 @@ class Client {
         
         return $authenticationClient->getAccessToken();
     }    
+
+    /**
+     * Proxy method for checking if the access token expired
+     * 
+     * @return array
+     */    
+    public function checkAccessTokenExpired() {
+        $authenticationClient = $this->getAuthenticationClient();
+        
+        return $authenticationClient->checkAccessTokenExpired();
+    }
+    
+    /**
+     * Proxy method for refreshing an access token
+     * 
+     * return array
+     */
+    public function refreshToken() {
+        $authenticationClient = $this->getAuthenticationClient();
+        $httpClient = $this->getHttpClient();
+        
+        return $authenticationClient->refreshToken($httpClient);        
+    }
+    
+    /**
+     * Proxy method for setting an access token
+     * 
+     * @param array $token
+     */
+    public function setAccessToken($token) {
+        $authenticationClient = $this->getAuthenticationClient();
+        $httpClient = $this->getHttpClient();
+        
+        $authenticationClient->setAccessToken($token, $httpClient);        
+    }
 }

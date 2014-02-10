@@ -20,10 +20,9 @@ interface AuthInterface {
 
     public function getAccessToken();
     public function requestAccessToken($code, $responseType, $client);
-    public function setAccessToken($accessToken);
+    public function setAccessToken($accessToken, $client);
 
     public function sign($httpClient);
 
-    public function refreshToken($refreshToken);
-    public function revokeToken();
+    public function refreshToken($client);
 }
