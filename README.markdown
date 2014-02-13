@@ -6,8 +6,8 @@ Uses [Imgur API v3](https://api.imgur.com/).
 
 ## Requirements
 
-* PHP >= 5.3.2 with [cURL](http://php.net/manual/en/book.curl.php) extension,
-* [Guzzle](https://github.com/guzzle/guzzle) library,
+* PHP >= 5.3.2 with [cURL](http://php.net/manual/en/book.curl.php) extension
+* [Guzzle](https://github.com/guzzle/guzzle) library
 
 ## Composer
 
@@ -60,7 +60,7 @@ else {
 The API calls can be accessed via the $client object
 
 ```php
-    $memes = $client->api('memegen')->defaultMemes();
+$memes = $client->api('memegen')->defaultMemes();
 ```
 
 ## Documentation
