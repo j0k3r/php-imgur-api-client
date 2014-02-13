@@ -24,5 +24,5 @@ interface AuthInterface {
 
     public function sign($httpClient);
 
-    public function refreshToken($client);
+    public function refreshToken($httpClient);
 }

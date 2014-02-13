@@ -30,7 +30,8 @@ class HttpClient implements \Imgur\HttpClient\HttpClientInterface {
      * @var array 
      */
     private $options = array(
-        'headers' => array()
+        'headers' => array(),
+        'body' => array()
     );
     
     /**
@@ -52,7 +53,7 @@ class HttpClient implements \Imgur\HttpClient\HttpClientInterface {
      * {@inheritDoc}
      */    
     public function get($url, array $parameters = array()) {
-        
+
         return $this->performRequest($url, $parameters, 'GET');
     }
     
@@ -92,8 +93,14 @@ class HttpClient implements \Imgur\HttpClient\HttpClientInterface {
      * {@inheritDoc}
      */
     public function createRequest($url, $parameters, $httpMethod = 'GET') {
+        if($httpMethod == 'POST') {
 
-        return $this->client->createRequest($httpMethod, $url, $this->options['headers'], $parameters);
+            return $this->client->createRequest($httpMethod, $url, $this->options['headers'], $parameters);
+        }
+        else {
+
+            return $this->client->createRequest($httpMethod, $url, $this->options['headers'], $this->options['body'], $parameters);
+        }
     }
 
     /**

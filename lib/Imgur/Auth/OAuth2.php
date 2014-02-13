@@ -117,7 +117,7 @@ class OAuth2 implements \Imgur\Auth\AuthInterface {
                                       ));
 
         $responseBody = json_decode($response->getBody(true), true);
-        
+
         if($response->getStatusCode() == 200) {
             $this->setAccessToken($responseBody);
         }
@@ -138,8 +138,6 @@ class OAuth2 implements \Imgur\Auth\AuthInterface {
      * @return array
      */
     public function setAccessToken($token, $httpClient) {
-        $latency = 30; //number of seconds which will be substracted from the token expiration time, to compensate for any request latency before getting a new token
-        
         if ($token == null) {
           throw new AuthException('Token is not a valid json string.');
         }
@@ -149,8 +147,6 @@ class OAuth2 implements \Imgur\Auth\AuthInterface {
         }
 
         $this->token = $token;  
-        $this->token['created_at'] = time();
-        $this->token['expires_in'] = $this->token['expires_in'] - $latency;
         
         $this->sign($httpClient);
     }

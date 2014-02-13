@@ -42,9 +42,9 @@ abstract class AbstractApi {
             $parameters['page'] = $this->pager->getPage();
             $parameters['perPage'] = $this->pager->getResultsPerPage();
         }
-        
-        $response = $httpClient->get($url, $parameters);
-        
+
+        $response = $httpClient->get($url, array('query' => $parameters));
+
         return $httpClient->parseResponse($response);
     }
     
