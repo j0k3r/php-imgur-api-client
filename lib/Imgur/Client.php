@@ -45,7 +45,7 @@ class Client {
      *
      * @param null|HttpClientInterface $httpClient Imgur http client
      */
-    public function __construct(Auth\AuthInterface $authenticationClient = null, HttpClientInterface $httpClient = null) {
+    public function __construct(Auth\AuthInterface $authenticationClient = null, HttpClient\HttpClientInterface $httpClient = null) {
         $this->httpClient = $httpClient;
         $this->authenticationClient = $authenticationClient;
     }  
@@ -112,7 +112,7 @@ class Client {
     /**
      * @param HttpClientInterface $httpClient
      */
-    public function setHttpClient(HttpClientInterface $httpClient) {
+    public function setHttpClient(HttpClient\HttpClientInterface $httpClient) {
         $this->httpClient = $httpClient;
     }
 
@@ -123,8 +123,7 @@ class Client {
      *
      * @throws InvalidArgumentException
      */
-    public function getOption($name)
-    {
+    public function getOption($name) {
         if (!array_key_exists($name, $this->options)) {
             throw new InvalidArgumentException(sprintf('Undefined option called: "%s"', $name));
         }
@@ -137,10 +136,8 @@ class Client {
      * @param mixed  $value
      *
      * @throws InvalidArgumentException
-     * @throws InvalidArgumentException
      */
-    public function setOption($name, $value)
-    {
+    public function setOption($name, $value) {
         if (!array_key_exists($name, $this->options)) {
             throw new InvalidArgumentException(sprintf('Undefined option called: "%s"', $name));
         }
@@ -212,7 +209,7 @@ class Client {
     /**
      * Proxy method for refreshing an access token
      * 
-     * return array
+     * @return array
      */
     public function refreshToken() {
         $authenticationClient = $this->getAuthenticationClient();
