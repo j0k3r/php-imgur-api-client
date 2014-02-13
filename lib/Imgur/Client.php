@@ -8,7 +8,7 @@ use Imgur\HttpClient;
 /**
  * PHP Imgur API wrapper
  * 
- * @author Adrian Ghiuta <ady.ghiuta@gmail.com>
+ * @author Adrian Ghiuta <adrian.ghiuta@gmail.com>
  * 
  * Website: https://bitbucket.org/adrian_ghiuta/php-imgur-api
  */
@@ -52,43 +52,44 @@ class Client {
 
     /**
      * @param string $name
-     *
+     * @param Imgur\Pager\PagerInterface $pager
+     * 
      * @return ApiInterface
      *
      * @throws InvalidArgumentException
      */
-    public function api($name) {
+    public function api($name, $pager = null) {
         switch ($name) {
             case 'account':
-                $api = new Api\Account($this);
+                $api = new Api\Account($this, $pager);
                 break;
             
             case 'album':
-                $api = new Api\Album($this);
+                $api = new Api\Album($this, $pager);
                 break;
             
             case 'comment':
-                $api = new Api\Comment($this);
+                $api = new Api\Comment($this, $pager);
                 break;
             
             case 'gallery':
-                $api = new Api\Gallery($this);
+                $api = new Api\Gallery($this, $pager);
                 break;
             
             case 'image':
-                $api = new Api\Image($this);
+                $api = new Api\Image($this, $pager);
                 break;
             
             case 'conversation':
-                $api = new Api\Conversation($this);
+                $api = new Api\Conversation($this, $pager);
                 break;
             
             case 'notification':
-                $api = new Api\Notification($this);
+                $api = new Api\Notification($this, $pager);
                 break;
             
             case 'memegen':
-                $api = new Api\Memegen($this);
+                $api = new Api\Memegen($this, $pager);
                 break;
             
             default:

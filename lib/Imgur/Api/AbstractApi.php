@@ -18,8 +18,15 @@ abstract class AbstractApi {
      */
     private $client;
     
-    public function __construct($client) {
+    /**
+     *
+     * @var Imgur\Pager\PagerInterface 
+     */
+    private $pager;
+    
+    public function __construct($client, $pager) {
         $this->client = $client;
+        $this->pager = $pager;
     }
     
     /**
@@ -30,6 +37,11 @@ abstract class AbstractApi {
      */
     public function get($url, $parameters = array()) {
         $httpClient = $this->client->getHttpClient();
+        
+        if(!empty($this->pager)) {
+            $parameters['page'] = $this->pager->getPage();
+            $parameters['perPage'] = $this->pager->getResultsPerPage();
+        }
         
         $response = $httpClient->get($url, $parameters);
         
