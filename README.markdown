@@ -1,4 +1,4 @@
-# PHP Imgur API
+# PHP Imgur API Client
 
 A simple Object Oriented PHP wrapper for the Imgur API.
 
@@ -20,9 +20,9 @@ $ curl -s http://getcomposer.org/installer | php
 Add the library details to your composer.json
 
 ```json
-    "require": {
-        "adyg/imgur-api": "dev-master"
-    }
+"require": {
+    "adyg/imgur-api-client": "dev-master"
+}
 ```
 
 Install the dependency with

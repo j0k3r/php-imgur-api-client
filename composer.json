@@ -1,5 +1,5 @@
 {
-    "name": "adyg/imgur-api",
+    "name": "adyg/imgur-api-client",
     "type": "library",
     "version": "dev-master",
     "description": "Imgur API v3 client",
