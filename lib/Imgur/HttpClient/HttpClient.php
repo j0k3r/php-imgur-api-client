@@ -101,7 +101,7 @@ class HttpClient implements \Imgur\HttpClient\HttpClientInterface {
      * {@inheritDoc}
      */
     public function createRequest($url, $parameters, $httpMethod = 'GET') {
-        if($httpMethod == 'POST') {
+        if($httpMethod == 'POST' || $httpMethod == 'DELETE') {
 
             return $this->client->createRequest($httpMethod, $url, $this->options['headers'], $parameters);
         }

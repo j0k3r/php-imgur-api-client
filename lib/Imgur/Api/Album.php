@@ -119,7 +119,7 @@ class Album extends AbstractApi {
      * @return \Imgur\Api\Model\Basic
      */
     public function setAlbumImages($albumId, $imageIds) {
-        $parameters = $this->post('album/'.$albumId, array('ids' => $imageIds));
+        $parameters = $this->post('album/'.$albumId, array('ids' => implode(',', $imageIds)));
         
         return new Model\Basic($parameters);
     }
@@ -133,7 +133,7 @@ class Album extends AbstractApi {
      * @return \Imgur\Api\Model\Basic
      */
     public function addImages($albumId, $imageIds) {
-        $parameters = $this->post('album/'.$albumId.'/add', array('ids' => $imageIds));
+        $parameters = $this->post('album/'.$albumId.'/add', array('ids' => implode(',', $imageIds)));
         
         return new Model\Basic($parameters);
     }
@@ -147,7 +147,7 @@ class Album extends AbstractApi {
      * @return \Imgur\Api\Model\Basic
      */
     public function removeImages($deletehashOrAlbumId, $imageIds) {
-        $parameters = $this->delete('album/'.$deletehashOrAlbumId.'/remove_images', array('ids' => $imageIds));
+        $parameters = $this->delete('album/'.$deletehashOrAlbumId.'/remove_images', array('ids' => implode(',', $imageIds)));
         
         return new Model\Basic($parameters);
     }
