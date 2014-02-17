@@ -77,7 +77,7 @@ class Gallery extends AbstractApi {
      * @param string $imageId
      * @return \Imgur\Api\Model\Image
      */
-    public function subredditImages($subreddit, $imageId) {
+    public function subredditImage($subreddit, $imageId) {
         $parameters = $this->get('gallery/r/'.$subreddit.'/'.$imageId);
         
         return new Model\Image($parameters);
@@ -91,7 +91,7 @@ class Gallery extends AbstractApi {
      * @param integer $page
      * @return \Imgur\Api\Model\GalleryImage or \Imgur\Api\Model\GalleryAlbum | array
      */
-    public function search($query, $sort = 'viral', $page = 0) {
+    public function search($query, $sort = 'time', $page = 0) {
         $parameters = $this->get('gallery/search/'.$sort.'/'.$page, array('q' => $query));
 
         return $this->createAlbumOrImageObjects($parameters);              
