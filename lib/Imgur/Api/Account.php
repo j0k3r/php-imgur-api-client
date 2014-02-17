@@ -43,7 +43,7 @@ class Account extends AbstractApi {
      * @param string $username
      * @return \Imgur\Api\Model\Basic
      */
-    public function delete($username) {
+    public function deleteAccount($username) {
         $parameters = $this->delete('account/'.$username);
         
         return new Model\Basic($parameters);
@@ -144,7 +144,7 @@ class Account extends AbstractApi {
             'accepted_gallery_terms' => var_export($account->getAcceptedGalleryTerms(), true)
         );
         
-        $response = $this->post('account/'.$username.'/submissions', $parameters);    
+        $response = $this->post('account/me/settings', $parameters);    
         
         return new Model\Basic($response);
     }
@@ -348,11 +348,10 @@ class Account extends AbstractApi {
      * You can page through the images by setting the page, this defaults to 0.
      * 
      * @param string $username
-     * @param integer $page
      * @return \Imgur\Api\Model\Image
      */
-    public function images($username = 'me', $page = 0) {
-        $parameters = $this->get('account/'.$username.'/images/'.$page);
+    public function images($username = 'me') {
+        $parameters = $this->get('account/'.$username.'/images');
         
         $images = array();
         

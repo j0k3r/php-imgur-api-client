@@ -56,6 +56,14 @@ class HttpClient implements \Imgur\HttpClient\HttpClientInterface {
 
         return $this->performRequest($url, $parameters, 'GET');
     }
+
+    /**
+     * {@inheritDoc}
+     */    
+    public function delete($url, array $parameters = array()) {
+
+        return $this->performRequest($url, $parameters, 'DELETE');
+    }    
     
     /**
      * {@inheritDoc}

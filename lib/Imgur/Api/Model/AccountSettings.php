@@ -74,6 +74,13 @@ class AccountSettings {
     private $blockedUsers;
 
     /**
+     * The biography of the user, is displayed in the gallery profile page.
+     * 
+     * @var string 
+     */
+    private $bio;
+    
+    /**
      * Build the AccountSettings object based on an array
      * 
      * @param array $parameters
@@ -97,6 +104,27 @@ class AccountSettings {
         return $this;
     }
 
+    /**
+     * The biography of the user, is displayed in the gallery profile page.
+     * 
+     * @return string
+     */
+    public function getBio() {
+        
+        return $this->bio;
+    }
+    
+    /**
+     * The biography of the user, is displayed in the gallery profile page.
+     * 
+     * @param string $bio
+     * @return \Imgur\Api\Model\AccountSettings
+     */
+    public function setBio($bio) {
+        $this->bio = $bio;
+        
+        return $this;
+    }
     /**
      * The user's email address
      * 

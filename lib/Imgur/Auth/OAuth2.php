@@ -84,6 +84,7 @@ class OAuth2 implements \Imgur\Auth\AuthInterface {
         $responseBody = json_decode($response->getBody(true), true);
         
         if($response->getStatusCode() == 200) {
+            $responseBody['created_at'] = time();
             $this->setAccessToken($responseBody, $httpClient);
         }
         else {
@@ -113,13 +114,13 @@ class OAuth2 implements \Imgur\Auth\AuthInterface {
                                           'refresh_token' => $token['refresh_token'],
                                           'client_id' => $this->clientId,
                                           'client_secret' => $this->clientSecret,
-                                          'grant_type' => 'authorization_code'
+                                          'grant_type' => 'refresh_token'
                                       ));
 
         $responseBody = json_decode($response->getBody(true), true);
 
         if($response->getStatusCode() == 200) {
-            $this->setAccessToken($responseBody);
+            $this->setAccessToken($responseBody, $httpClient);
         }
         else {
             throw new AuthException('Request for refresh access token failed. '.$responseBody['error'], $response->getStatusCode());

@@ -29,6 +29,16 @@ interface HttpClientInterface {
     public function post($url, array $parameters = array());
 
     /**
+     * Perform a DELETE request
+     *
+     * @param string $url         URL to which the request should point
+     * @param array  $parameters  Request parameters
+     *
+     * @return array 
+     */
+    public function delete($url, array $parameters = array());    
+    
+    /**
      * Perform the actual request
      *
      * @param string $url         URL to which the request should point
