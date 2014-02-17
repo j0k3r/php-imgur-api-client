@@ -92,7 +92,7 @@ class Album extends AbstractApi {
      * @param string $deletehashOrAlbumId
      * @return \Imgur\Api\Model\Basic
      */
-    public function delete($deletehashOrAlbumId) {
+    public function deleteAlbum($deletehashOrAlbumId) {
         $parameters = $this->delete('album/'.$deletehashOrAlbumId);
         
         return new Model\Basic($parameters);
