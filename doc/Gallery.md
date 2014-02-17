@@ -100,6 +100,7 @@ $comments = $api->client('gallery')->comment($imageOrAlbumId, $commentId);
 
 #### Album/Image Comment Creation
 ```php
+<?php
 $commentData = array(
                 'comment' => 'Lorem Ipsum Dolor Sit Amet'
             );
@@ -108,10 +109,12 @@ $basic = $api->client('gallery')->createComment($imageOrAlbumId, $commentData);
 
 #### Album/Image Comment IDs
 ```php
+<?php
 $commentIds = $api->client('gallery')->commentIds($imageOrAlbumId);
 ```
 
 #### Album/Image Comment Count
 ```php
+<?php
 $commentCount = $api->client('gallery')->commentCount($imageOrAlbumId);
 ```
