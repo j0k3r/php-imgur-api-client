@@ -5,6 +5,7 @@ Link: [Imgur Album API](https://api.imgur.com/endpoints/album).
 
 #### Album info
 ```php
+<?php
 $album = $client->api('album')->album($albumId);
 ```
 
