@@ -43,7 +43,7 @@ class Comment extends AbstractApi {
      * @param string $commentId
      * @return \Imgur\Api\Model\Basic
      */
-    public function delete($commentId) {
+    public function deleteComment($commentId) {
         $parameters = $this->delete('comment/'.$commentId);
         
         return new Model\Basic($parameters);
