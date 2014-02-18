@@ -65,7 +65,7 @@ $memes = $client->api('memegen')->defaultMemes();
 
 ### Uploading an image
 
-Check the [Image documentation](doc/Image.md) in the [doc](doc) folder.
+Check the Image documentation in the doc/ folder.
 
 ## Documentation
 
