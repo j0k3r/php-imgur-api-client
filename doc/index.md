@@ -9,3 +9,4 @@ Navigation
 * [Image](Image.md)
 * [Memegen](Memegen.md)
 * [Notification](Notification.md)
+* [Pagination](Pagination.md)
