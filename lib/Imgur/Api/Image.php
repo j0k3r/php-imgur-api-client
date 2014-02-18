@@ -21,6 +21,10 @@ class Image extends AbstractApi {
      * @return \Imgur\Api\Model\Basic
      */
     public function upload($data) {
+        if($data['type'] == 'file') {
+            $data['image'] = '@'.$data['image'];
+        }
+        
         $parameters = $this->post('image', $data);
         
         return new Model\Basic($parameters);
@@ -45,7 +49,7 @@ class Image extends AbstractApi {
      * @param string $imageIdOrDeleteHash
      * @return \Imgur\Api\Model\Basic
      */
-    public function delete($imageIdOrDeleteHash) {
+    public function deleteImage($imageIdOrDeleteHash) {
         $parameters = $this->delete('image/'.$imageIdOrDeleteHash);
         
         return new Model\Basic($parameters);        
