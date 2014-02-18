@@ -59,8 +59,9 @@ class Client {
      * @throws InvalidArgumentException
      */
     public function api($name, $pager = null) {
-        $this->authenticationClient = $authenticationClient;
-        $this->sign();
+        if(!$this->getAccessToken()) {
+            $this->sign();
+        }
         
         switch ($name) {
             case 'account':

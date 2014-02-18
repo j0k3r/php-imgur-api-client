@@ -19,6 +19,7 @@ $basic = $client->api('image')->upload($imageData);
     
 ##### OR
 
+
 ```php
 <?php
 $imageData = array(
@@ -34,6 +35,7 @@ $basic = $client->api('image')->upload($imageData);
     
 ##### OR
 
+
 ```php
 <?php
 $imageData = array(
@@ -47,3 +49,33 @@ $imageData = array(
 $basic = $client->api('image')->upload($imageData);
 ```
     
+#### Image
+
+```php
+<?php
+$image = $client->api('image')->image($imageId);
+```
+    
+#### Image Deletion
+
+```php
+<?php
+$basic = $client->api('image')->deleteImage($imageIdOrDeleteHash);
+```
+    
+#### Update Image Information
+
+```php
+<?php
+$imageInfo = array(
+    'title' => 'Lorem Ipsum',
+    'description' => 'Lorem Ipsum Dolor Sit Amet'
+);
+$basic = $client->api('image')->update($imageIdOrDeleteHash, $imageInfo);
+```
+    
+#### Favorite image
+
+```php
+$basic = $client->api('image')->favorite($imageIdOrDeleteHash);
+```
