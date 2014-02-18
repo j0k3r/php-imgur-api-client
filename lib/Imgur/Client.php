@@ -10,7 +10,7 @@ use Imgur\HttpClient;
  * 
  * @author Adrian Ghiuta <adrian.ghiuta@gmail.com>
  * 
- * Website: https://bitbucket.org/adrian_ghiuta/php-imgur-api
+ * Website: https://github.com/Adyg/php-imgur-api-client
  */
 
 class Client {
