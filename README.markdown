@@ -48,7 +48,7 @@ if (isset($_SESSION['token'])) {
       $client->refreshToken();
   }
 }
-elseif (isset($_GET['code']))
+elseif (isset($_GET['code'])) {
       $client->requestAccessToken($_GET['code']);
       $_SESSION['token'] = $client->getAccessToken();
 }
@@ -62,6 +62,10 @@ The API calls can be accessed via the $client object
 <?php
 $memes = $client->api('memegen')->defaultMemes();
 ```
+
+### Uploading an image
+
+Check the [Image documentation](doc/Image.md) in the [doc](doc) folder.
 
 ## Documentation
 
