@@ -52,7 +52,7 @@ class Conversation extends AbstractApi {
      * @link https://api.imgur.com/endpoints/conversation#message-create
      * @return \Imgur\Api\Model\Basic
      */
-    public function messageCreation($parameters) {
+    public function messageCreate($parameters) {
         $parameters = $this->post('conversations/'.$parameters['recipient'], $parameters);
         
         return new Model\Basic($parameters);
@@ -64,7 +64,7 @@ class Conversation extends AbstractApi {
      * @param string $conversationId
      * @return \Imgur\Api\Model\Basic
      */
-    public function conversationDeletion($conversationId) {
+    public function conversationDelete($conversationId) {
         $parameters = $this->delete('conversations/'.$conversationId);
         
         return new Model\Basic($parameters);
