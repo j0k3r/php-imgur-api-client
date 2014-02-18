@@ -1,9 +1,8 @@
 {
-    "name": "adyg/imgur-api-client",
+    "name": "adyg/php-imgur-api-client",
     "type": "library",
-    "version": "dev-master",
     "description": "Imgur API v3 client",
-    "homepage": "https://bitbucket.org/adrian_ghiuta/php-imgur-api",
+    "homepage": "https://github.com/Adyg/php-imgur-api-client",
     "keywords": ["imgur", "api"],
     "license": "MIT",
     "authors": [

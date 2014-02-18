@@ -21,7 +21,7 @@ Add the library details to your composer.json
 
 ```json
 "require": {
-    "adyg/imgur-api-client": "dev-master"
+    "adyg/php-imgur-api-client": "dev-master"
 }
 ```
 
