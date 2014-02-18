@@ -77,5 +77,6 @@ $basic = $client->api('image')->update($imageIdOrDeleteHash, $imageInfo);
 #### Favorite image
 
 ```php
+<?php
 $basic = $client->api('image')->favorite($imageIdOrDeleteHash);
 ```
