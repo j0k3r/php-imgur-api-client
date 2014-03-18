@@ -4,6 +4,8 @@ Object Oriented PHP wrapper for the Imgur API.
 
 Uses [Imgur API v3](https://api.imgur.com/).
 
+Please use the Issues section if you encounter any difficulties.
+
 ## Requirements
 
 * PHP >= 5.3.2 with [cURL](http://php.net/manual/en/book.curl.php) extension
