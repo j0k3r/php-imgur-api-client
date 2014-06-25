@@ -3,6 +3,7 @@
 namespace Imgur\Auth;
 
 use Imgur\Listener;
+use Imgur\Exception\AuthException;
 
 /**
  * Authentication class used for handling OAuth2
