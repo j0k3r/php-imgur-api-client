@@ -144,6 +144,11 @@ class OAuth2 implements \Imgur\Auth\AuthInterface {
           throw new AuthException('Token is not a valid json string.');
         }
         
+        if ( isset($token['data']['access_token'])) {
+          $token = $token['data'];
+        }
+
+        
         if (! isset($token['access_token'])) {
           throw new AuthException('Access token could not be retrieved from the decoded json response.');
         }
