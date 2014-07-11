@@ -3,6 +3,7 @@
 namespace Imgur\Auth;
 
 use Imgur\Listener;
+use Imgur\Exception\AuthException;
 
 /**
  * Authentication class used for handling OAuth2
@@ -142,6 +143,11 @@ class OAuth2 implements \Imgur\Auth\AuthInterface {
         if ($token == null) {
           throw new AuthException('Token is not a valid json string.');
         }
+        
+        if ( isset($token['data']['access_token'])) {
+          $token = $token['data'];
+        }
+
         
         if (! isset($token['access_token'])) {
           throw new AuthException('Access token could not be retrieved from the decoded json response.');
