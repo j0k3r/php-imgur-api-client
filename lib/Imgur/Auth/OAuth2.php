@@ -74,12 +74,26 @@ class OAuth2 implements \Imgur\Auth\AuthInterface {
      * @return string
      */
     public function requestAccessToken($code, $requestType, $httpClient) {
+        switch ($requestType) {
+            case 'code':
+                $grantType = 'authorization_code';
+                $type = 'code';
+                break;
+            case 'pin':
+                $grantType = 'pin';
+                $type = 'pin';
+                break;
+            default:
+                $grantType = 'authorization_code';
+                $type = 'code';
+                break;
+        }
         $response = $httpClient->post(self::ACCESS_TOKEN_ENDPOINT, 
                                       array(
                                           'client_id' => $this->clientId,
                                           'client_secret' => $this->clientSecret,
-                                          'grant_type' => 'authorization_code',
-                                          'code' => $code
+                                          'grant_type' => $grantType,
+                                          $type => $code
                                       ));
 
         $responseBody = json_decode($response->getBody(true), true);
