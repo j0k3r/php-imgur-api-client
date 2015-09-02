@@ -110,6 +110,62 @@ class Image
     private $link;
 
     /**
+     * OPTIONAL, the original filename, if you're logged in as the image owner.
+     *
+     * @var string
+     */
+    private $name;
+
+    /**
+     * OPTIONAL, The .gifv link. Only available if the image is animated and type is 'image/gif'.
+     *
+     * @var string
+     */
+    private $gifv;
+
+    /**
+     * OPTIONAL, The direct link to the .mp4. Only available if the image is animated and type is 'image/gif'.
+     *
+     * @var string
+     */
+    private $mp4;
+
+    /**
+     * OPTIONAL, The direct link to the .webm. Only available if the image is animated and type is 'image/gif'.
+     *
+     * @var string
+     */
+    private $webm;
+
+    /**
+     * OPTIONAL, Whether the image has a looping animation. Only available if the image is animated and type is 'image/gif'.
+     *
+     * @var bool
+     */
+    private $looping;
+
+    /**
+     * Indicates if the current user favorited the image. Defaults to false if not signed in.
+     *
+     * @var bool
+     */
+    private $favorite;
+
+    /**
+     * Indicates if the image has been marked as nsfw or not. Defaults to null if information is not available.
+     *
+     * @var bool
+     */
+    private $nsfw;
+
+    /**
+     * The current user's vote on the album. null if not signed in, if the user hasn't voted on it, or if not submitted to the gallery.
+     *
+     * @var string
+     */
+    private $vote;
+
+    /**
      * Build the Image object based on an array.
      *
      * @param array $parameters
@@ -134,7 +190,15 @@ class Image
              ->setViews($parameters['views'])
              ->setBandwidth($parameters['bandwidth'])
              ->setSection($parameters['section'])
-             ->setLink($parameters['link']);
+             ->setLink($parameters['link'])
+             ->setName($parameters['name'])
+             ->setGifv($parameters['gifv'])
+             ->setMp4($parameters['mp4'])
+             ->setWebm($parameters['webm'])
+             ->setLooping($parameters['looping'])
+             ->setFavorite($parameters['favorite'])
+             ->setNsfw($parameters['nsfw'])
+             ->setVote($parameters['vote']);
 
         if (!empty($parameters['deletehash'])) {
             $this->setDeletehash($parameters['deletehash']);
@@ -449,5 +513,181 @@ class Image
     public function getLink()
     {
         return $this->link;
+    }
+
+    /**
+     * OPTIONAL, the original filename, if you're logged in as the image owner.
+     *
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * OPTIONAL, the original filename, if you're logged in as the image owner.
+     *
+     * @return string $name
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * OPTIONAL, The .gifv link. Only available if the image is animated and type is 'image/gif'.
+     *
+     * @param string $gifv
+     */
+    public function setGifv($gifv)
+    {
+        $this->gifv = $gifv;
+
+        return $this;
+    }
+
+    /**
+     * OPTIONAL, The .gifv link. Only available if the image is animated and type is 'image/gif'.
+     *
+     * @return string $gifv
+     */
+    public function getGifv()
+    {
+        return $this->gifv;
+    }
+
+    /**
+     * OPTIONAL, The direct link to the .mp4. Only available if the image is animated and type is 'image/gif'.
+     *
+     * @param string $mp4
+     */
+    public function setMp4($mp4)
+    {
+        $this->mp4 = $mp4;
+
+        return $this;
+    }
+
+    /**
+     * OPTIONAL, The direct link to the .mp4. Only available if the image is animated and type is 'image/gif'.
+     *
+     * @return string $mp4
+     */
+    public function getMp4()
+    {
+        return $this->mp4;
+    }
+
+    /**
+     * OPTIONAL, The direct link to the .webm. Only available if the image is animated and type is 'image/gif'.
+     *
+     * @param string $webm
+     */
+    public function setWebm($webm)
+    {
+        $this->webm = $webm;
+
+        return $this;
+    }
+
+    /**
+     * OPTIONAL, The direct link to the .webm. Only available if the image is animated and type is 'image/gif'.
+     *
+     * @return string $webm
+     */
+    public function getWebm()
+    {
+        return $this->webm;
+    }
+
+    /**
+     * OPTIONAL, Whether the image has a looping animation. Only available if the image is animated and type is 'image/gif'.
+     *
+     * @param bool $looping
+     */
+    public function setLooping($looping)
+    {
+        $this->looping = $looping;
+
+        return $this;
+    }
+
+    /**
+     * OPTIONAL, Whether the image has a looping animation. Only available if the image is animated and type is 'image/gif'.
+     *
+     * @return bool $looping
+     */
+    public function getLooping()
+    {
+        return $this->looping;
+    }
+
+    /**
+     * Indicates if the current user favorited the image. Defaults to false if not signed in.
+     *
+     * @param bool $favorite
+     */
+    public function setFavorite($favorite)
+    {
+        $this->favorite = $favorite;
+
+        return $this;
+    }
+
+    /**
+     * Indicates if the current user favorited the image. Defaults to false if not signed in.
+     *
+     * @return bool $favorite
+     */
+    public function getFavorite()
+    {
+        return $this->favorite;
+    }
+
+    /**
+     * Indicates if the image has been marked as nsfw or not. Defaults to null if information is not available.
+     *
+     * @param bool $nsfw
+     */
+    public function setNsfw($nsfw)
+    {
+        $this->nsfw = $nsfw;
+
+        return $this;
+    }
+
+    /**
+     * Indicates if the image has been marked as nsfw or not. Defaults to null if information is not available.
+     *
+     * @return bool $nsfw
+     */
+    public function getNsfw()
+    {
+        return $this->nsfw;
+    }
+
+    /**
+     * The current user's vote on the album. null if not signed in, if the user hasn't voted on it, or if not submitted to the gallery.
+     *
+     * @param string $vote
+     */
+    public function setVote($vote)
+    {
+        $this->vote = $vote;
+
+        return $this;
+    }
+
+    /**
+     * The current user's vote on the album. null if not signed in, if the user hasn't voted on it, or if not submitted to the gallery.
+     *
+     * @return string $vote
+     */
+    public function getVote()
+    {
+        return $this->vote;
     }
 }
