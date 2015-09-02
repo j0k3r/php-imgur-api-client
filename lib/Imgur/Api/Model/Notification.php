@@ -3,132 +3,145 @@
 namespace Imgur\Api\Model;
 
 /**
- * Model for Notification
- * 
+ * Model for Notification.
+ *
  * @link https://api.imgur.com/models/notification
+ *
  * @author Adrian Ghiuta <adrian.ghiuta@gmail.com>
  */
-
-class Notification {
-    
+class Notification
+{
     /**
-     * The ID for the notification
+     * The ID for the notification.
+     *
      * @var string
      */
     private $id;
-    
+
     /**
-     * The Account ID for the notification
-     * @var integer
+     * The Account ID for the notification.
+     *
+     * @var int
      */
     private $accountId;
-    
+
     /**
      * Has the user viewed the image yet?
-     * @var boolean
+     *
+     * @var bool
      */
     private $viewed;
-    
+
     /**
-     * This can be any other model, currently only using comments and messages
-     * @var mixed 
+     * This can be any other model, currently only using comments and messages.
+     *
+     * @var mixed
      */
     private $content;
-    
-    public function __construct($parameters, $content) {
+
+    public function __construct($parameters, $content)
+    {
         $this->setId($parameters['id'])
              ->setAccountId($parameters['account_id'])
              ->setViewed($parameters['viewed'])
              ->setContent($content);
-        
+
         return $this;
     }
-    
+
     /**
-     * The ID for the notification
-     * 
+     * The ID for the notification.
+     *
      * @return string
      */
-    public function getId() {
-        
+    public function getId()
+    {
         return $this->id;
     }
 
     /**
-     * The ID for the notification 
-     * 
+     * The ID for the notification.
+     *
      * @param string $id
+     *
      * @return \Imgur\Api\Model\Notification
      */
-    public function setId($id) {
+    public function setId($id)
+    {
         $this->id = $id;
-        
+
         return $this;
     }
 
     /**
-     * The Account ID for the notification
-     * 
-     * @return integer
+     * The Account ID for the notification.
+     *
+     * @return int
      */
-    public function getAccountId() {
-        
+    public function getAccountId()
+    {
         return $this->accountId;
     }
 
     /**
-     * The Account ID for the notification
-     *  
+     * The Account ID for the notification.
+     *
      * @param type $accountId
+     *
      * @return \Imgur\Api\Model\Notification
      */
-    public function setAccountId($accountId) {
+    public function setAccountId($accountId)
+    {
         $this->accountId = $accountId;
-        
-        return $this;        
+
+        return $this;
     }
 
     /**
      * Has the user viewed the image yet?
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
-    public function getViewed() {
-        
+    public function getViewed()
+    {
         return $this->viewed;
     }
 
     /**
      * Has the user viewed the image yet?
-     * 
-     * @param boolean $viewed
+     *
+     * @param bool $viewed
+     *
      * @return \Imgur\Api\Model\Notification
      */
-    public function setViewed($viewed) {
+    public function setViewed($viewed)
+    {
         $this->viewed = $viewed;
 
-        return $this;        
+        return $this;
     }
-    
+
     /**
-     * This can be any other model, currently only using comments and messages
-     * 
+     * This can be any other model, currently only using comments and messages.
+     *
      * @return mixed
      */
-    public function getContent() {
-        
+    public function getContent()
+    {
         return $this->content;
     }
 
     /**
-     * This can be any other model, currently only using comments and messages
-     * 
+     * This can be any other model, currently only using comments and messages.
+     *
      * @param mixed $content
+     *
      * @return \Imgur\Api\Model\Notification
      */
-    public function setContent($content) {
+    public function setContent($content)
+    {
         $this->content = $content;
-        
-        return $this;        
-    }    
+
+        return $this;
+    }
 }

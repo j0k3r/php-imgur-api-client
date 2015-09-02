@@ -3,67 +3,76 @@
 namespace Imgur\Api\Model;
 
 /**
- * Model for Message
- * 
+ * Model for Message.
+ *
  * @link https://api.imgur.com/models/message
+ *
  * @author Adrian Ghiuta <adrian.ghiuta@gmail.com>
  */
-
-class Message {
+class Message
+{
     /**
-     * The ID for the message
-     * 
-     * @var string 
+     * The ID for the message.
+     *
+     * @var string
      */
     private $id;
-    
+
     /**
-     * Account Username of person sending the message
-     * @var string 
+     * Account Username of person sending the message.
+     *
+     * @var string
      */
     private $from;
-    
+
     /**
-     * The account ID of the person sending the message
-     * @var integer 
+     * The account ID of the person sending the message.
+     *
+     * @var int
      */
     private $accountId;
-    
+
     /**
-     * The account id of the person whom received the message
-     * @var integer 
+     * The account id of the person whom received the message.
+     *
+     * @var int
      */
     private $recipientAccountId;
-    
+
     /**
      * The subject of the message.
-     * @var string 
+     *
+     * @var string
      */
     private $subject;
-    
+
     /**
-     * The text of body of the message
-     * @var string 
+     * The text of body of the message.
+     *
+     * @var string
      */
     private $body;
-    
+
     /**
      * The formatted time of the message from now.
-     * @var string 
+     *
+     * @var string
      */
     private $timestamp;
-    
+
     /**
-     * Parent ID is the message id first message in the thread
-     * @var integer 
+     * Parent ID is the message id first message in the thread.
+     *
+     * @var int
      */
     private $parentId;
-    
-    public function __construct($parameters) {
-        if(!empty($parameters['data'])) {
+
+    public function __construct($parameters)
+    {
+        if (!empty($parameters['data'])) {
             $parameters = $parameters['data'];
         }
-        
+
         $this->setAccountId($parameters['account_id'])
              ->setBody($parameters['body'])
              ->setFrom($parameters['from'])
@@ -72,183 +81,199 @@ class Message {
              ->setRecipientAccountId($parameters['recipient_account_id'])
              ->setSubject($parameters['subject'])
              ->setTimestamp($parameters['timestamp']);
-       
-        return $this;        
+
+        return $this;
     }
-    
+
     /**
-     * The ID for the message
-     * 
+     * The ID for the message.
+     *
      * @return string
      */
-    public function getId() {
-        
+    public function getId()
+    {
         return $this->id;
     }
 
     /**
-     * The ID for the message
-     * 
+     * The ID for the message.
+     *
      * @param string $id
+     *
      * @return \Imgur\Api\Model\Message
      */
-    public function setId($id) {
+    public function setId($id)
+    {
         $this->id = $id;
-        
+
         return $this;
     }
 
     /**
-     * Account Username of person sending the message
-     * 
+     * Account Username of person sending the message.
+     *
      * @return string
      */
-    public function getFrom() {
-        
+    public function getFrom()
+    {
         return $this->from;
     }
 
     /**
-     * Account Username of person sending the message
-     * 
+     * Account Username of person sending the message.
+     *
      * @param string $from
+     *
      * @return \Imgur\Api\Model\Message
      */
-    public function setFrom($from) {
+    public function setFrom($from)
+    {
         $this->from = $from;
-        
+
         return $this;
     }
 
     /**
-     * The account ID of the person sending the message
-     * 
-     * @return integer
+     * The account ID of the person sending the message.
+     *
+     * @return int
      */
-    public function getAccountId() {
-        
+    public function getAccountId()
+    {
         return $this->accountId;
     }
 
     /**
-     * The account ID of the person sending the message
-     * 
-     * @param integer $accountId
+     * The account ID of the person sending the message.
+     *
+     * @param int $accountId
+     *
      * @return \Imgur\Api\Model\Message
      */
-    public function setAccountId($accountId) {
+    public function setAccountId($accountId)
+    {
         $this->accountId = $accountId;
-        
+
         return $this;
     }
 
     /**
-     * The account id of the person whom received the message
-     * 
-     * @return integer
+     * The account id of the person whom received the message.
+     *
+     * @return int
      */
-    public function getRecipientAccountId() {
-        
+    public function getRecipientAccountId()
+    {
         return $this->recipientAccountId;
     }
 
     /**
-     * The account id of the person whom received the message
-     * 
-     * @param integer $recipientAccountId
+     * The account id of the person whom received the message.
+     *
+     * @param int $recipientAccountId
+     *
      * @return \Imgur\Api\Model\Message
      */
-    public function setRecipientAccountId($recipientAccountId) {
+    public function setRecipientAccountId($recipientAccountId)
+    {
         $this->recipientAccountId = $recipientAccountId;
-        
+
         return $this;
     }
 
     /**
      * The subject of the message.
-     * 
+     *
      * @return string
      */
-    public function getSubject() {
-        
+    public function getSubject()
+    {
         return $this->subject;
     }
 
     /**
      * The subject of the message.
-     * 
+     *
      * @param string $subject
+     *
      * @return \Imgur\Api\Model\Message
      */
-    public function setSubject($subject) {
+    public function setSubject($subject)
+    {
         $this->subject = $subject;
-        
+
         return $this;
     }
 
     /**
-     * The text of body of the message
-     * 
+     * The text of body of the message.
+     *
      * @return string
      */
-    public function getBody() {
-        
+    public function getBody()
+    {
         return $this->body;
     }
 
     /**
-     * The text of body of the message
-     * 
+     * The text of body of the message.
+     *
      * @param string $body
+     *
      * @return \Imgur\Api\Model\Message
      */
-    public function setBody($body) {
+    public function setBody($body)
+    {
         $this->body = $body;
-        
+
         return $this;
     }
 
     /**
      * The formatted time of the message from now.
-     * 
+     *
      * @return string
      */
-    public function getTimestamp() {
-        
+    public function getTimestamp()
+    {
         return $this->timestamp;
     }
 
     /**
      * The formatted time of the message from now.
-     * 
+     *
      * @param string $timestamp
+     *
      * @return \Imgur\Api\Model\Message
      */
-    public function setTimestamp($timestamp) {
+    public function setTimestamp($timestamp)
+    {
         $this->timestamp = $timestamp;
-        
+
         return $this;
     }
 
     /**
-     * Parent ID is the message id first message in the thread
-     * 
+     * Parent ID is the message id first message in the thread.
+     *
      * @return string
      */
-    public function getParentId() {
-        
+    public function getParentId()
+    {
         return $this->parentId;
     }
 
     /**
-     * Parent ID is the message id first message in the thread
-     * 
+     * Parent ID is the message id first message in the thread.
+     *
      * @param string $parentId
+     *
      * @return \Imgur\Api\Model\Message
      */
-    public function setParentId($parentId) {
+    public function setParentId($parentId)
+    {
         $this->parentId = $parentId;
-        
+
         return $this;
     }
 }

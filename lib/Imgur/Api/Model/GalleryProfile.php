@@ -3,149 +3,160 @@
 namespace Imgur\Api\Model;
 
 /**
- * Model for Gallery Profile
- * 
+ * Model for Gallery Profile.
+ *
  * @link https://api.imgur.com/models/gallery_profile
+ *
  * @author Adrian Ghiuta <adrian.ghiuta@gmail.com>
  */
-
-class GalleryProfile {
-    
+class GalleryProfile
+{
     /**
-     * Total number of comments the user has made in the gallery
-     * 
-     * @var integer
+     * Total number of comments the user has made in the gallery.
+     *
+     * @var int
      */
     private $totalGalleryComments;
-    
+
     /**
-     * Total number of images liked by the user in the gallery
-     * 
-     * @var integer
+     * Total number of images liked by the user in the gallery.
+     *
+     * @var int
      */
     private $totalGalleryLikes;
-    
+
     /**
      * Total number of images submitted by the user.
-     * 
-     * @var integer
+     *
+     * @var int
      */
     private $totalGallerySubmissions;
-    
+
     /**
      * An array of trophies that the user has.
+     *
      * @var \Imgur\Api\Model\Trophy|array
      */
     private $trophies;
-    
+
     /**
-     * Build the GalleryProfile object from an array
-     * 
+     * Build the GalleryProfile object from an array.
+     *
      * @param array $parameters
+     *
      * @return \Imgur\Api\Model\GalleryProfile
      */
-    public function __construct($parameters) {
+    public function __construct($parameters)
+    {
         $this->setTotalGalleryComments($parameters['total_gallery_comments'])
              ->setTotalGalleryLikes($parameters['total_gallery_likes'])
              ->setTotalGallerySubmissions($parameters['total_gallery_submissions']);
-        
-        if(!empty($parameters['trophies'])) {
+
+        if (!empty($parameters['trophies'])) {
             $trophies = array();
-            foreach($parameters['trophies'] as $trophyData) {
+            foreach ($parameters['trophies'] as $trophyData) {
                 $trophies[] = new Trophy($trophyData);
             }
-            
+
             $this->setTrophies($trophies);
         }
-        
+
         return $this;
     }
-    
+
     /**
-     * Total number of comments the user has made in the gallery
-     * 
-     * @return integer
+     * Total number of comments the user has made in the gallery.
+     *
+     * @return int
      */
-    public function getTotalGalleryComments() {
-        
+    public function getTotalGalleryComments()
+    {
         return $this->totalGalleryComments;
     }
 
     /**
-     * Total number of comments the user has made in the gallery
-     * 
-     * @param integer $totalGalleryComments
+     * Total number of comments the user has made in the gallery.
+     *
+     * @param int $totalGalleryComments
+     *
      * @return \Imgur\Api\Model\GalleryProfile
      */
-    public function setTotalGalleryComments($totalGalleryComments) {
+    public function setTotalGalleryComments($totalGalleryComments)
+    {
         $this->totalGalleryComments = $totalGalleryComments;
-        
+
         return $this;
     }
 
     /**
-     * Total number of images liked by the user in the gallery
-     * 
-     * @return integer
+     * Total number of images liked by the user in the gallery.
+     *
+     * @return int
      */
-    public function getTotalGalleryLikes() {
-        
+    public function getTotalGalleryLikes()
+    {
         return $this->totalGalleryLikes;
     }
 
     /**
-     * Total number of images liked by the user in the gallery
-     * 
-     * @param integer $totalGalleryLikes
+     * Total number of images liked by the user in the gallery.
+     *
+     * @param int $totalGalleryLikes
+     *
      * @return \Imgur\Api\Model\GalleryProfile
      */
-    public function setTotalGalleryLikes($totalGalleryLikes) {
+    public function setTotalGalleryLikes($totalGalleryLikes)
+    {
         $this->totalGalleryLikes = $totalGalleryLikes;
-        
-        return $this;        
+
+        return $this;
     }
 
     /**
      * Total number of images submitted by the user.
-     * 
-     * @return integer
+     *
+     * @return int
      */
-    public function getTotalGallerySubmissions() {
-        
+    public function getTotalGallerySubmissions()
+    {
         return $this->totalGallerySubmissions;
     }
 
     /**
      * Total number of images submitted by the user.
-     * 
-     * @param integer $totalGallerySubmissions
+     *
+     * @param int $totalGallerySubmissions
+     *
      * @return \Imgur\Api\Model\GalleryProfile
      */
-    public function setTotalGallerySubmissions($totalGallerySubmissions) {
+    public function setTotalGallerySubmissions($totalGallerySubmissions)
+    {
         $this->totalGallerySubmissions = $totalGallerySubmissions;
-        
-        return $this;        
+
+        return $this;
     }
 
     /**
      * An array of trophies that the user has.
-     * 
+     *
      * @return \Imgur\Api\Model\Trophy|array
      */
-    public function getTrophies() {
-        
+    public function getTrophies()
+    {
         return $this->trophies;
     }
 
     /**
      * An array of trophies that the user has.
-     * 
+     *
      * @param \Imgur\Api\Model\Trophy|array $trophies
+     *
      * @return \Imgur\Api\Model\GalleryProfile
      */
-    public function setTrophies($trophies) {
+    public function setTrophies($trophies)
+    {
         $this->trophies = $trophies;
-        
-        return $this;        
-    }    
+
+        return $this;
+    }
 }
