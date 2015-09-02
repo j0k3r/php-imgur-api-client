@@ -40,10 +40,13 @@ class HttpClient implements \Imgur\HttpClient\HttpClientInterface
         $this->options = array_merge($options, $this->options);
         $this->client = new GuzzleClient($this->options['base_url']);
 
-        $this->addListener('request.error', array(
-                            new ErrorListener($this->options),
-                            'onRequestError', )
-                );
+        $this->addListener(
+            'request.error',
+            array(
+                new ErrorListener($this->options),
+                'onRequestError',
+            )
+        );
     }
 
     /**
@@ -102,9 +105,9 @@ class HttpClient implements \Imgur\HttpClient\HttpClientInterface
     {
         if ($httpMethod === 'POST' || $httpMethod === 'DELETE') {
             return $this->client->createRequest($httpMethod, $url, $this->options['headers'], $parameters);
-        } else {
-            return $this->client->createRequest($httpMethod, $url, $this->options['headers'], $this->options['body'], $parameters);
         }
+
+        return $this->client->createRequest($httpMethod, $url, $this->options['headers'], $this->options['body'], $parameters);
     }
 
     /**

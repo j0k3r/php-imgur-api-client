@@ -45,6 +45,7 @@ class ErrorListener
             if (!empty($applicationAvailableCallsCount) && $applicationTotalCallsAvailable < 1) {
                 $applicationTotalCallsResetTime = $response->getHeader('X-RateLimit-UserReset'); // unix epoch
                 $applicationTotalCallsResetTime = date('Y-m-d H:i:s', $applicationTotalCallsResetTime);
+
                 throw new \Imgur\Exception\RateLimitException('No application credits available. The limit is ' . $applicationTotalCallsAvailable . ' '
                         . 'and will be reset at ' . $applicationTotalCallsResetTime);
             }
