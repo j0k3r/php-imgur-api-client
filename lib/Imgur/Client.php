@@ -12,7 +12,6 @@ class Client
      */
     private $options = array(
         'base_url' => 'https://api.imgur.com/3/',
-
         'client_id' => null,
         'client_secret' => null,
     );
@@ -27,7 +26,7 @@ class Client
     /**
      * The class handling authentication.
      *
-     * @var \Imgur\Auth\AuthInterface
+     * @var Auth\AuthInterface
      */
     private $authenticationClient;
 
@@ -90,7 +89,7 @@ class Client
                 break;
 
             default:
-                throw new InvalidArgumentException('API Method not supported: ' . $name);
+                throw new Exception\InvalidArgumentException('API Method not supported: ' . $name);
         }
 
         return $api;
@@ -102,7 +101,7 @@ class Client
     public function getHttpClient()
     {
         if (null === $this->httpClient) {
-            $this->httpClient = new \Imgur\HttpClient\HttpClient($this->options);
+            $this->setHttpClient(new HttpClient\HttpClient($this->options));
         }
 
         return $this->httpClient;
@@ -126,7 +125,7 @@ class Client
     public function getOption($name)
     {
         if (!array_key_exists($name, $this->options)) {
-            throw new InvalidArgumentException(sprintf('Undefined option called: "%s"', $name));
+            throw new Exception\InvalidArgumentException(sprintf('Undefined option called: "%s"', $name));
         }
 
         return $this->options[$name];
@@ -141,7 +140,7 @@ class Client
     public function setOption($name, $value)
     {
         if (!array_key_exists($name, $this->options)) {
-            throw new InvalidArgumentException(sprintf('Undefined option called: "%s"', $name));
+            throw new Exception\InvalidArgumentException(sprintf('Undefined option called: "%s"', $name));
         }
 
         $this->options[$name] = $value;
