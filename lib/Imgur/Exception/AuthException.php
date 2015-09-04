@@ -9,8 +9,4 @@ namespace Imgur\Exception;
  */
 class AuthException extends RuntimeException
 {
-    public function __construct($message, $code = '')
-    {
-        parent::__construct($message, $code);
-    }
 }
