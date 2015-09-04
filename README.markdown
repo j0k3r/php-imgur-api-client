@@ -1,5 +1,9 @@
 # PHP Imgur API Client
 
+[![Build Status](https://travis-ci.org/Adyg/php-imgur-api-client.svg?branch=master)](https://travis-ci.org/Adyg/php-imgur-api-client)
+[![Code Coverage](https://scrutinizer-ci.com/g/Adyg/php-imgur-api-client/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Adyg/php-imgur-api-client/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Adyg/php-imgur-api-client/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Adyg/php-imgur-api-client/?branch=master)
+
 Object Oriented PHP wrapper for the Imgur API.
 
 Uses [Imgur API v3](https://api.imgur.com/).
@@ -8,7 +12,7 @@ Please use the [issues](https://github.com/Adyg/php-imgur-api-client/issues) sec
 
 ## Requirements
 
-* PHP >= 5.3.2 with [cURL](http://php.net/manual/en/book.curl.php) extension
+* PHP >= 5.3.3 with [cURL](http://php.net/manual/en/book.curl.php) extension
 * [Guzzle](https://github.com/guzzle/guzzle) library
 
 ## Composer
