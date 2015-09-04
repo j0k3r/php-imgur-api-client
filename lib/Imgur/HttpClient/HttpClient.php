@@ -2,9 +2,11 @@
 
 namespace Imgur\HttpClient;
 
+use Guzzle\Http\ClientInterface;
 use Guzzle\Http\Client as GuzzleClient;
 use Guzzle\Http\Message\Request;
-use Imgur\Exception;
+use Imgur\Exception\RuntimeException;
+use Imgur\Exception\ErrorException;
 use Imgur\Listener\ErrorListener;
 
 /**
@@ -12,21 +14,22 @@ use Imgur\Listener\ErrorListener;
  *
  * @author Adrian Ghiuta <adrian.ghiuta@gmail.com>
  */
-class HttpClient implements \Imgur\HttpClient\HttpClientInterface
+class HttpClient implements HttpClientInterface
 {
     /**
      * The Guzzle instance.
      *
      * @var Guzzle\Http\Client
      */
-    private $client;
+    protected $client;
 
     /**
      * HTTP Client Settings.
      *
      * @var array
      */
-    private $options = array(
+    protected $options = array(
+        'base_url' => 'https://api.imgur.com/3/',
         'headers' => array(),
         'body' => array(),
     );
@@ -35,10 +38,10 @@ class HttpClient implements \Imgur\HttpClient\HttpClientInterface
      * @param array                        $options
      * @param \Guzzle\Http\ClientInterface $client
      */
-    public function __construct(array $options = array())
+    public function __construct(array $options = array(), ClientInterface $client = null)
     {
-        $this->options = array_merge($options, $this->options);
-        $this->client = new GuzzleClient($this->options['base_url']);
+        $this->options = array_merge_recursive($options, $this->options);
+        $this->client = $client ?: new GuzzleClient($this->options['base_url']);
 
         $this->addListener(
             'request.error',
@@ -81,21 +84,12 @@ class HttpClient implements \Imgur\HttpClient\HttpClientInterface
         $request = $this->createRequest($url, $parameters, $httpMethod);
 
         try {
-            $response = $this->client->send($request);
-
-            return $response;
-        } catch (\Imgur\Exception\LogicException $e) {
-            error_log($e->getMessage());
-        } catch (\Imgur\Exception\RuntimeException $e) {
-            error_log($e->getMessage());
-        } catch (\Guzzle\Http\Exception\ClientErrorResponseException $e) {
-            $responseData = $e->getResponse()->json();
-            error_log('Request to: '.$responseData['data']['request'].' failed with: ['.$responseData['status'].']"'.$responseData['data']['error'].'"');
-        } catch (Exception $e) {
-            error_log($e->getMessage());
+            return $this->client->send($request);
+        } catch (\LogicException $e) {
+            throw new ErrorException($e->getMessage(), $e->getCode(), null, null, null, $e);
+        } catch (\RuntimeException $e) {
+            throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
         }
-
-        return false;
     }
 
     /**

@@ -9,8 +9,4 @@ namespace Imgur\Exception;
  */
 class RuntimeException extends \RuntimeException implements ExceptionInterface
 {
-    public function __construct($error)
-    {
-        parent::__construct($error);
-    }
 }

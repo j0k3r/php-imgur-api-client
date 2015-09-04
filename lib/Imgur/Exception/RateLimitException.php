@@ -7,8 +7,4 @@ namespace Imgur\Exception;
  */
 class RateLimitException extends RuntimeException
 {
-    public function __construct($error)
-    {
-        parent::__construct($error);
-    }
 }
