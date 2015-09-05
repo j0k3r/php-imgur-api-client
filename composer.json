@@ -16,8 +16,8 @@
         "psr-0": { "Imgur\\": "lib/" }
     },
     "require": {
-        "php":             ">=5.3.2",
-        "ext-curl":        "*",
-        "guzzle/guzzle":   ">=3.7"        
+        "php": ">=5.3.3",
+        "ext-curl":  "*",
+        "guzzle/guzzle": "~3.7"
     }
 }

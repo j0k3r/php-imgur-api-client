@@ -2,137 +2,130 @@
 
 namespace Imgur\HttpClient;
 
-use Guzzle\Http\Client as GuzzleClient;
 use Guzzle\Http\ClientInterface;
+use Guzzle\Http\Client as GuzzleClient;
 use Guzzle\Http\Message\Request;
-use Guzzle\Http\Message\Response;
-use Imgur\Exception;
-
+use Imgur\Exception\RuntimeException;
+use Imgur\Exception\ErrorException;
 use Imgur\Listener\ErrorListener;
 
 /**
- * Basic client for performing HTTP requests
+ * Basic client for performing HTTP requests.
  *
  * @author Adrian Ghiuta <adrian.ghiuta@gmail.com>
  */
-class HttpClient implements \Imgur\HttpClient\HttpClientInterface {
-    
+class HttpClient implements HttpClientInterface
+{
     /**
-     * The Guzzle instance
-     * 
+     * The Guzzle instance.
+     *
      * @var Guzzle\Http\Client
      */
-    private $client;
-    
+    protected $client;
+
     /**
-     * HTTP Client Settings
-     * 
-     * @var array 
+     * HTTP Client Settings.
+     *
+     * @var array
      */
-    private $options = array(
+    protected $options = array(
+        'base_url' => 'https://api.imgur.com/3/',
         'headers' => array(),
-        'body' => array()
+        'body' => array(),
     );
-    
+
     /**
-     * 
-     * @param array $options
+     * @param array                        $options
      * @param \Guzzle\Http\ClientInterface $client
      */
-    public function __construct(array $options = array()) {
-        $this->options = array_merge($options, $this->options);
-        $this->client = new GuzzleClient($this->options['base_url']);
-        
-        $this->addListener('request.error', array(
-                            new ErrorListener($this->options), 
-                            'onRequestError')
-                );
-    }
-    
-    /**
-     * {@inheritDoc}
-     */    
-    public function get($url, array $parameters = array()) {
+    public function __construct(array $options = array(), ClientInterface $client = null)
+    {
+        $this->options = array_merge_recursive($options, $this->options);
+        $this->client = $client ?: new GuzzleClient($this->options['base_url']);
 
+        $this->addListener(
+            'request.error',
+            array(
+                new ErrorListener(),
+                'onRequestError',
+            )
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function get($url, array $parameters = array())
+    {
         return $this->performRequest($url, $parameters, 'GET');
     }
 
     /**
-     * {@inheritDoc}
-     */    
-    public function delete($url, array $parameters = array()) {
-
-        return $this->performRequest($url, $parameters, 'DELETE');
-    }    
-    
-    /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
-    public function post($url, array $parameters = array()) {
+    public function delete($url, array $parameters = array())
+    {
+        return $this->performRequest($url, $parameters, 'DELETE');
+    }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function post($url, array $parameters = array())
+    {
         return $this->performRequest($url, $parameters, 'POST');
     }
-    
+
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
-    public function performRequest($url, $parameters, $httpMethod = 'GET') {
+    public function performRequest($url, $parameters, $httpMethod = 'GET')
+    {
         $request = $this->createRequest($url, $parameters, $httpMethod);
 
         try {
-            $response = $this->client->send($request);
-
-            return $response;        
-        } catch (\Imgur\Exception\LogicException $e) {
-            error_log($e->getMessage());
-        } catch (\Imgur\Exception\RuntimeException $e) {
-            error_log($e->getMessage());
-        } catch (\Guzzle\Http\Exception\ClientErrorResponseException $e) {
-            $responseData = $e->getResponse()->json();
-            error_log('Request to: '.$responseData['data']['request'].' failed with: ['.$responseData['status'].']"'.$responseData['data']['error'].'"');
-        } catch (Exception $e) {
-            error_log($e->getMessage());
+            return $this->client->send($request);
+        } catch (\LogicException $e) {
+            throw new ErrorException($e->getMessage(), $e->getCode(), null, null, null, $e);
+        } catch (\RuntimeException $e) {
+            throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
         }
-        
-        return false;
     }
-    
-    /**
-     * {@inheritDoc}
-     */
-    public function createRequest($url, $parameters, $httpMethod = 'GET') {
-        if($httpMethod == 'POST' || $httpMethod == 'DELETE') {
 
+    /**
+     * {@inheritdoc}
+     */
+    public function createRequest($url, $parameters, $httpMethod = 'GET')
+    {
+        if ($httpMethod == 'POST' || $httpMethod == 'DELETE') {
             return $this->client->createRequest($httpMethod, $url, $this->options['headers'], $parameters);
         }
-        else {
 
-            return $this->client->createRequest($httpMethod, $url, $this->options['headers'], $this->options['body'], $parameters);
-        }
+        return $this->client->createRequest($httpMethod, $url, $this->options['headers'], $this->options['body'], $parameters);
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
-    public function parseResponse($response) {
+    public function parseResponse($response)
+    {
         $responseBody = array('data' => array(), 'success' => false);
-        
-        if($response) {
+
+        if ($response) {
             $responseBody = json_decode($response->getBody(true), true);
         }
-        
+
         return $responseBody;
     }
-    
+
     /**
-     * Attaches a listener to a HttpClient event
-     * 
-     * @param HttpClient $httpClient
+     * Attaches a listener to a HttpClient event.
+     *
      * @param string $eventName
-     * @param array $listener
+     * @param array  $listener
      */
-    public function addListener($eventName, $listener) {
+    public function addListener($eventName, $listener)
+    {
         $this->client->getEventDispatcher()->addListener($eventName, $listener);
-    }    
-    
+    }
 }

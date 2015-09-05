@@ -3,200 +3,208 @@
 namespace Imgur\Api\Model;
 
 /**
- * Model for Accounts
- * 
+ * Model for Accounts.
+ *
  * @link https://api.imgur.com/models/account
+ *
  * @author Adrian Ghiuta <adrian.ghiuta@gmail.com>
  */
-
-class Account {
+class Account
+{
     /**
      * The account id for the username requested.
-     * 
-     * @var integer 
+     *
+     * @var int
      */
     private $id;
-    
+
     /**
-     * The account username
-     * 
+     * The account username.
+     *
      * @var string
      */
     private $url;
-    
+
     /**
-     * A basic description the user has filled out
-     * 
-     * @var string 
+     * A basic description the user has filled out.
+     *
+     * @var string
      */
     private $bio;
-    
+
     /**
      * The reputation for the account, in it's numerical format.
-     * 
-     * @var float 
+     *
+     * @var float
      */
     private $reputation;
-    
+
     /**
-     * The epoch time of account creation
-     *  
-     * @var integer
+     * The epoch time of account creation.
+     *
+     * @var int
      */
     private $created;
-    
+
     /**
      * False if not a pro user, their expiration date if they are.
-     * 
-     * @var integer|boolean 
+     *
+     * @var int|bool
      */
-    private $proExpiration; 
-    
+    private $proExpiration;
+
     /**
-     * Build the Account object based on an array
-     * 
+     * Build the Account object based on an array.
+     *
      * @param array $accountInfo
+     *
      * @return \Imgur\Api\Model\Account
      */
-    public function __construct($accountInfo) {
-        if(!empty($accountInfo['data'])) {
+    public function __construct($accountInfo)
+    {
+        if (!empty($accountInfo['data'])) {
             $accountInfo = $accountInfo['data'];
         }
-        
+
         $this->setId($accountInfo['id'])
              ->setUrl($accountInfo['url'])
              ->setBio($accountInfo['bio'])
              ->setReputation($accountInfo['reputation'])
              ->setCreated($accountInfo['created'])
              ->setProExpiration($accountInfo['pro_expiration']);
-        
+
         return $this;
     }
 
     /**
      * The account id for the username requested.
-     * 
-     * @param integer $id
-     */    
-    public function setId($id) {
-        $this->id = $id; 
-        
+     *
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
         return $this;
     }
 
     /**
      * The account id for the username requested.
-     * 
-     * @return integer|null
-     */    
-    public function getId() {
-        
+     *
+     * @return int|null
+     */
+    public function getId()
+    {
         return $this->id;
     }
 
     /**
-     * The account username
-     * 
+     * The account username.
+     *
      * @param string $url
-     */    
-    public function setUrl($url) {
+     */
+    public function setUrl($url)
+    {
         $this->url = $url;
-        
-        return $this;        
+
+        return $this;
     }
 
-    
     /**
-     * The account username
-     * 
+     * The account username.
+     *
      * @return string|null
-     */    
-    public function getUrl() {
-        
+     */
+    public function getUrl()
+    {
         return $this->url;
     }
 
     /**
-     * A basic description the user has filled out
-     * 
+     * A basic description the user has filled out.
+     *
      * @param string $bio
      */
-    public function setBio($bio) {
+    public function setBio($bio)
+    {
         $this->bio = $bio;
-        
-        return $this;        
+
+        return $this;
     }
-    
+
     /**
-     * A basic description the user has filled out
-     * 
+     * A basic description the user has filled out.
+     *
      * @return string|null
-     */  
-    public function getBio() {
-        
+     */
+    public function getBio()
+    {
         return $this->bio;
-    }    
-    
+    }
+
     /**
      * The reputation for the account, in it's numerical format.
-     * 
+     *
      * @param float $reputation
      */
-    public function setReputation($reputation) {
+    public function setReputation($reputation)
+    {
         $this->reputation = $reputation;
-        
-        return $this;        
+
+        return $this;
     }
-    
+
     /**
      * The reputation for the account, in it's numerical format.
-     * 
+     *
      * @return float|null
      */
-    public function getReputation() {
-        
+    public function getReputation()
+    {
         return $this->reputation;
-    }  
-    
+    }
+
     /**
-     * The epoch time of account creation
-     *  
-     * @param integer $created
+     * The epoch time of account creation.
+     *
+     * @param int $created
      */
-    public function setCreated($created) {
+    public function setCreated($created)
+    {
         $this->created = $created;
-        
-        return $this;        
+
+        return $this;
     }
-    
+
     /**
-     * The epoch time of account creation
-     *  
-     * @return integer
+     * The epoch time of account creation.
+     *
+     * @return int
      */
-    public function getCreated() {
-        
+    public function getCreated()
+    {
         return $this->created;
-    }  
-    
-    /**
-     * False if not a pro user, their expiration date if they are.
-     * 
-     * @param integer|boolean $proExpiration
-     */
-    public function setProExpiration($proExpiration) {
-        $this->proExpiration = $proExpiration;
-        
-        return $this;        
     }
-    
+
     /**
      * False if not a pro user, their expiration date if they are.
-     * 
-     * @return integer|boolean 
+     *
+     * @param int|bool $proExpiration
      */
-    public function getProExpiration() {
-        
+    public function setProExpiration($proExpiration)
+    {
+        $this->proExpiration = $proExpiration;
+
+        return $this;
+    }
+
+    /**
+     * False if not a pro user, their expiration date if they are.
+     *
+     * @return int|bool
+     */
+    public function getProExpiration()
+    {
         return $this->proExpiration;
-    }     
+    }
 }

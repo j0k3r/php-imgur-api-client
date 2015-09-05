@@ -3,124 +3,125 @@
 namespace Imgur\Api\Model;
 
 /**
- * Model for Comment
- * 
+ * Model for Comment.
+ *
  * @link https://api.imgur.com/models/comment
+ *
  * @author Adrian Ghiuta <adrian.ghiuta@gmail.com>
  */
-
-class Comment {
-    
+class Comment
+{
     /**
-     * The ID for the comment
-     * 
+     * The ID for the comment.
+     *
      * @var string
      */
     private $id;
-    
+
     /**
-     * The ID of the image that the comment is for
-     * 
+     * The ID of the image that the comment is for.
+     *
      * @var string
      */
     private $imageId;
-    
+
     /**
      * The comment itself.
-     * 
+     *
      * @var string
      */
     private $caption;
-    
+
     /**
-     * Username of the author of the comment
-     * 
+     * Username of the author of the comment.
+     *
      * @var string
      */
     private $author;
-    
+
     /**
-     * The account ID for the author
-     * 
-     * @var integer
+     * The account ID for the author.
+     *
+     * @var int
      */
     private $authorId;
-    
+
     /**
-     * If this comment was done to an album
-     * 
-     * @var boolean
+     * If this comment was done to an album.
+     *
+     * @var bool
      */
     private $onAlbum;
-    
+
     /**
-     * The ID of the album cover image, this is what should be displayed for album comments
-     * 
-     * @var integer
+     * The ID of the album cover image, this is what should be displayed for album comments.
+     *
+     * @var int
      */
     private $albumCover;
-    
+
     /**
-     * Number of upvotes for the comment
-     * 
-     * @var integer
+     * Number of upvotes for the comment.
+     *
+     * @var int
      */
     private $ups;
-    
+
     /**
-     * Number of downvotes for the comment
-     * 
-     * @var integer
+     * Number of downvotes for the comment.
+     *
+     * @var int
      */
     private $downs;
-    
+
     /**
-     * The number of upvotes - downvotes
-     * 
+     * The number of upvotes - downvotes.
+     *
      * @var float
      */
     private $points;
-    
+
     /**
-     * Timestamp of creation, epoch time
-     * 
-     * @var integer
+     * Timestamp of creation, epoch time.
+     *
+     * @var int
      */
     private $datetime;
-    
+
     /**
      * If this is a reply, this will be the value of the comment_id for the caption this a reply for.
-     * 
-     * @var integer
+     *
+     * @var int
      */
     private $parentId;
-    
+
     /**
-     * Marked true if this caption has been deleted
-     * 
-     * @var boolean
+     * Marked true if this caption has been deleted.
+     *
+     * @var bool
      */
     private $deleted;
-    
+
     /**
      * All of the replies for this comment. If there are no replies to the comment then this is an empty set.
-     * 
+     *
      * @var \Imgur\Api\Model\Comment|array
      */
     private $children;
 
-
     /**
-     * Build the Comment object based on an array
-     * 
+     * Build the Comment object based on an array.
+     *
      * @param array $parameters
+     *
      * @return \Imgur\Api\Model\Comment
-     */         
-    public function __construct($parameters) {
-        if(!empty($parameters['data'])) {
+     */
+    public function __construct($parameters)
+    {
+        if (!empty($parameters['data'])) {
             $parameters = $parameters['data'];
         }
-        
+
         $this->setAlbumCover($parameters['album_cover'])
              ->setAuthor($parameters['author'])
              ->setAuthorId($parameters['author_id'])
@@ -135,322 +136,350 @@ class Comment {
              ->setPoints($parameters['points'])
              ->setUps($parameters['ups']);
 
-        if(!empty($parameters['children'])) {
+        if (!empty($parameters['children'])) {
             $children = array();
-            foreach($parameters['children'] as $comment) {
-                $children[] = new Comment($comment);
+            foreach ($parameters['children'] as $comment) {
+                $children[] = new self($comment);
             }
             $this->setComments($children);
-        }        
-        
+        }
+
         return $this;
     }
-    
+
     /**
-     * The ID for the comment
-     * 
-     * @return integer
+     * The ID for the comment.
+     *
+     * @return int
      */
-    public function getId() {
-        
+    public function getId()
+    {
         return $this->id;
     }
 
     /**
-     * The ID for the comment
-     * 
-     * @param integer $id
+     * The ID for the comment.
+     *
+     * @param int $id
+     *
      * @return \Imgur\Api\Model\Comment
      */
-    public function setId($id) {
+    public function setId($id)
+    {
         $this->id = $id;
-        
+
         return $this;
     }
 
     /**
-     * The ID of the image that the comment is for
-     * 
-     * @return integer
+     * The ID of the image that the comment is for.
+     *
+     * @return int
      */
-    public function getImageId() {
-        
+    public function getImageId()
+    {
         return $this->imageId;
     }
 
     /**
-     * The ID of the image that the comment is for
-     * 
-     * @param integer $imageId
+     * The ID of the image that the comment is for.
+     *
+     * @param int $imageId
+     *
      * @return \Imgur\Api\Model\Comment
      */
-    public function setImageId($imageId) {
+    public function setImageId($imageId)
+    {
         $this->imageId = $imageId;
-        
-        return $this;        
+
+        return $this;
     }
 
     /**
      * The comment itself.
-     * 
+     *
      * @return string
      */
-    public function getCaption() {
-        
+    public function getCaption()
+    {
         return $this->caption;
     }
 
     /**
      * The comment itself.
-     * 
+     *
      * @param string $caption
+     *
      * @return \Imgur\Api\Model\Comment
      */
-    public function setCaption($caption) {
+    public function setCaption($caption)
+    {
         $this->caption = $caption;
-                
+
         return $this;
     }
 
     /**
-     * Username of the author of the comment
-     * 
+     * Username of the author of the comment.
+     *
      * @return string
      */
-    public function getAuthor() {
-        
+    public function getAuthor()
+    {
         return $this->author;
     }
 
     /**
-     * Username of the author of the comment
-     * 
+     * Username of the author of the comment.
+     *
      * @param string $author
+     *
      * @return \Imgur\Api\Model\Comment
      */
-    public function setAuthor($author) {
+    public function setAuthor($author)
+    {
         $this->author = $author;
-                
+
         return $this;
     }
 
     /**
-     * The account ID for the author
-     * 
-     * @return integer
+     * The account ID for the author.
+     *
+     * @return int
      */
-    public function getAuthorId() {
-        
+    public function getAuthorId()
+    {
         return $this->authorId;
     }
 
     /**
-     * The account ID for the author
-     * 
-     * @param integer $authorId
+     * The account ID for the author.
+     *
+     * @param int $authorId
+     *
      * @return \Imgur\Api\Model\Comment
      */
-    public function setAuthorId($authorId) {
+    public function setAuthorId($authorId)
+    {
         $this->authorId = $authorId;
-                
+
         return $this;
     }
 
     /**
-     * If this comment was done to an album
-     * 
-     * @return boolean
+     * If this comment was done to an album.
+     *
+     * @return bool
      */
-    public function getOnAlbum() {
-        
+    public function getOnAlbum()
+    {
         return $this->onAlbum;
     }
 
     /**
-     * If this comment was done to an album
-     * 
-     * @param boolean $onAlbum
+     * If this comment was done to an album.
+     *
+     * @param bool $onAlbum
+     *
      * @return \Imgur\Api\Model\Comment
      */
-    public function setOnAlbum($onAlbum) {
+    public function setOnAlbum($onAlbum)
+    {
         $this->onAlbum = $onAlbum;
-                
+
         return $this;
     }
 
     /**
-     * The ID of the album cover image, this is what should be displayed for album comments
-     * 
+     * The ID of the album cover image, this is what should be displayed for album comments.
+     *
      * @return string
      */
-    public function getAlbumCover() {
-        
+    public function getAlbumCover()
+    {
         return $this->albumCover;
     }
 
     /**
-     * The ID of the album cover image, this is what should be displayed for album comments
-     * 
+     * The ID of the album cover image, this is what should be displayed for album comments.
+     *
      * @param string $albumCover
+     *
      * @return \Imgur\Api\Model\Comment
      */
-    public function setAlbumCover($albumCover) {
+    public function setAlbumCover($albumCover)
+    {
         $this->albumCover = $albumCover;
-                
+
         return $this;
     }
 
     /**
-     * Number of upvotes for the comment
-     * 
-     * @return integer
+     * Number of upvotes for the comment.
+     *
+     * @return int
      */
-    public function getUps() {
+    public function getUps()
+    {
         return $this->ups;
     }
 
     /**
-     * Number of upvotes for the comment
-     * 
-     * @param integer $ups
+     * Number of upvotes for the comment.
+     *
+     * @param int $ups
+     *
      * @return \Imgur\Api\Model\Comment
      */
-    public function setUps($ups) {
+    public function setUps($ups)
+    {
         $this->ups = $ups;
-                
+
         return $this;
     }
 
     /**
-     * Number of downvotes for the comment
-     * 
+     * Number of downvotes for the comment.
+     *
      * @return type
      */
-    public function getDowns() {
-        
+    public function getDowns()
+    {
         return $this->downs;
     }
 
     /**
-     * Number of downvotes for the comment
-     * 
-     * @param integer $downs
+     * Number of downvotes for the comment.
+     *
+     * @param int $downs
+     *
      * @return \Imgur\Api\Model\Comment
      */
-    public function setDowns($downs) {
+    public function setDowns($downs)
+    {
         $this->downs = $downs;
-                
+
         return $this;
     }
 
     /**
-     * The number of upvotes - downvotes
-     * 
+     * The number of upvotes - downvotes.
+     *
      * @return float
      */
-    public function getPoints() {
-        
+    public function getPoints()
+    {
         return $this->points;
     }
 
     /**
-     * The number of upvotes - downvotes
-     * 
+     * The number of upvotes - downvotes.
+     *
      * @param float $points
+     *
      * @return \Imgur\Api\Model\Comment
      */
-    public function setPoints($points) {
+    public function setPoints($points)
+    {
         $this->points = $points;
-                
+
         return $this;
     }
 
     /**
-     * Timestamp of creation, epoch time
-     * 
-     * @return integer
+     * Timestamp of creation, epoch time.
+     *
+     * @return int
      */
-    public function getDatetime() {
-        
+    public function getDatetime()
+    {
         return $this->datetime;
     }
 
     /**
-     * Timestamp of creation, epoch time
-     * 
-     * @param integer $datetime
+     * Timestamp of creation, epoch time.
+     *
+     * @param int $datetime
+     *
      * @return \Imgur\Api\Model\Comment
      */
-    public function setDatetime($datetime) {
+    public function setDatetime($datetime)
+    {
         $this->datetime = $datetime;
-                
+
         return $this;
     }
-    
+
     /**
      * If this is a reply, this will be the value of the comment_id for the caption this a reply for.
-     * 
-     * @return integer
+     *
+     * @return int
      */
-    public function getParentId() {
-        
+    public function getParentId()
+    {
         return $this->parentId;
     }
 
     /**
      * If this is a reply, this will be the value of the comment_id for the caption this a reply for.
-     * 
-     * @param integer $parentId
+     *
+     * @param int $parentId
+     *
      * @return \Imgur\Api\Model\Comment
      */
-    public function setParentId($parentId) {
+    public function setParentId($parentId)
+    {
         $this->parentId = $parentId;
-                
+
         return $this;
     }
 
     /**
-     * Marked true if this caption has been deleted
-     * 
-     * @return boolean
+     * Marked true if this caption has been deleted.
+     *
+     * @return bool
      */
-    public function getDeleted() {
-        
+    public function getDeleted()
+    {
         return $this->deleted;
     }
 
     /**
-     * Marked true if this caption has been deleted
-     * 
-     * @param boolean $deleted
+     * Marked true if this caption has been deleted.
+     *
+     * @param bool $deleted
+     *
      * @return \Imgur\Api\Model\Comment
      */
-    public function setDeleted($deleted) {
+    public function setDeleted($deleted)
+    {
         $this->deleted = $deleted;
-                
+
         return $this;
     }
 
     /**
      * All of the replies for this comment. If there are no replies to the comment then this is an empty set.
-     * 
+     *
      * @return \Imgur\Api\Model\Comment|array
      */
-    public function getChildren() {
-        
+    public function getChildren()
+    {
         return $this->children;
     }
 
     /**
      * All of the replies for this comment. If there are no replies to the comment then this is an empty set.
-     * 
+     *
      * @param \Imgur\Api\Model\Comment|array $children
+     *
      * @return \Imgur\Api\Model\Comment
      */
-    public function setChildren($children) {
+    public function setChildren($children)
+    {
         $this->children = $children;
-                
+
         return $this;
-    }    
+    }
 }
-    

@@ -2,218 +2,245 @@
 
 namespace Imgur\Auth;
 
-use Imgur\Listener;
+use Imgur\Listener\AuthListener;
 use Imgur\Exception\AuthException;
+use Imgur\HttpClient\HttpClientInterface;
 
 /**
- * Authentication class used for handling OAuth2
+ * Authentication class used for handling OAuth2.
  *
  * @author Adrian Ghiuta <adrian.ghiuta@gmail.com>
  */
-
-class OAuth2 implements \Imgur\Auth\AuthInterface {
+class OAuth2 implements AuthInterface
+{
     /**
      * Indicates the client that is making the request.
-     * 
-     * @var string 
+     *
+     * @var string
      */
     private $clientId;
 
     /**
-     * The client_secret for the application
-     * 
-     * @var string 
+     * The client_secret for the application.
+     *
+     * @var string
      */
-    private $clientSecret;    
+    private $clientSecret;
 
     /**
-     * The access token and refresh token values
-     * 
+     * The class handling communication with Imgur servers.
+     *
+     * @var HttpClient
+     */
+    private $httpClient;
+
+    /**
+     * The access token and refresh token values, with keys:.
+     *
+     * For "token":
+     *     - access_token
+     *     - expires_in
+     *     - token_type
+     *     - refresh_token
+     *     - account_username
+     *     - account_id
+     *
+     * For "code":
+     *     - code
+     *     - state
+     *
+     * For "pin":
+     *     - pin
+     *     - state
+     *
      * @var array
      */
-    private $token;    
-        
+    private $token;
+
     const AUTHORIZATION_ENDPOINT = 'https://api.imgur.com/oauth2/authorize';
     const ACCESS_TOKEN_ENDPOINT = 'https://api.imgur.com/oauth2/token';
-    
+
     /**
-     * Instantiates the OAuth2 class, but does not trigger the authentication process
-     * 
-     * @param string $clientId
-     * @param string $clientSecret
+     * Instantiates the OAuth2 class, but does not trigger the authentication process.
+     *
+     * @param HttpClientInterface $httpClient
+     * @param string              $clientId
+     * @param string              $clientSecret
      */
-    public function __construct($clientId, $clientSecret) {
+    public function __construct(HttpClientInterface $httpClient, $clientId, $clientSecret)
+    {
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
+        $this->httpClient = $httpClient;
     }
-    
+
     /**
-     * Generates the authentication URL to which a user should be pointed at in order to start the OAuth2 process
-     * 
-     * @param string $responseType
+     * Generates the authentication URL to which a user should be pointed at in order to start the OAuth2 process.
+     *
+     * @param string      $responseType
      * @param null|string $state
+     *
      * @return string
      */
-    public function getAuthenticationURL($responseType = 'code', $state = null) {
+    public function getAuthenticationURL($responseType = 'code', $state = null)
+    {
         $httpQueryParameters = array(
             'client_id' => $this->clientId,
             'response_type' => $responseType,
-            'state' => $state
+            'state' => $state,
         );
-        
+
         $httpQueryParameters = http_build_query($httpQueryParameters);
-        
+
         return self::AUTHORIZATION_ENDPOINT.'?'.$httpQueryParameters;
     }
 
     /**
-     * Exchanges a code/pin for an access token
-     * 
+     * Exchanges a code/pin for an access token.
+     *
      * @param string $code
      * @param string $requestType
+     *
      * @return string
      */
-    public function requestAccessToken($code, $requestType, $httpClient) {
+    public function requestAccessToken($code, $requestType)
+    {
         switch ($requestType) {
-            case 'code':
-                $grantType = 'authorization_code';
-                $type = 'code';
-                break;
             case 'pin':
                 $grantType = 'pin';
                 $type = 'pin';
                 break;
+            case 'code':
             default:
                 $grantType = 'authorization_code';
                 $type = 'code';
-                break;
         }
-        $response = $httpClient->post(self::ACCESS_TOKEN_ENDPOINT, 
-                                      array(
-                                          'client_id' => $this->clientId,
-                                          'client_secret' => $this->clientSecret,
-                                          'grant_type' => $grantType,
-                                          $type => $code
-                                      ));
+
+        $response = $this->httpClient->post(
+            self::ACCESS_TOKEN_ENDPOINT,
+            array(
+                'client_id' => $this->clientId,
+                'client_secret' => $this->clientSecret,
+                'grant_type' => $grantType,
+                $type => $code,
+            )
+        );
 
         $responseBody = json_decode($response->getBody(true), true);
-        
-        if($response->getStatusCode() == 200) {
-            $responseBody['created_at'] = time();
-            $this->setAccessToken($responseBody, $httpClient);
+
+        if ($response->getStatusCode() !== 200) {
+            throw new AuthException('Request for access token failed: '.$responseBody['error'], $response->getStatusCode());
         }
-        else {
-            throw new AuthException('Request for access token failed. '.$responseBody['error'], $response->getStatusCode());
-        }
-        
-        $this->sign($httpClient);
-        
+
+        $responseBody['created_at'] = time();
+        $this->setAccessToken($responseBody);
+
+        $this->sign();
+
         return $responseBody;
     }
-    
+
     /**
-     * If a user has authorized their account but you no longer have a valid access_token for them, 
+     * If a user has authorized their account but you no longer have a valid access_token for them,
      * then a new one can be generated by using the refresh_token.
-     * When your application receives a refresh token, it is important to store that refresh token for future use. 
-     * If your application loses the refresh token, 
+     * When your application receives a refresh token, it is important to store that refresh token for future use.
+     * If your application loses the refresh token,
      * you will have to prompt the user for their login information again.
-     * 
+     *
      * @return array
+     *
      * @throws AuthException
      */
-    public function refreshToken($httpClient) {
+    public function refreshToken()
+    {
         $token = $this->getAccessToken();
-        
-        $response = $httpClient->post(self::ACCESS_TOKEN_ENDPOINT, 
-                                      array(
-                                          'refresh_token' => $token['refresh_token'],
-                                          'client_id' => $this->clientId,
-                                          'client_secret' => $this->clientSecret,
-                                          'grant_type' => 'refresh_token'
-                                      ));
+
+        $response = $this->httpClient->post(
+            self::ACCESS_TOKEN_ENDPOINT,
+            array(
+                'refresh_token' => $token['refresh_token'],
+                'client_id' => $this->clientId,
+                'client_secret' => $this->clientSecret,
+                'grant_type' => 'refresh_token',
+            )
+        );
 
         $responseBody = json_decode($response->getBody(true), true);
 
-        if($response->getStatusCode() == 200) {
-            $this->setAccessToken($responseBody, $httpClient);
-        }
-        else {
+        if ($response->getStatusCode() !== 200) {
             throw new AuthException('Request for refresh access token failed. '.$responseBody['error'], $response->getStatusCode());
         }
-        
-        $this->sign($httpClient);
-        
-        return $responseBody;        
+
+        $this->setAccessToken($responseBody);
+
+        $this->sign();
+
+        return $responseBody;
     }
 
     /**
-     * Stores the access token, refresh token and expiration date
-     * 
+     * Stores the access token, refresh token and expiration date.
+     *
      * @param array $token
+     *
      * @throws AuthException
+     *
      * @return array
      */
-    public function setAccessToken($token, $httpClient) {
-        if ($token == null) {
-          throw new AuthException('Token is not a valid json string.');
-        }
-        
-        if ( isset($token['data']['access_token'])) {
-          $token = $token['data'];
+    public function setAccessToken($token)
+    {
+        if (!$token) {
+            throw new AuthException('Token is not a valid json string.');
         }
 
-        
-        if (! isset($token['access_token'])) {
-          throw new AuthException('Access token could not be retrieved from the decoded json response.');
+        if (isset($token['data']['access_token'])) {
+            $token = $token['data'];
         }
 
-        $this->token = $token;  
-        
-        $this->sign($httpClient);
+        if (!isset($token['access_token'])) {
+            throw new AuthException('Access token could not be retrieved from the decoded json response.');
+        }
+
+        $this->token = $token;
+
+        $this->sign();
     }
 
     /**
-     * Getter for the current access token
-     * 
+     * Getter for the current access token.
+     *
      * @return array
      */
-    public function getAccessToken() {
-        
+    public function getAccessToken()
+    {
         return $this->token;
     }
-    
+
     /**
-     * Check if the current access token (if present), is still usable
-     * 
+     * Check if the current access token (if present), is still usable.
+     *
      * @return bool
      */
-    public function checkAccessTokenExpired() {
-        $expirationTime = $this->token['created_at'] + $this->token['expires_in'];
+    public function checkAccessTokenExpired()
+    {
+        // don't have the data? Let's assume the token has expired
+        if (!$this->token || !isset($this->token['created_at']) || !isset($this->token['expires_in'])) {
+            return true;
+        }
 
-        return $expirationTime < time();        
+        return ($this->token['created_at'] + $this->token['expires_in']) < time();
     }
-    
+
     /**
-     * Attaches the triggers needed for attaching the header signature to each request
-     * 
-     * @param HttpClient $httpClient
+     * Attaches the triggers needed for attaching the header signature to each request.
      */
-    public function sign($httpClient) {
+    public function sign()
+    {
         $token = $this->getAccessToken();
-        
-        $this->addListener($httpClient, 'request.before_send', array(
-            new Listener\AuthListener($token, $this->clientId), 'onRequestBeforeSend'
-        ));        
+
+        $this->httpClient->addListener('request.before_send', array(
+            new AuthListener($token, $this->clientId),
+            'onRequestBeforeSend',
+        ));
     }
-    
-    /**
-     * Attaches a listener to a HttpClient event
-     * 
-     * @param HttpClient $httpClient
-     * @param string $eventName
-     * @param array $listener
-     */
-    public function addListener($httpClient, $eventName, $listener) {
-        $httpClient->addListener($eventName, $listener);
-    }    
 }
