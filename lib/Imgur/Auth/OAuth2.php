@@ -2,15 +2,16 @@
 
 namespace Imgur\Auth;
 
+use Imgur\Listener\AuthListener;
 use Imgur\Exception\AuthException;
-use Imgur\Listener;
+use Imgur\HttpClient\HttpClientInterface;
 
 /**
  * Authentication class used for handling OAuth2.
  *
  * @author Adrian Ghiuta <adrian.ghiuta@gmail.com>
  */
-class OAuth2 implements \Imgur\Auth\AuthInterface
+class OAuth2 implements AuthInterface
 {
     /**
      * Indicates the client that is making the request.
@@ -27,7 +28,30 @@ class OAuth2 implements \Imgur\Auth\AuthInterface
     private $clientSecret;
 
     /**
-     * The access token and refresh token values.
+     * The class handling communication with Imgur servers.
+     *
+     * @var HttpClient
+     */
+    private $httpClient;
+
+    /**
+     * The access token and refresh token values, with keys:.
+     *
+     * For "token":
+     *     - access_token
+     *     - expires_in
+     *     - token_type
+     *     - refresh_token
+     *     - account_username
+     *     - account_id
+     *
+     * For "code":
+     *     - code
+     *     - state
+     *
+     * For "pin":
+     *     - pin
+     *     - state
      *
      * @var array
      */
@@ -39,13 +63,15 @@ class OAuth2 implements \Imgur\Auth\AuthInterface
     /**
      * Instantiates the OAuth2 class, but does not trigger the authentication process.
      *
-     * @param string $clientId
-     * @param string $clientSecret
+     * @param HttpClientInterface $httpClient
+     * @param string              $clientId
+     * @param string              $clientSecret
      */
-    public function __construct($clientId, $clientSecret)
+    public function __construct(HttpClientInterface $httpClient, $clientId, $clientSecret)
     {
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
+        $this->httpClient = $httpClient;
     }
 
     /**
@@ -77,7 +103,7 @@ class OAuth2 implements \Imgur\Auth\AuthInterface
      *
      * @return string
      */
-    public function requestAccessToken($code, $requestType, $httpClient)
+    public function requestAccessToken($code, $requestType)
     {
         switch ($requestType) {
             case 'pin':
@@ -90,24 +116,26 @@ class OAuth2 implements \Imgur\Auth\AuthInterface
                 $type = 'code';
         }
 
-        $response = $httpClient->post(self::ACCESS_TOKEN_ENDPOINT,
-                                      array(
-                                          'client_id' => $this->clientId,
-                                          'client_secret' => $this->clientSecret,
-                                          'grant_type' => $grantType,
-                                          $type => $code,
-                                      ));
+        $response = $this->httpClient->post(
+            self::ACCESS_TOKEN_ENDPOINT,
+            array(
+                'client_id' => $this->clientId,
+                'client_secret' => $this->clientSecret,
+                'grant_type' => $grantType,
+                $type => $code,
+            )
+        );
 
         $responseBody = json_decode($response->getBody(true), true);
 
-        if ($response->getStatusCode() === 200) {
-            $responseBody['created_at'] = time();
-            $this->setAccessToken($responseBody, $httpClient);
-        } else {
-            throw new AuthException('Request for access token failed. ' . $responseBody['error'], $response->getStatusCode());
+        if ($response->getStatusCode() !== 200) {
+            throw new AuthException('Request for access token failed: '.$responseBody['error'], $response->getStatusCode());
         }
 
-        $this->sign($httpClient);
+        $responseBody['created_at'] = time();
+        $this->setAccessToken($responseBody);
+
+        $this->sign();
 
         return $responseBody;
     }
@@ -123,27 +151,29 @@ class OAuth2 implements \Imgur\Auth\AuthInterface
      *
      * @return array
      */
-    public function refreshToken($httpClient)
+    public function refreshToken()
     {
         $token = $this->getAccessToken();
 
-        $response = $httpClient->post(self::ACCESS_TOKEN_ENDPOINT,
-                                      array(
-                                          'refresh_token' => $token['refresh_token'],
-                                          'client_id' => $this->clientId,
-                                          'client_secret' => $this->clientSecret,
-                                          'grant_type' => 'refresh_token',
-                                      ));
+        $response = $this->httpClient->post(
+            self::ACCESS_TOKEN_ENDPOINT,
+            array(
+                'refresh_token' => $token['refresh_token'],
+                'client_id' => $this->clientId,
+                'client_secret' => $this->clientSecret,
+                'grant_type' => 'refresh_token',
+            )
+        );
 
         $responseBody = json_decode($response->getBody(true), true);
 
-        if ($response->getStatusCode() === 200) {
-            $this->setAccessToken($responseBody, $httpClient);
-        } else {
-            throw new AuthException('Request for refresh access token failed. ' . $responseBody['error'], $response->getStatusCode());
+        if ($response->getStatusCode() !== 200) {
+            throw new AuthException('Request for refresh access token failed. '.$responseBody['error'], $response->getStatusCode());
         }
 
-        $this->sign($httpClient);
+        $this->setAccessToken($responseBody);
+
+        $this->sign();
 
         return $responseBody;
     }
@@ -157,9 +187,9 @@ class OAuth2 implements \Imgur\Auth\AuthInterface
      *
      * @return array
      */
-    public function setAccessToken($token, $httpClient)
+    public function setAccessToken($token)
     {
-        if ($token === null) {
+        if (!$token) {
             throw new AuthException('Token is not a valid json string.');
         }
 
@@ -173,7 +203,7 @@ class OAuth2 implements \Imgur\Auth\AuthInterface
 
         $this->token = $token;
 
-        $this->sign($httpClient);
+        $this->sign();
     }
 
     /**
@@ -193,34 +223,24 @@ class OAuth2 implements \Imgur\Auth\AuthInterface
      */
     public function checkAccessTokenExpired()
     {
-        $expirationTime = $this->token['created_at'] + $this->token['expires_in'];
+        // don't have the data? Let's assume the token has expired
+        if (!$this->token || !isset($this->token['created_at']) || !isset($this->token['expires_in'])) {
+            return true;
+        }
 
-        return $expirationTime < time();
+        return ($this->token['created_at'] + $this->token['expires_in']) < time();
     }
 
     /**
      * Attaches the triggers needed for attaching the header signature to each request.
-     *
-     * @param HttpClient $httpClient
      */
-    public function sign($httpClient)
+    public function sign()
     {
         $token = $this->getAccessToken();
 
-        $this->addListener($httpClient, 'request.before_send', array(
-            new Listener\AuthListener($token, $this->clientId), 'onRequestBeforeSend',
+        $this->httpClient->addListener('request.before_send', array(
+            new AuthListener($token, $this->clientId),
+            'onRequestBeforeSend',
         ));
-    }
-
-    /**
-     * Attaches a listener to a HttpClient event.
-     *
-     * @param HttpClient $httpClient
-     * @param string     $eventName
-     * @param array      $listener
-     */
-    public function addListener($httpClient, $eventName, $listener)
-    {
-        $httpClient->addListener($eventName, $listener);
     }
 }

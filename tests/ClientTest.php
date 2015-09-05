@@ -155,7 +155,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $authenticationClient = $this->getAuthenticationClientMock();
         $authenticationClient->expects($this->once())
             ->method('requestAccessToken')
-            ->with('code', 'code', $httpClient);
+            ->with('code', 'code');
 
         $client = new Client($authenticationClient, $httpClient);
         $client->requestAccessToken('code');
@@ -166,8 +166,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $httpClient = $this->getHttpClientMock();
         $authenticationClient = $this->getAuthenticationClientMock();
         $authenticationClient->expects($this->once())
-            ->method('refreshToken')
-            ->with($httpClient);
+            ->method('refreshToken');
 
         $client = new Client($authenticationClient, $httpClient);
         $client->refreshToken();

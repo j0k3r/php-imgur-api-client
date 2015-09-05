@@ -46,7 +46,7 @@ class HttpClient implements HttpClientInterface
         $this->addListener(
             'request.error',
             array(
-                new ErrorListener($this->options),
+                new ErrorListener(),
                 'onRequestError',
             )
         );
@@ -121,9 +121,8 @@ class HttpClient implements HttpClientInterface
     /**
      * Attaches a listener to a HttpClient event.
      *
-     * @param HttpClient $httpClient
-     * @param string     $eventName
-     * @param array      $listener
+     * @param string $eventName
+     * @param array  $listener
      */
     public function addListener($eventName, $listener)
     {
