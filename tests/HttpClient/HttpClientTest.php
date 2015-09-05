@@ -189,14 +189,14 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Imgur\Exception\ErrorException
-     * @expectedExceptionMessage Request to: that failed with: "oops"
+     * @expectedExceptionMessage Request to: that failed with: "oops2"
      */
     public function testThrowExceptionWhenBadRequestJsonError()
     {
         $path = '/some/path';
         $parameters = array('a' => 'b');
 
-        $response = new Response(403, null, json_encode(array('data' => array('request' => 'that', 'error' => 'oops'), 'error' => 'oops2')));
+        $response = new Response(403, null, json_encode(array('data' => array('request' => 'that', 'error' => 'oops2', 'method' => 'GET'), 'success' => false, 'status' => 403)));
         $response->addHeader('X-RateLimit-UserLimit', 10);
         $response->addHeader('X-RateLimit-UserRemaining', 10);
         $response->addHeader('X-RateLimit-ClientLimit', 10);
@@ -258,14 +258,11 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Guzzle\Http\Message\Response', $response);
     }
 
-    protected function getClientMock(array $methods = array())
+    protected function getClientMock()
     {
         $mock = $this->getMock(
             'Guzzle\Http\Client',
-            array_merge(
-                array('send', 'createRequest'),
-                $methods
-            )
+            array('send', 'createRequest')
         );
 
         $mock->expects($this->any())

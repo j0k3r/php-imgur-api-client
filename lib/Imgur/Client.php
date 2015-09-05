@@ -2,6 +2,8 @@
 
 namespace Imgur;
 
+use Imgur\Exception\InvalidArgumentException;
+
 /**
  * PHP Imgur API wrapper.
  *
@@ -61,42 +63,32 @@ class Client
 
         switch ($name) {
             case 'account':
-                $api = new Api\Account($this, $pager);
-                break;
+                return new Api\Account($this, $pager);
 
             case 'album':
-                $api = new Api\Album($this, $pager);
-                break;
+                return new Api\Album($this, $pager);
 
             case 'comment':
-                $api = new Api\Comment($this, $pager);
-                break;
+                return new Api\Comment($this, $pager);
 
             case 'gallery':
-                $api = new Api\Gallery($this, $pager);
-                break;
+                return new Api\Gallery($this, $pager);
 
             case 'image':
-                $api = new Api\Image($this, $pager);
-                break;
+                return new Api\Image($this, $pager);
 
             case 'conversation':
-                $api = new Api\Conversation($this, $pager);
-                break;
+                return new Api\Conversation($this, $pager);
 
             case 'notification':
-                $api = new Api\Notification($this, $pager);
-                break;
+                return new Api\Notification($this, $pager);
 
             case 'memegen':
-                $api = new Api\Memegen($this, $pager);
-                break;
+                return new Api\Memegen($this, $pager);
 
             default:
-                throw new Exception\InvalidArgumentException('API Method not supported: '.$name);
+                throw new InvalidArgumentException('API Method not supported: '.$name);
         }
-
-        return $api;
     }
 
     /**
@@ -129,7 +121,7 @@ class Client
     public function getOption($name)
     {
         if (!array_key_exists($name, $this->options)) {
-            throw new Exception\InvalidArgumentException(sprintf('Undefined option called: "%s"', $name));
+            throw new InvalidArgumentException(sprintf('Undefined option called: "%s"', $name));
         }
 
         return $this->options[$name];
@@ -144,7 +136,7 @@ class Client
     public function setOption($name, $value)
     {
         if (!array_key_exists($name, $this->options)) {
-            throw new Exception\InvalidArgumentException(sprintf('Undefined option called: "%s"', $name));
+            throw new InvalidArgumentException(sprintf('Undefined option called: "%s"', $name));
         }
 
         $this->options[$name] = $value;
@@ -158,7 +150,11 @@ class Client
     public function getAuthenticationClient()
     {
         if (empty($this->authenticationClient)) {
-            $this->authenticationClient = new Auth\OAuth2($this->getOption('client_id'), $this->getOption('client_secret'));
+            $this->authenticationClient = new Auth\OAuth2(
+                $this->getHttpClient(),
+                $this->getOption('client_id'),
+                $this->getOption('client_secret')
+            );
         }
 
         return $this->authenticationClient;
@@ -174,9 +170,7 @@ class Client
      */
     public function getAuthenticationUrl($responseType = 'code', $state = null)
     {
-        $authenticationClient = $this->getAuthenticationClient();
-
-        return $authenticationClient->getAuthenticationUrl($responseType, $state);
+        return $this->getAuthenticationClient()->getAuthenticationUrl($responseType, $state);
     }
 
     /**
@@ -189,9 +183,7 @@ class Client
      */
     public function requestAccessToken($code, $responseType = 'code')
     {
-        $authenticationClient = $this->getAuthenticationClient();
-
-        return $authenticationClient->requestAccessToken($code, $responseType, $this->getHttpClient());
+        return $this->getAuthenticationClient()->requestAccessToken($code, $responseType);
     }
 
     /**
@@ -201,9 +193,7 @@ class Client
      */
     public function getAccessToken()
     {
-        $authenticationClient = $this->getAuthenticationClient();
-
-        return $authenticationClient->getAccessToken();
+        return $this->getAuthenticationClient()->getAccessToken();
     }
 
     /**
@@ -213,9 +203,7 @@ class Client
      */
     public function checkAccessTokenExpired()
     {
-        $authenticationClient = $this->getAuthenticationClient();
-
-        return $authenticationClient->checkAccessTokenExpired();
+        return $this->getAuthenticationClient()->checkAccessTokenExpired();
     }
 
     /**
@@ -225,10 +213,7 @@ class Client
      */
     public function refreshToken()
     {
-        $authenticationClient = $this->getAuthenticationClient();
-        $httpClient = $this->getHttpClient();
-
-        return $authenticationClient->refreshToken($httpClient);
+        return $this->getAuthenticationClient()->refreshToken();
     }
 
     /**
@@ -238,10 +223,7 @@ class Client
      */
     public function setAccessToken($token)
     {
-        $authenticationClient = $this->getAuthenticationClient();
-        $httpClient = $this->getHttpClient();
-
-        $authenticationClient->setAccessToken($token, $httpClient);
+        $this->getAuthenticationClient()->setAccessToken($token);
     }
 
     /**
@@ -249,9 +231,6 @@ class Client
      */
     public function sign()
     {
-        $authenticationClient = $this->getAuthenticationClient();
-        $httpClient = $this->getHttpClient();
-
-        $authenticationClient->sign($httpClient);
+        $this->getAuthenticationClient()->sign();
     }
 }

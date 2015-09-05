@@ -17,7 +17,7 @@ class AuthListener
 
     public function onRequestBeforeSend(Event $event)
     {
-        if (!empty($this->token['access_token'])) {
+        if (is_array($this->token) && !empty($this->token['access_token'])) {
             $event['request']->setHeader(
                 'Authorization',
                 'Bearer '.$this->token['access_token']
