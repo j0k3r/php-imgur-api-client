@@ -36,7 +36,7 @@ class Basic {
     public function __construct($parameters) {
         $this->setData($parameters['data'])
              ->setSuccess($parameters['success'])
-             ->setStatus($parameters['status']);
+             ->setStatus(@$parameters['status']);
     }
 
     /**
