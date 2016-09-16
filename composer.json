@@ -1,11 +1,19 @@
 {
-    "name": "adyg/php-imgur-api-client",
+    "name": "j0k3r/php-imgur-api-client",
+    "replace": {
+        "adyg/php-imgur-api-client": "self.version"
+    },
     "type": "library",
     "description": "Imgur API v3 client",
-    "homepage": "https://github.com/Adyg/php-imgur-api-client",
+    "homepage": "https://github.com/j0k3r/php-imgur-api-client",
     "keywords": ["imgur", "api"],
     "license": "MIT",
     "authors": [
+        {
+            "name": "Jeremy Benoist",
+            "email": "jeremy.benoist@gmail.com",
+            "homepage": "http://www.j0k3r.net"
+        },
         {
             "name": "Adrian Ghiuta",
             "email": "adrian.ghiuta@gmail.com",
@@ -18,6 +26,6 @@
     "require": {
         "php":             ">=5.3.2",
         "ext-curl":        "*",
-        "guzzle/guzzle":   ">=3.7"        
+        "guzzle/guzzle":   ">=3.7"
     }
 }
