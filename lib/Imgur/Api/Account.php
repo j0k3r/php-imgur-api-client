@@ -16,13 +16,13 @@ class Account extends AbstractApi
      *
      * @param string $username
      *
-     * @return \Imgur\Api\Model\Account
+     * @link https://api.imgur.com/endpoints/account#account
+     *
+     * @return array Account (@see https://api.imgur.com/models/account)
      */
     public function base($username = 'me')
     {
-        $parameters = $this->get('account/' . $username);
-
-        return new Model\Account($parameters);
+        return $this->get('account/' . $username);
     }
 
     /**
@@ -58,23 +58,13 @@ class Account extends AbstractApi
      *
      * @param string $username
      *
-     * @return \Imgur\Api\Model\Image|array
+     * @link https://api.imgur.com/endpoints/account#account-gallery-favorites
+     *
+     * @return array Gallery Image (@see https://api.imgur.com/models/gallery_image) OR Gallery Album (@see https://api.imgur.com/models/gallery_album)
      */
     public function galleryFavorites($username = 'me')
     {
-        $parameters = $this->get('account/' . $username . '/gallery_favorites');
-
-        $images = array();
-
-        if (empty($parameters['data'])) {
-            return $images;
-        }
-
-        foreach ($parameters['data'] as $parameter) {
-            $images[] = new Model\Image($parameter);
-        }
-
-        return $images;
+        return $this->get('account/' . $username . '/gallery_favorites');
     }
 
     /**
@@ -82,23 +72,13 @@ class Account extends AbstractApi
      *
      * @param string $username
      *
-     * @return \Imgur\Api\Model\GalleryImage or \Imgur\Api\Model\GalleryAlbum|array
+     * @link https://api.imgur.com/endpoints/account#account-favorites
+     *
+     * @return array Gallery Image (@see https://api.imgur.com/models/gallery_image) OR Gallery Album (@see https://api.imgur.com/models/gallery_album)
      */
     public function favorites($username = 'me')
     {
-        $parameters = $this->get('account/' . $username . '/favorites');
-
-        $images = array();
-
-        foreach ($parameters['data'] as $parameter) {
-            if (!empty($parameter['is_album'])) {
-                $images[] = new Model\GalleryAlbum($parameter);
-            } else {
-                $images[] = new Model\GalleryImage($parameter);
-            }
-        }
-
-        return $images;
+        return $this->get('account/' . $username . '/favorites');
     }
 
     /**
@@ -106,71 +86,54 @@ class Account extends AbstractApi
      *
      * @param string $username
      *
-     * @return \Imgur\Api\Model\GalleryImage or \Imgur\Api\Model\GalleryAlbum|array
+     * @link https://api.imgur.com/endpoints/account#account-submissions
+     *
+     * @return array Gallery Image (@see https://api.imgur.com/models/gallery_image) OR Gallery Album (@see https://api.imgur.com/models/gallery_album)
      */
     public function submissions($username = 'me')
     {
-        $parameters = $this->get('account/' . $username . '/submissions');
-
-        $images = array();
-
-        foreach ($parameters['data'] as $parameter) {
-            if (!empty($parameter['is_album'])) {
-                $images[] = new Model\GalleryAlbum($parameter);
-            } else {
-                $images[] = new Model\GalleryImage($parameter);
-            }
-        }
-
-        return $images;
+        return $this->get('account/' . $username . '/submissions');
     }
 
     /**
      * Returns the account settings, only accessible if you're logged in as the user.
      *
      * @param string $username
+     *
+     * @link https://api.imgur.com/endpoints/account#account-settings
+     *
+     * @return array Account Settings (@see https://api.imgur.com/models/account_settings)
      */
     public function settings($username = 'me')
     {
-        $parameters = $this->get('account/' . $username . '/settings');
-
-        return new Model\AccountSettings($parameters);
+        return $this->get('account/' . $username . '/settings');
     }
 
     /**
      * Updates the account settings for a given user, the user must be logged in.
      *
-     * @param \Imgur\Api\Model\AccountSettings $account
+     * @param array $parameters
      *
-     * @return \Imgur\Api\Model\Basic
+     * @link https://api.imgur.com/endpoints/account#update-settings
+     *
+     * @return bool
      */
-    public function changeAccountSettings(\Imgur\Api\Model\AccountSettings $account)
+    public function changeAccountSettings($parameters)
     {
-        $parameters = array(
-            'bio' => $account->getBio(),
-            'public_images' => var_export($account->getPublicImages(), true),
-            'messaging_enabled' => var_export($account->getMessagingEnabled(), true),
-            'album_privacy' => $account->getAlbumPrivacy(),
-            'accepted_gallery_terms' => var_export($account->getAcceptedGalleryTerms(), true),
-        );
-
-        $response = $this->post('account/me/settings', $parameters);
-
-        return new Model\Basic($response);
+        return $this->post('account/me/settings', $parameters);
     }
 
     /**
+     * UNDOCUMENTED
      * Return the statistics about the account.
      *
      * @param string $username
      *
-     * @return \Imgur\Api\Model\AccountStatistics
+     * @return array
      */
     public function accountStats($username = 'me')
     {
-        $parameters = $this->get('account/' . $username . '/stats');
-
-        return new Model\AccountStatistics($parameters);
+        return $this->get('account/' . $username . '/stats');
     }
 
     /**
@@ -178,17 +141,13 @@ class Account extends AbstractApi
      *
      * @param string $username
      *
-     * @return \Imgur\Api\Model\GalleryProfile
+     * @link https://api.imgur.com/endpoints/account#account-profile
+     *
+     * @return array Gallery Profile (@see https://api.imgur.com/models/gallery_profile)
      */
     public function accountGalleryProfile($username = 'me')
     {
-        $parameters = $this->get('account/' . $username . '/gallery_profile');
-
-        if (!empty($parameters['data'])) {
-            $parameters = $parameters['data'];
-        }
-
-        return new Model\GalleryProfile($parameters);
+        return $this->get('account/' . $username . '/gallery_profile');
     }
 
     /**
@@ -196,25 +155,27 @@ class Account extends AbstractApi
      *
      * @param string $username
      *
+     * @link https://api.imgur.com/endpoints/account#verify-email
+     *
      * @return bool
      */
     public function verifyUsersEmail($username = 'me')
     {
-        $parameters = $this->get('account/' . $username . '/verifyemail');
-
-        return new Model\Basic($parameters);
+        return $this->get('account/' . $username . '/verifyemail');
     }
 
     /**
      * Sends an email to the user to verify that their email is valid to upload to gallery. Must be logged in as the user to send.
      *
      * @param string $username
+     *
+     * @link https://api.imgur.com/endpoints/account#send-verify-email
+     *
+     * @return bool
      */
     public function sendVerificationEmail($username = 'me')
     {
-        $parameters = $this->post('account/' . $username . '/verifyemail');
-
-        return new Model\Basic($parameters);
+        return $this->post('account/' . $username . '/verifyemail');
     }
 
     /**
@@ -222,25 +183,13 @@ class Account extends AbstractApi
      *
      * @param string $username
      *
-     * @throws \Imgur\Exception\RuntimeException
+     * @link https://api.imgur.com/endpoints/account#albums
      *
-     * @return \Imgur\Api\Model\Album|array
+     * @return array Array of Album (@see https://api.imgur.com/models/album)
      */
     public function albums($username = 'me')
     {
-        $parameters = $this->get('account/' . $username . '/albums');
-
-        if (empty($parameters['data'])) {
-            throw new \Imgur\Exception\RuntimeException('An error occured while attempting to retrieve albums for ' . $username . ':' . $parameters['error']['message']);
-        }
-
-        $albums = array();
-
-        foreach ($parameters['data'] as $parameter) {
-            $albums[] = new Model\Album($parameter);
-        }
-
-        return $albums;
+        return $this->get('account/' . $username . '/albums');
     }
 
     /**
@@ -250,13 +199,13 @@ class Account extends AbstractApi
      * @param string $username
      * @param string $albumId
      *
-     * @return \Imgur\Api\Model\Album
+     * @link https://api.imgur.com/endpoints/account#album
+     *
+     * @return array Album (@see https://api.imgur.com/models/album)
      */
     public function album($albumId, $username = 'me')
     {
-        $parameters = $this->get('account/' . $username . '/album/' . $albumId);
-
-        return new Model\Album($parameters['data']);
+        return $this->get('account/' . $username . '/album/' . $albumId);
     }
 
     /**
@@ -264,13 +213,13 @@ class Account extends AbstractApi
      *
      * @param string $username
      *
-     * @return \Imgur\Api\Model\Basic
+     * @link https://api.imgur.com/endpoints/account#album-ids
+     *
+     * @return array<int>
      */
     public function albumIds($username = 'me')
     {
-        $parameters = $this->get('account/' . $username . '/albums/ids');
-
-        return new Model\Basic($parameters);
+        return $this->get('account/' . $username . '/albums/ids');
     }
 
     /**
@@ -278,13 +227,13 @@ class Account extends AbstractApi
      *
      * @param string $username
      *
-     * @return \Imgur\Api\Model\Basic
+     * @link https://api.imgur.com/endpoints/account#album-count
+     *
+     * @return int
      */
     public function albumCount($username = 'me')
     {
-        $parameters = $this->get('account/' . $username . '/albums/count');
-
-        return new Model\Basic($parameters);
+        return $this->get('account/' . $username . '/albums/count');
     }
 
     /**
@@ -293,13 +242,13 @@ class Account extends AbstractApi
      * @param string $username
      * @param string $albumId
      *
-     * @return \Imgur\Api\Model\Basic
+     * @link https://api.imgur.com/endpoints/account#album-delete
+     *
+     * @return bool
      */
     public function albumDelete($albumId, $username = 'me')
     {
-        $parameters = $this->delete('account/' . $username . '/album/' . $albumId);
-
-        return new Model\Basic($parameters);
+        return $this->delete('account/' . $username . '/album/' . $albumId);
     }
 
     /**
@@ -307,19 +256,13 @@ class Account extends AbstractApi
      *
      * @param string $username
      *
-     * @return \Imgur\Api\Model\Comment
+     * @link https://api.imgur.com/endpoints/account#comments
+     *
+     * @return array Array of Comment (@see https://api.imgur.com/models/comment)
      */
     public function comments($username = 'me')
     {
-        $parameters = $this->get('account/' . $username . '/comments');
-
-        $comments = array();
-
-        foreach ($parameters['data'] as $parameter) {
-            $comments[] = new Model\Comment($parameter);
-        }
-
-        return $comments;
+        return $this->get('account/' . $username . '/comments');
     }
 
     /**
@@ -329,13 +272,13 @@ class Account extends AbstractApi
      * @param string $commentId
      * @param string $username
      *
-     * @return \Imgur\Api\Model\Comment
+     * @link https://api.imgur.com/endpoints/account#comment
+     *
+     * @return array Comment (@see https://api.imgur.com/models/comment)
      */
     public function comment($commentId, $username = 'me')
     {
-        $parameters = $this->get('account/' . $username . '/comment/' . $commentId);
-
-        return new Model\Comment($parameters['data']);
+        return $this->get('account/' . $username . '/comment/' . $commentId);
     }
 
     /**
@@ -343,27 +286,27 @@ class Account extends AbstractApi
      *
      * @param string $username
      *
-     * @return \Imgur\Api\Model\Basic
+     * @link https://api.imgur.com/endpoints/account#comment-ids
+     *
+     * @return array<int>
      */
     public function commentIds($username = 'me')
     {
-        $parameters = $this->get('account/' . $username . '/comments/ids');
-
-        return new Model\Basic($parameters);
+        return $this->get('account/' . $username . '/comments/ids');
     }
 
     /**
      * Return a count of all of the comments associated with the account.
      *
-     * @param type $username
+     * @param string $username
      *
-     * @return \Imgur\Api\Model\Basic
+     * @link https://api.imgur.com/endpoints/account#comment-count
+     *
+     * @return int
      */
     public function commentCount($username = 'me')
     {
-        $parameters = $this->get('account/' . $username . '/comments/count');
-
-        return new Model\Basic($parameters);
+        return $this->get('account/' . $username . '/comments/count');
     }
 
     /**
@@ -372,13 +315,13 @@ class Account extends AbstractApi
      * @param string $commentId
      * @param string $username
      *
-     * @return \Imgur\Api\Model\Basic
+     * @link https://api.imgur.com/endpoints/account#comment-delete
+     *
+     * @return bool
      */
     public function commentDelete($commentId, $username = 'me')
     {
-        $parameters = $this->delete('account/' . $username . '/comment/' . $commentId);
-
-        return new Model\Basic($parameters);
+        return $this->delete('account/' . $username . '/comment/' . $commentId);
     }
 
     /**
@@ -387,19 +330,13 @@ class Account extends AbstractApi
      *
      * @param string $username
      *
-     * @return \Imgur\Api\Model\Image
+     * @link https://api.imgur.com/endpoints/account#images
+     *
+     * @return array Array of Image (@see https://api.imgur.com/models/image)
      */
     public function images($username = 'me')
     {
-        $parameters = $this->get('account/' . $username . '/images');
-
-        $images = array();
-
-        foreach ($parameters['data'] as $parameter) {
-            $images[] = new Model\Image($parameter);
-        }
-
-        return $images;
+        return $this->get('account/' . $username . '/images');
     }
 
     /**
@@ -409,13 +346,13 @@ class Account extends AbstractApi
      * @param string $imageId
      * @param string $username
      *
-     * @return \Imgur\Api\Model\Image
+     * @link https://api.imgur.com/endpoints/account#image
+     *
+     * @return array Image (@see https://api.imgur.com/models/image)
      */
     public function image($imageId, $username = 'me')
     {
-        $parameters = $this->get('account/' . $username . '/image/' . $imageId);
-
-        return new Model\Image($parameters['data']);
+        return $this->get('account/' . $username . '/image/' . $imageId);
     }
 
     /**
@@ -423,13 +360,13 @@ class Account extends AbstractApi
      *
      * @param string $username
      *
-     * @return \Imgur\Api\Model\Basic
+     * @link https://api.imgur.com/endpoints/account#image-ids
+     *
+     * @return array<int>
      */
     public function imageIds($username = 'me')
     {
-        $parameters = $this->get('account/' . $username . '/images/ids');
-
-        return new Model\Basic($parameters);
+        return $this->get('account/' . $username . '/images/ids');
     }
 
     /**
@@ -437,13 +374,13 @@ class Account extends AbstractApi
      *
      * @param string $username
      *
-     * @return \Imgur\Api\Model\Basic
+     * @link https://api.imgur.com/endpoints/account#image-count
+     *
+     * @return int
      */
     public function imageCount($username = 'me')
     {
-        $parameters = $this->get('account/' . $username . '/images/count');
-
-        return new Model\Basic($parameters);
+        return $this->get('account/' . $username . '/images/count');
     }
 
     /**
@@ -452,13 +389,13 @@ class Account extends AbstractApi
      * @param string $deleteHash
      * @param string $username
      *
-     * @return \Imgur\Api\Model\Basic
+     * @link https://api.imgur.com/endpoints/account#image-delete
+     *
+     * @return bool
      */
     public function imageDelete($deleteHash, $username = 'me')
     {
-        $parameters = $this->delete('account/' . $username . '/image/' . $deleteHash);
-
-        return new Model\Basic($parameters);
+        return $this->delete('account/' . $username . '/image/' . $deleteHash);
     }
 
     /**
@@ -467,20 +404,12 @@ class Account extends AbstractApi
      * @param string $username
      * @param bool   $onlyNew
      *
-     * @return \Imgur\Api\Model\Notification
+     * @link https://api.imgur.com/endpoints/account#replies
+     *
+     * @return array Array of Notification (@see https://api.imgur.com/models/notification)
      */
     public function replies($username = 'me', $onlyNew = false)
     {
-        $parameters = $this->get('account/' . $username . '/notifications/replies?new=' . var_export($onlyNew, true));
-
-        $replies = array();
-
-        foreach ($parameters['data'] as $parameter) {
-            $reply = new Model\Comment($parameter['content']);
-
-            $replies[] = new Model\Notification($parameter, $reply);
-        }
-
-        return $replies;
+        return $this->get('account/' . $username . '/notifications/replies?new=' . var_export($onlyNew, true));
     }
 }

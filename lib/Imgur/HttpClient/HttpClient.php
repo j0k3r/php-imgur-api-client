@@ -2,9 +2,8 @@
 
 namespace Imgur\HttpClient;
 
-use Guzzle\Http\Client as GuzzleClient;
-use Guzzle\Http\ClientInterface;
-use Guzzle\Http\Message\Request;
+use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\ClientInterface;
 use Imgur\Exception\ErrorException;
 use Imgur\Exception\RuntimeException;
 use Imgur\Listener\ErrorListener;
@@ -19,7 +18,7 @@ class HttpClient implements HttpClientInterface
     /**
      * The Guzzle instance.
      *
-     * @var Guzzle\Http\Client
+     * @var GuzzleHttp\Client
      */
     protected $client;
 
@@ -30,24 +29,25 @@ class HttpClient implements HttpClientInterface
      */
     protected $options = array(
         'base_url' => 'https://api.imgur.com/3/',
-        'headers' => array(),
-        'body' => array(),
     );
 
     /**
-     * @param array                        $options
-     * @param \Guzzle\Http\ClientInterface $client
+     * @param array           $options
+     * @param ClientInterface $client
      */
     public function __construct(array $options = array(), ClientInterface $client = null)
     {
-        $this->options = array_merge_recursive($options, $this->options);
-        $this->client = $client ?: new GuzzleClient($this->options['base_url']);
+        $this->options = array_merge($options, $this->options);
+
+        $this->client = $client ?: new GuzzleClient(array('base_url' => $this->options['base_url']));
+
+        unset($this->options['base_url']);
 
         $this->addListener(
-            'request.error',
+            'error',
             array(
                 new ErrorListener(),
-                'onRequestError',
+                'error',
             )
         );
     }
@@ -97,11 +97,17 @@ class HttpClient implements HttpClientInterface
      */
     public function createRequest($url, $parameters, $httpMethod = 'GET')
     {
+        $options = array(
+            'query' => $parameters,
+            'headers' => isset($this->options['headers']) ? $this->options['headers'] : array(),
+            'body' => isset($this->options['body']) ? $this->options['body'] : '',
+        );
+
         if ($httpMethod === 'POST' || $httpMethod === 'DELETE') {
-            return $this->client->createRequest($httpMethod, $url, $this->options['headers'], $parameters);
+            $options['body'] = $parameters;
         }
 
-        return $this->client->createRequest($httpMethod, $url, $this->options['headers'], $this->options['body'], $parameters);
+        return $this->client->createRequest($httpMethod, $url, $options);
     }
 
     /**
@@ -115,7 +121,7 @@ class HttpClient implements HttpClientInterface
             $responseBody = json_decode($response->getBody(true), true);
         }
 
-        return $responseBody;
+        return $responseBody['data'];
     }
 
     /**
@@ -126,6 +132,9 @@ class HttpClient implements HttpClientInterface
      */
     public function addListener($eventName, $listener)
     {
-        $this->client->getEventDispatcher()->addListener($eventName, $listener);
+        $this
+            ->client
+            ->getEmitter()
+            ->on($eventName, $listener);
     }
 }

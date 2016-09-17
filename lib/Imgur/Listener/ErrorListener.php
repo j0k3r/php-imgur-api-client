@@ -2,7 +2,7 @@
 
 namespace Imgur\Listener;
 
-use Guzzle\Common\Event;
+use GuzzleHttp\Event\ErrorEvent;
 use Imgur\Exception\ErrorException;
 use Imgur\Exception\RateLimitException;
 use Imgur\Exception\RuntimeException;
@@ -15,12 +15,12 @@ class ErrorListener
     /**
      * {@inheritdoc}
      */
-    public function onRequestError(Event $event)
+    public function error(ErrorEvent $event)
     {
-        $request = $event['request'];
-        $response = $request->getResponse();
+        $request = $event->getRequest();
+        $response = $event->getResponse();
 
-        if (!$response->isClientError() && !$response->isServerError()) {
+        if ($response->getStatusCode() < 400) {
             return;
         }
 

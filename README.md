@@ -12,7 +12,7 @@ Please use the [issues](https://github.com/Adyg/php-imgur-api-client/issues) sec
 
 ## Requirements
 
-* PHP >= 5.3.3 with [cURL](http://php.net/manual/en/book.curl.php) extension
+* PHP >= 5.5
 * [Guzzle](https://github.com/guzzle/guzzle) library
 
 ## Composer

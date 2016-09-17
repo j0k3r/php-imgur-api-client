@@ -110,6 +110,7 @@ class OAuth2 implements AuthInterface
                 $grantType = 'pin';
                 $type = 'pin';
                 break;
+
             case 'code':
             default:
                 $grantType = 'authorization_code';
@@ -236,11 +237,12 @@ class OAuth2 implements AuthInterface
      */
     public function sign()
     {
-        $token = $this->getAccessToken();
-
-        $this->httpClient->addListener('request.before_send', array(
-            new AuthListener($token, $this->clientId),
-            'onRequestBeforeSend',
+        $this->httpClient->addListener('before', array(
+            new AuthListener(
+                $this->getAccessToken(),
+                $this->clientId
+            ),
+            'before',
         ));
     }
 }

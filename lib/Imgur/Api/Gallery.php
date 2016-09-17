@@ -15,34 +15,34 @@ class Gallery extends AbstractApi
      * Returns the images in the gallery. For example the main gallery is https://api.imgur.com/3/gallery/hot/viral/0.json.
      *
      * @param string $section   (hot | top | user)
-     * @param string $sort      (viral | time)
+     * @param string $sort      (viral | top | time | rising)
      * @param int    $page
      * @param string $window    (day | week | month | year | all)
      * @param bool   $showViral
      *
-     * @return \Imgur\Api\Model\GalleryImage or \Imgur\Api\Model\GalleryAlbum | array
+     * @link https://api.imgur.com/endpoints/gallery#gallery
+     *
+     * @return array Gallery Image (@see https://api.imgur.com/models/gallery_image) OR Gallery Album (@see https://api.imgur.com/models/gallery_album)
      */
     public function gallery($section = 'hot', $sort = 'viral', $page = 0, $window = 'day', $showViral = true)
     {
-        $parameters = $this->get('gallery/' . $section . '/' . $sort . '/' . $window . '/' . $page, array('showViral' => var_export($showViral, true)));
-
-        return $this->createAlbumOrImageObjects($parameters);
+        return $this->get('gallery/' . $section . '/' . $sort . '/' . $window . '/' . $page, array('showViral' => var_export($showViral, true)));
     }
 
     /**
      * View images for memes subgallery.
      *
-     * @param string $sort   (viral | time)
+     * @param string $sort   (viral | time | top)
      * @param int    $page
      * @param string $window (day | week | month | year | all)
      *
-     * @return \Imgur\Api\Model\GalleryImage or \Imgur\Api\Model\GalleryAlbum | array
+     * @link https://api.imgur.com/endpoints/gallery#meme-subgallery
+     *
+     * @return array Gallery Image (@see https://api.imgur.com/models/gallery_image) OR Gallery Album (@see https://api.imgur.com/models/gallery_album)
      */
     public function memesSubgallery($sort = 'viral', $page = 0, $window = 'day')
     {
-        $parameters = $this->get('gallery/' . $sort . '/' . $window . '/' . $page);
-
-        return $this->createAlbumOrImageObjects($parameters);
+        return $this->get('gallery/' . $sort . '/' . $window . '/' . $page);
     }
 
     /**
@@ -50,30 +50,30 @@ class Gallery extends AbstractApi
      *
      * @param type $imageId
      *
-     * @return \Imgur\Api\Model\Image
+     * @link https://api.imgur.com/endpoints/gallery#meme-subgallery-image
+     *
+     * @return array Gallery Image (@see https://api.imgur.com/models/gallery_image)
      */
     public function memeSubgalleryImage($imageId)
     {
-        $parameters = $this->get('gallery/g/memes/' . $imageId);
-
-        return new Model\Image($parameters);
+        return $this->get('gallery/g/memes/' . $imageId);
     }
 
     /**
      * View gallery images for a sub-reddit.
      *
      * @param string $subreddit (e.g pics - A valid sub-reddit name)
-     * @param string $sort      (viral | time)
+     * @param string $sort      (top | time)
      * @param int    $page
      * @param string $window    (day | week | month | year | all)
      *
-     * @return \Imgur\Api\Model\GalleryImage or \Imgur\Api\Model\GalleryAlbum | array
+     * @link https://api.imgur.com/endpoints/gallery#subreddit
+     *
+     * @return array Gallery Image (@see https://api.imgur.com/models/gallery_image)
      */
-    public function subredditGalleries($subreddit, $sort = 'viral', $page = 0, $window = 'day')
+    public function subredditGalleries($subreddit, $sort = 'time', $page = 0, $window = 'day')
     {
-        $parameters = $this->get('gallery/r/' . $subreddit . '/' . $sort . '/' . $window . '/' . $page);
-
-        return $this->createAlbumOrImageObjects($parameters);
+        return $this->get('gallery/r/' . $subreddit . '/' . $sort . '/' . $window . '/' . $page);
     }
 
     /**
@@ -82,29 +82,29 @@ class Gallery extends AbstractApi
      * @param string $subreddit (e.g pics - A valid sub-reddit name)
      * @param string $imageId
      *
-     * @return \Imgur\Api\Model\Image
+     * @link https://api.imgur.com/endpoints/gallery#subreddit-image
+     *
+     * @return array Gallery Image (@see https://api.imgur.com/models/gallery_image)
      */
     public function subredditImage($subreddit, $imageId)
     {
-        $parameters = $this->get('gallery/r/' . $subreddit . '/' . $imageId);
-
-        return new Model\Image($parameters);
+        return $this->get('gallery/r/' . $subreddit . '/' . $imageId);
     }
 
     /**
      * Search the gallery with a given query string.
      *
      * @param string $query
-     * @param string $sort  (viral | time)
+     * @param string $sort  (time | viral | top)
      * @param int    $page
      *
-     * @return \Imgur\Api\Model\GalleryImage or \Imgur\Api\Model\GalleryAlbum | array
+     * @link https://api.imgur.com/endpoints/gallery#gallery-search
+     *
+     * @return array Gallery Image (@see https://api.imgur.com/models/gallery_image) OR Gallery Album (@see https://api.imgur.com/models/gallery_album)
      */
     public function search($query, $sort = 'time', $page = 0)
     {
-        $parameters = $this->get('gallery/search/' . $sort . '/' . $page, array('q' => $query));
-
-        return $this->createAlbumOrImageObjects($parameters);
+        return $this->get('gallery/search/' . $sort . '/' . $page, array('q' => $query));
     }
 
     /**
@@ -112,13 +112,13 @@ class Gallery extends AbstractApi
      *
      * @param int $page
      *
-     * @return \Imgur\Api\Model\GalleryImage or \Imgur\Api\Model\GalleryAlbum | array
+     * @link https://api.imgur.com/endpoints/gallery#gallery-random
+     *
+     * @return array Gallery Image (@see https://api.imgur.com/models/gallery_image) OR Gallery Album (@see https://api.imgur.com/models/gallery_album)
      */
     public function randomGalleryImages($page = 0)
     {
-        $parameters = $this->get('gallery/random/random/' . $page);
-
-        return $this->createAlbumOrImageObjects($parameters);
+        return $this->get('gallery/random/random/' . $page);
     }
 
     /**
@@ -129,13 +129,11 @@ class Gallery extends AbstractApi
      *
      * @link https://api.imgur.com/endpoints/gallery#to-gallery
      *
-     * @return \Imgur\Api\Model\GalleryImage or \Imgur\Api\Model\GalleryAlbum
+     * @return bool
      */
     public function submitToGallery($imageOrAlbumId, $data)
     {
-        $parameters = $this->post('gallery/' . $imageOrAlbumId, $data);
-
-        return $this->createAlbumOrImageObjects($parameters);
+        return $this->post('gallery/' . $imageOrAlbumId, $data);
     }
 
     /**
@@ -143,13 +141,13 @@ class Gallery extends AbstractApi
      *
      * @param string $imageOrAlbumId
      *
-     * @return \Imgur\Api\Model\Basic
+     * @link https://api.imgur.com/endpoints/gallery#from-gallery
+     *
+     * @return bool
      */
     public function removeFromGallery($imageOrAlbumId)
     {
-        $parameters = $this->delete('gallery/' . $imageOrAlbumId);
-
-        return new Model\Basic($parameters);
+        return $this->delete('gallery/' . $imageOrAlbumId);
     }
 
     /**
@@ -157,13 +155,13 @@ class Gallery extends AbstractApi
      *
      * @param string $albumId
      *
-     * @return \Imgur\Api\Model\Album
+     * @link https://api.imgur.com/endpoints/gallery#album
+     *
+     * @return array Gallery Album (@see https://api.imgur.com/models/gallery_album)
      */
     public function album($albumId)
     {
-        $parameters = $this->get('gallery/album/' . $albumId);
-
-        return new Model\Album($parameters);
+        return $this->get('gallery/album/' . $albumId);
     }
 
     /**
@@ -171,13 +169,13 @@ class Gallery extends AbstractApi
      *
      * @param string $imageId
      *
-     * @return \Imgur\Api\Model\Image
+     * @link https://api.imgur.com/endpoints/gallery#image
+     *
+     * @return array Gallery Image (@see https://api.imgur.com/models/gallery_image)
      */
     public function image($imageId)
     {
-        $parameters = $this->get('gallery/image/' . $imageId);
-
-        return new Model\Image($parameters);
+        return $this->get('gallery/image/' . $imageId);
     }
 
     /**
@@ -185,13 +183,13 @@ class Gallery extends AbstractApi
      *
      * @param string $imageOrAlbumId
      *
-     * @return \Imgur\Api\Model\Vote
+     * @link https://api.imgur.com/endpoints/gallery#gallery-reporting
+     *
+     * @return bool
      */
     public function report($imageOrAlbumId)
     {
-        $parameters = $this->post('gallery/' . $imageOrAlbumId . '/report');
-
-        return new Model\Vote($parameters);
+        return $this->post('gallery/' . $imageOrAlbumId . '/report');
     }
 
     /**
@@ -199,13 +197,13 @@ class Gallery extends AbstractApi
      *
      * @param string $imageOrAlbumId
      *
-     * @return \Imgur\Api\Model\Vote
+     * @link https://api.imgur.com/endpoints/gallery#gallery-votes
+     *
+     * @return array Vote (@see https://api.imgur.com/models/vote)
      */
     public function votes($imageOrAlbumId)
     {
-        $parameters = $this->get('gallery/' . $imageOrAlbumId . '/votes');
-
-        return new Model\Vote($parameters);
+        return $this->get('gallery/' . $imageOrAlbumId . '/votes');
     }
 
     /**
@@ -214,13 +212,13 @@ class Gallery extends AbstractApi
      * @param string $imageOrAlbumId
      * @param string $vote           (up|down)
      *
-     * @return \Imgur\Api\Model\Basic
+     * @link https://api.imgur.com/endpoints/gallery#gallery-voting
+     *
+     * @return bool
      */
     public function vote($imageOrAlbumId, $vote)
     {
-        $parameters = $this->get('gallery/' . $imageOrAlbumId . '/vote/' . $vote);
-
-        return new Model\Basic($parameters);
+        return $this->get('gallery/' . $imageOrAlbumId . '/vote/' . $vote);
     }
 
     /**
@@ -229,19 +227,13 @@ class Gallery extends AbstractApi
      * @param string $imageOrAlbumId
      * @param string $sort           (best | top | new)
      *
-     * @return \Imgur\Api\Model\Comment|array
+     * @link https://api.imgur.com/endpoints/gallery#gallery-comments
+     *
+     * @return array Array of Comment (@see https://api.imgur.com/endpoints/gallery#gallery-comments)
      */
     public function comments($imageOrAlbumId, $sort = 'best')
     {
-        $parameters = $this->get('gallery/' . $imageOrAlbumId . '/comments/' . $sort);
-
-        $comments = array();
-
-        foreach ($parameters['data'] as $parameter) {
-            $comments[] = new Model\Comment($parameter);
-        }
-
-        return $comments;
+        return $this->get('gallery/' . $imageOrAlbumId . '/comments/' . $sort);
     }
 
     /**
@@ -250,13 +242,13 @@ class Gallery extends AbstractApi
      * @param string $imageOrAlbumId
      * @param string $commentId
      *
-     * @return \Imgur\Api\Model\Comment
+     * @link https://api.imgur.com/endpoints/gallery#gallery-comment
+     *
+     * @return array Comment (@see https://api.imgur.com/endpoints/gallery#gallery-comments)
      */
     public function comment($imageOrAlbumId, $commentId)
     {
-        $parameters = $this->get('gallery/' . $imageOrAlbumId . '/comment/' . $commentId);
-
-        return new Model\Comment($parameters);
+        return $this->get('gallery/' . $imageOrAlbumId . '/comment/' . $commentId);
     }
 
     /**
@@ -267,13 +259,11 @@ class Gallery extends AbstractApi
      *
      * @link https://api.imgur.com/endpoints/gallery#gallery-comment-creation
      *
-     * @return \Imgur\Api\Model\Basic
+     * @return bool
      */
     public function createComment($imageOrAlbumId, $data)
     {
-        $parameters = $this->post('gallery/' . $imageOrAlbumId . '/comment', $data);
-
-        return new Model\Basic($parameters);
+        return $this->post('gallery/' . $imageOrAlbumId . '/comment', $data);
     }
 
     /**
@@ -281,13 +271,13 @@ class Gallery extends AbstractApi
      *
      * @param string $imageOrAlbumId
      *
-     * @return \Imgur\Api\Model\Basic
+     * @link https://api.imgur.com/endpoints/gallery#gallery-comment-ids
+     *
+     * @return array<int>
      */
     public function commentIds($imageOrAlbumId)
     {
-        $parameters = $this->get('gallery/' . $imageOrAlbumId . '/comments/ids');
-
-        return new Model\Basic($parameters);
+        return $this->get('gallery/' . $imageOrAlbumId . '/comments/ids');
     }
 
     /**
@@ -295,34 +285,12 @@ class Gallery extends AbstractApi
      *
      * @param string $imageOrAlbumId
      *
-     * @return \Imgur\Api\Model\Basic
+     * @link https://api.imgur.com/endpoints/gallery#gallery-comment-count
+     *
+     * @return int
      */
     public function commentCount($imageOrAlbumId)
     {
-        $parameters = $this->get('gallery/' . $imageOrAlbumId . '/comments/count');
-
-        return new Model\Basic($parameters);
-    }
-
-    /**
-     * Parses an array of data and creates the appropriate objects.
-     *
-     * @param array $parameters
-     *
-     * @return \Imgur\Api\Model\GalleryImage or \Imgur\Api\Model\GalleryAlbum | array
-     */
-    private function createAlbumOrImageObjects($parameters)
-    {
-        $images = array();
-
-        foreach ($parameters['data'] as $parameter) {
-            if (!empty($parameter['is_album'])) {
-                $images[] = new Model\GalleryAlbum($parameter);
-            } else {
-                $images[] = new Model\GalleryImage($parameter);
-            }
-        }
-
-        return $images;
+        return $this->get('gallery/' . $imageOrAlbumId . '/comments/count');
     }
 }
