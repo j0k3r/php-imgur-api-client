@@ -1,12 +1,12 @@
 <?php
 
-namespace Imgur\Tests\Auth;
+namespace Imgur\tests\Auth;
 
-use Imgur\HttpClient\HttpClient;
-use Imgur\Auth\OAuth2;
+use Guzzle\Http\Client as GuzzleClient;
 use Guzzle\Http\Message\Response;
 use Guzzle\Plugin\Mock\MockPlugin;
-use Guzzle\Http\Client as GuzzleClient;
+use Imgur\Auth\OAuth2;
+use Imgur\HttpClient\HttpClient;
 
 class OAuth2Test extends \PHPUnit_Framework_TestCase
 {

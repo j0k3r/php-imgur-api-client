@@ -2,10 +2,10 @@
 
 namespace Imgur\Listener;
 
+use Guzzle\Common\Event;
+use Imgur\Exception\ErrorException;
 use Imgur\Exception\RateLimitException;
 use Imgur\Exception\RuntimeException;
-use Imgur\Exception\ErrorException;
-use Guzzle\Common\Event;
 
 /**
  * @author Adrian Ghiuta <adrian.ghiuta@gmail.com>
@@ -29,7 +29,7 @@ class ErrorListener
         $userLimit = (string) $response->getHeader('X-RateLimit-UserLimit');
 
         if ('' !== $userRemaining && $userRemaining < 1) {
-            throw new RateLimitException('No user credits available. The limit is '.$userLimit);
+            throw new RateLimitException('No user credits available. The limit is ' . $userLimit);
         }
 
         $clientRemaining = (string) $response->getHeader('X-RateLimit-ClientRemaining');
@@ -39,7 +39,7 @@ class ErrorListener
             // X-RateLimit-UserReset: unix epoch
             $resetTime = date('Y-m-d H:i:s', $response->getHeader('X-RateLimit-UserReset'));
 
-            throw new RateLimitException('No application credits available. The limit is '.$clientLimit.' and will be reset at '.$resetTime);
+            throw new RateLimitException('No application credits available. The limit is ' . $clientLimit . ' and will be reset at ' . $resetTime);
         }
 
         $body = $response->getBody(true);
@@ -49,7 +49,7 @@ class ErrorListener
         }
 
         if (is_array($responseData) && isset($responseData['data']) && isset($responseData['data']['error'])) {
-            throw new ErrorException('Request to: '.$responseData['data']['request'].' failed with: "'.$responseData['data']['error'].'"');
+            throw new ErrorException('Request to: ' . $responseData['data']['request'] . ' failed with: "' . $responseData['data']['error'] . '"');
         }
 
         throw new RuntimeException(is_array($responseData) && isset($responseData['message']) ? $responseData['message'] : $responseData, $response->getStatusCode());

@@ -2,11 +2,11 @@
 
 namespace Imgur\HttpClient;
 
-use Guzzle\Http\ClientInterface;
 use Guzzle\Http\Client as GuzzleClient;
+use Guzzle\Http\ClientInterface;
 use Guzzle\Http\Message\Request;
-use Imgur\Exception\RuntimeException;
 use Imgur\Exception\ErrorException;
+use Imgur\Exception\RuntimeException;
 use Imgur\Listener\ErrorListener;
 
 /**

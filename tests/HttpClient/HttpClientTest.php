@@ -2,11 +2,11 @@
 
 namespace Imgur\Tests\HttpClient;
 
-use Imgur\Client;
-use Imgur\HttpClient\HttpClient;
+use Guzzle\Http\Client as GuzzleClient;
 use Guzzle\Http\Message\Response;
 use Guzzle\Plugin\Mock\MockPlugin;
-use Guzzle\Http\Client as GuzzleClient;
+use Imgur\Client;
+use Imgur\HttpClient\HttpClient;
 
 class HttpClientTest extends \PHPUnit_Framework_TestCase
 {

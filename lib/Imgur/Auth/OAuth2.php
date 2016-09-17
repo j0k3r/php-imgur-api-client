@@ -2,9 +2,9 @@
 
 namespace Imgur\Auth;
 
-use Imgur\Listener\AuthListener;
 use Imgur\Exception\AuthException;
 use Imgur\HttpClient\HttpClientInterface;
+use Imgur\Listener\AuthListener;
 
 /**
  * Authentication class used for handling OAuth2.
@@ -129,7 +129,7 @@ class OAuth2 implements AuthInterface
         $responseBody = json_decode($response->getBody(true), true);
 
         if ($response->getStatusCode() !== 200) {
-            throw new AuthException('Request for access token failed: '.$responseBody['error'], $response->getStatusCode());
+            throw new AuthException('Request for access token failed: ' . $responseBody['error'], $response->getStatusCode());
         }
 
         $responseBody['created_at'] = time();
@@ -168,7 +168,7 @@ class OAuth2 implements AuthInterface
         $responseBody = json_decode($response->getBody(true), true);
 
         if ($response->getStatusCode() !== 200) {
-            throw new AuthException('Request for refresh access token failed. '.$responseBody['error'], $response->getStatusCode());
+            throw new AuthException('Request for refresh access token failed. ' . $responseBody['error'], $response->getStatusCode());
         }
 
         $this->setAccessToken($responseBody);

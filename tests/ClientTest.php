@@ -1,6 +1,6 @@
 <?php
 
-namespace Imgur\Tests;
+namespace Imgur\tests;
 
 use Imgur\Client;
 

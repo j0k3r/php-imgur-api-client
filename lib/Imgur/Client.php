@@ -83,7 +83,7 @@ class Client
                 return new Api\Memegen($this, $pager);
 
             default:
-                throw new InvalidArgumentException('API Method not supported: '.$name);
+                throw new InvalidArgumentException('API Method not supported: ' . $name);
         }
     }
 
