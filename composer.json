@@ -6,7 +6,10 @@
     "type": "library",
     "description": "Imgur API v3 client",
     "homepage": "https://github.com/j0k3r/php-imgur-api-client",
-    "keywords": ["imgur", "api"],
+    "keywords": [
+        "imgur",
+        "api"
+    ],
     "license": "MIT",
     "authors": [
         {
@@ -21,11 +24,18 @@
         }
     ],
     "autoload": {
-        "psr-0": { "Imgur\\": "lib/" }
+        "psr-0": {
+            "Imgur\\": "lib/"
+        }
     },
     "require": {
-        "php":             ">=5.3.2",
-        "ext-curl":        "*",
-        "guzzle/guzzle":   ">=3.7"
+        "php": ">=5.3.3",
+        "ext-curl": "*",
+        "guzzle/guzzle": "~3.7"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.0.x-dev"
+        }
     }
 }

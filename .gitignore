@@ -1,5 +1,6 @@
-phpunit.xml
 composer.lock
 composer.phar
-vendor/*
-/nbproject/private/
+vendor
+coverage
+build
+.php_cs.cache
