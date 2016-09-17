@@ -3,109 +3,125 @@
 namespace Imgur\Api\Model;
 
 /**
- * Model for Image
- * 
+ * Model for Image.
+ *
  * @link https://api.imgur.com/models/image
+ *
  * @author Adrian Ghiuta <adrian.ghiuta@gmail.com>
  */
-
-class Image {
-    
+class Image
+{
     /**
-     * The ID for the image
-     * @var string 
+     * The ID for the image.
+     *
+     * @var string
      */
     private $id;
-    
+
     /**
      * The title of the image.
+     *
      * @var string
      */
     private $title;
-    
+
     /**
      * Description of the image.
-     * @var string 
+     *
+     * @var string
      */
     private $description;
-    
+
     /**
-     * Time inserted into the gallery, epoch time
-     * @var integer
+     * Time inserted into the gallery, epoch time.
+     *
+     * @var int
      */
     private $datetime;
-    
+
     /**
      * Image MIME type.
-     * @var string 
+     *
+     * @var string
      */
     private $type;
-    
+
     /**
-     * Is the image animated
-     * @var boolean
+     * Is the image animated.
+     *
+     * @var bool
      */
     private $animated;
-    
+
     /**
-     * The width of the image in pixels
-     * @var integer 
+     * The width of the image in pixels.
+     *
+     * @var int
      */
     private $width;
-    
+
     /**
-     * The width of the image in pixels
-     * @var integer 
+     * The width of the image in pixels.
+     *
+     * @var int
      */
     private $height;
-    
+
     /**
-     * The size of the image in bytes
-     * @var size 
+     * The size of the image in bytes.
+     *
+     * @var size
      */
     private $size;
-    
+
     /**
-     * The number of image views
-     * @var integer
+     * The number of image views.
+     *
+     * @var int
      */
     private $views;
-    
+
     /**
-     * Bandwidth consumed by the image in bytes
-     * @var integer 
+     * Bandwidth consumed by the image in bytes.
+     *
+     * @var int
      */
     private $bandwidth;
-    
+
     /**
-     * OPTIONAL, the deletehash, if you're logged in as the image owner
+     * OPTIONAL, the deletehash, if you're logged in as the image owner.
+     *
      * @var string
      */
     private $deletehash;
-    
+
     /**
-     * If the image has been categorized by the Imgur backend then this will contain the section the image belongs in. (funny, cats, adviceanimals, wtf, etc)
-     * @var type 
+     * If the image has been categorized by the Imgur backend then this will contain the section the image belongs in. (funny, cats, adviceanimals, wtf, etc).
+     *
+     * @var type
      */
     private $section;
-    
+
     /**
-     * The direct link to the the image    
-     * @var type 
+     * The direct link to the the image.
+     *
+     * @var type
      */
     private $link;
 
     /**
-     * Build the Image object based on an array
-     * 
+     * Build the Image object based on an array.
+     *
      * @param array $parameters
+     *
      * @return \Imgur\Api\Model\Image
      */
-    public function __construct($parameters) {
-        if(!empty($parameters['data'])) {
+    public function __construct($parameters)
+    {
+        if (!empty($parameters['data'])) {
             $parameters = $parameters['data'];
         }
-        
+
         $this->setId($parameters['id'])
              ->setTitle($parameters['title'])
              ->setDescription($parameters['description'])
@@ -119,305 +135,319 @@ class Image {
              ->setBandwidth($parameters['bandwidth'])
              ->setSection($parameters['section'])
              ->setLink($parameters['link']);
-       
-        if(!empty($parameters['deletehash'])) {
+
+        if (!empty($parameters['deletehash'])) {
             $this->setDeletehash($parameters['deletehash']);
         }
-        
+
         return $this;
     }
 
     /**
      * The account id for the username requested.
-     * 
-     * @param integer $id
-     */    
-    public function setId($id) {
-        $this->id = $id; 
-        
+     *
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
         return $this;
     }
 
     /**
      * The account id for the username requested.
-     * 
-     * @return integer|null
-     */    
-    public function getId() {
-        
+     *
+     * @return int|null
+     */
+    public function getId()
+    {
         return $this->id;
     }
 
     /**
-     * The title of the image
-     * 
+     * The title of the image.
+     *
      * @param string $title
-     */    
-    public function setTitle($title) {
+     */
+    public function setTitle($title)
+    {
         $this->title = $title;
-        
-        return $this;        
+
+        return $this;
     }
-    
+
     /**
-     * The title of the image
-     * 
+     * The title of the image.
+     *
      * @return string|null
-     */    
-    public function getTitle() {
-        
+     */
+    public function getTitle()
+    {
         return $this->title;
     }
 
     /**
-     * The description of the image
-     * 
+     * The description of the image.
+     *
      * @param string $description
-     */    
-    public function setDescription($description) {
+     */
+    public function setDescription($description)
+    {
         $this->description = $description;
-        
-        return $this;        
+
+        return $this;
     }
-    
+
     /**
-     * The description of the image
-     * 
+     * The description of the image.
+     *
      * @return string|null
-     */    
-    public function getDescription() {
-        
+     */
+    public function getDescription()
+    {
         return $this->description;
-    } 
+    }
 
     /**
-     * Time inserted into the gallery, epoch time
-     * 
-     * @param integer $datetime
-     */    
-    public function setDatetime($datetime) {
+     * Time inserted into the gallery, epoch time.
+     *
+     * @param int $datetime
+     */
+    public function setDatetime($datetime)
+    {
         $this->datetime = $datetime;
-        
-        return $this;        
+
+        return $this;
     }
-    
+
     /**
-     * Time inserted into the gallery, epoch time
-     * 
-     * @return integer|null
-     */    
-    public function getDatetime() {
-        
+     * Time inserted into the gallery, epoch time.
+     *
+     * @return int|null
+     */
+    public function getDatetime()
+    {
         return $this->datetime;
-    } 
+    }
 
     /**
      * Image MIME type.
-     * 
+     *
      * @param string $type
-     */    
-    public function setType($type) {
+     */
+    public function setType($type)
+    {
         $this->type = $type;
-        
-        return $this;        
+
+        return $this;
     }
-    
+
     /**
      * Image MIME type.
-     * 
+     *
      * @return string|null
-     */    
-    public function getType() {
-        
+     */
+    public function getType()
+    {
         return $this->type;
-    } 
+    }
 
     /**
-     * Is the image animated
-     * 
-     * @param boolean $animated
-     */    
-    public function setAnimated($animated) {
+     * Is the image animated.
+     *
+     * @param bool $animated
+     */
+    public function setAnimated($animated)
+    {
         $this->animated = $animated;
-        
-        return $this;        
+
+        return $this;
     }
-    
+
     /**
-     * Is the image animated
-     * 
-     * @return boolean|null
-     */    
-    public function getAnimated() {
-        
+     * Is the image animated.
+     *
+     * @return bool|null
+     */
+    public function getAnimated()
+    {
         return $this->animated;
-    }     
-    
+    }
+
     /**
-     * Width of the image in pixels
-     * 
-     * @param integer $width
-     */    
-    public function setWidth($width) {
+     * Width of the image in pixels.
+     *
+     * @param int $width
+     */
+    public function setWidth($width)
+    {
         $this->width = $width;
-        
-        return $this;        
+
+        return $this;
     }
-    
+
     /**
-     * Width of the image in pixels
-     * 
-     * @return integer|null
-     */    
-    public function getWidth() {
-        
+     * Width of the image in pixels.
+     *
+     * @return int|null
+     */
+    public function getWidth()
+    {
         return $this->width;
-    }     
+    }
 
     /**
-     * Height of the image in pixels
-     * 
-     * @param integer $height
-     */    
-    public function setHeight($height) {
+     * Height of the image in pixels.
+     *
+     * @param int $height
+     */
+    public function setHeight($height)
+    {
         $this->height = $height;
-        
-        return $this;        
+
+        return $this;
     }
-    
-    /**
-     * Height of the image in pixels
-     * 
-     * @return integer|null
-     */    
-    public function getHeight() {
-        
-        return $this->height;
-    }     
 
     /**
-     * The size of the image in bytes
-     * 
-     * @param integer $size
-     */    
-    public function setSize($size) {
+     * Height of the image in pixels.
+     *
+     * @return int|null
+     */
+    public function getHeight()
+    {
+        return $this->height;
+    }
+
+    /**
+     * The size of the image in bytes.
+     *
+     * @param int $size
+     */
+    public function setSize($size)
+    {
         $this->size = $size;
-        
-        return $this;        
+
+        return $this;
     }
-    
+
     /**
-     * The size of the image in bytes
-     * 
-     * @return integer|null
-     */    
-    public function getSize() {
-        
+     * The size of the image in bytes.
+     *
+     * @return int|null
+     */
+    public function getSize()
+    {
         return $this->size;
-    }     
-    
+    }
+
     /**
-     * The number of image views
-     * 
-     * @param integer $views
-     */    
-    public function setViews($views) {
+     * The number of image views.
+     *
+     * @param int $views
+     */
+    public function setViews($views)
+    {
         $this->views = $views;
-        
-        return $this;        
+
+        return $this;
     }
-    
+
     /**
-     * The number of image views
-     * 
-     * @return integer|null
-     */    
-    public function getViews() {
-        
+     * The number of image views.
+     *
+     * @return int|null
+     */
+    public function getViews()
+    {
         return $this->views;
-    }       
-    
+    }
+
     /**
-     * Bandwidth consumed by the image in bytes
-     * 
-     * @param integer $bandwidth
-     */    
-    public function setBandwidth($bandwidth) {
+     * Bandwidth consumed by the image in bytes.
+     *
+     * @param int $bandwidth
+     */
+    public function setBandwidth($bandwidth)
+    {
         $this->bandwidth = $bandwidth;
-        
-        return $this;        
+
+        return $this;
     }
-    
+
     /**
-     * Bandwidth consumed by the image in bytes
-     * 
-     * @return integer|null
-     */    
-    public function getBandwidth() {
-        
+     * Bandwidth consumed by the image in bytes.
+     *
+     * @return int|null
+     */
+    public function getBandwidth()
+    {
         return $this->bandwidth;
-    }       
-    
+    }
+
     /**
-     * The deletehash
-     * 
+     * The deletehash.
+     *
      * @param string $deletehash
-     */    
-    public function setDeletehash($deletehash) {
+     */
+    public function setDeletehash($deletehash)
+    {
         $this->deletehash = $deletehash;
-        
-        return $this;        
+
+        return $this;
     }
-    
+
     /**
-     * The deletehash
-     * 
+     * The deletehash.
+     *
      * @return string|null
-     */    
-    public function getDeletehash() {
-        
+     */
+    public function getDeletehash()
+    {
         return $this->deletehash;
-    }   
-    
+    }
+
     /**
-     * If the image has been categorized by the Imgur backend then this will contain the section the image belongs in. (funny, cats, adviceanimals, wtf, etc)
-     * 
+     * If the image has been categorized by the Imgur backend then this will contain the section the image belongs in. (funny, cats, adviceanimals, wtf, etc).
+     *
      * @param string $section
-     */    
-    public function setSection($section) {
+     */
+    public function setSection($section)
+    {
         $this->section = $section;
-        
-        return $this;        
+
+        return $this;
     }
-    
+
     /**
-     * If the image has been categorized by the Imgur backend then this will contain the section the image belongs in. (funny, cats, adviceanimals, wtf, etc)
-     * 
+     * If the image has been categorized by the Imgur backend then this will contain the section the image belongs in. (funny, cats, adviceanimals, wtf, etc).
+     *
      * @return string|null
-     */    
-    public function getSection() {
-        
+     */
+    public function getSection()
+    {
         return $this->section;
-    }    
-    
-    /**
-     * The direct link to the the image    
-     * 
-     * @param string $link
-     */    
-    public function setLink($link) {
-        $this->link = $link;
-        
-        return $this;        
     }
-    
+
     /**
-     * The direct link to the the image    
-     * 
+     * The direct link to the the image.
+     *
+     * @param string $link
+     */
+    public function setLink($link)
+    {
+        $this->link = $link;
+
+        return $this;
+    }
+
+    /**
+     * The direct link to the the image.
+     *
      * @return string|null
-     */    
-    public function getLink() {
-        
+     */
+    public function getLink()
+    {
         return $this->link;
-    }       
+    }
 }

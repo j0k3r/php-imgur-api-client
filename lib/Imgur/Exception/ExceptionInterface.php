@@ -2,6 +2,6 @@
 
 namespace Imgur\Exception;
 
-interface ExceptionInterface {
-
+interface ExceptionInterface
+{
 }
