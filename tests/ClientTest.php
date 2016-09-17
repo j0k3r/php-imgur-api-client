@@ -13,7 +13,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             $methods
         );
 
-        return $this->getMock('Imgur\HttpClient\HttpClientInterface', $methods);
+        return $this->createMock('Imgur\HttpClient\HttpClientInterface', $methods);
     }
 
     private function getAuthenticationClientMock(array $methods = array())
@@ -23,7 +23,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             $methods
         );
 
-        return $this->getMock('Imgur\Auth\AuthInterface', $methods);
+        return $this->createMock('Imgur\Auth\AuthInterface', $methods);
     }
 
     public function testNoParameters()

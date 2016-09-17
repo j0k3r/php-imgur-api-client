@@ -136,7 +136,7 @@ class OAuth2Test extends \PHPUnit_Framework_TestCase
 
     protected function getClientMock($statusCode = 200, $body = null)
     {
-        $client = $this->getMock('Guzzle\Http\Client', array('addListener', 'post', 'get', 'send'));
+        $client = $this->createMock('Guzzle\Http\Client', array('getEventDispatcher', 'post', 'get', 'send'));
 
         $response = $this->getMockBuilder('Guzzle\Http\Message\Response')
             ->disableOriginalConstructor()
@@ -151,6 +151,9 @@ class OAuth2Test extends \PHPUnit_Framework_TestCase
         $client->expects($this->any())
             ->method('send')
             ->will($this->returnValue($response));
+        $client->expects($this->any())
+            ->method('getEventDispatcher')
+            ->willReturn(new \Symfony\Component\EventDispatcher\EventDispatcher());
 
         return new HttpClient(array(), $client);
     }

@@ -26,4 +26,5 @@ interface AuthInterface
     public function sign();
 
     public function refreshToken();
+    public function checkAccessTokenExpired();
 }

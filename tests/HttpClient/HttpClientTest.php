@@ -97,7 +97,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
         $path = '/some/path';
         $parameters = array('a' => 'b');
 
-        $message = $this->getMock('Guzzle\Http\Message\Response', array(), array(200));
+        $message = $this->createMock('Guzzle\Http\Message\Response', array(), array(200));
         $message->expects($this->once())
             ->method('getBody')
             ->will($this->returnValue('Just raw context'));
@@ -260,14 +260,15 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 
     protected function getClientMock()
     {
-        $mock = $this->getMock(
-            'Guzzle\Http\Client',
-            array('send', 'createRequest')
-        );
+        $mock = $this->createMock('Guzzle\Http\Client', array('send', 'createRequest', 'getEventDispatcher'));
+
+        $mock->expects($this->any())
+            ->method('getEventDispatcher')
+            ->willReturn(new \Symfony\Component\EventDispatcher\EventDispatcher());
 
         $mock->expects($this->any())
             ->method('createRequest')
-            ->will($this->returnValue($this->getMock('Guzzle\Http\Message\Request', array(), array('GET', 'some'))));
+            ->will($this->returnValue($this->createMock('Guzzle\Http\Message\Request', array(), array('GET', 'some'))));
 
         return $mock;
     }

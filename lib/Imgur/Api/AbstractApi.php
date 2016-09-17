@@ -14,14 +14,14 @@ abstract class AbstractApi
     /**
      * @var Imgur\Client
      */
-    private $client;
+    protected $client;
 
     /**
      * @var Imgur\Pager\PagerInterface
      */
-    private $pager;
+    protected $pager;
 
-    public function __construct($client, $pager)
+    public function __construct(Client $client, $pager = null)
     {
         $this->client = $client;
         $this->pager = $pager;
