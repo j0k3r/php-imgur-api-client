@@ -26,31 +26,31 @@ class Account extends AbstractApi
     }
 
     /**
+     * UNDOCUMENTED
      * Create a new user on Imgur.  Note: you MUST send recaptcha information with this request.
      * Use this as the public captcha key: 6LeZbt4SAAAAAG2ccJykgGk_oAqjFgQ1y6daNz-H.
      *
      * @param string $username
      * @param array  $recaptchaInformation
+     *
+     * @return array Account (@see https://api.imgur.com/models/account)
      */
     public function create($username, $recaptchaInformation)
     {
-        $parameters = $this->post('account/' . $username, $recaptchaInformation);
-
-        return new Model\Account($parameters);
+        return $this->post('account/' . $username, $recaptchaInformation);
     }
 
     /**
+     * UNDOCUMENTED
      * Delete a user account, you can only access this if you're logged in as the user.
      *
      * @param string $username
      *
-     * @return \Imgur\Api\Model\Basic
+     * @return bool
      */
     public function deleteAccount($username)
     {
-        $parameters = $this->delete('account/' . $username);
-
-        return new Model\Basic($parameters);
+        return $this->delete('account/' . $username);
     }
 
     /**
