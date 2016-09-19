@@ -57,14 +57,16 @@ class Account extends AbstractApi
      * Return the images the user has favorited in the gallery.
      *
      * @param string $username
+     * @param int    $page
+     * @param string $sort     'oldest', or 'newest'. Defaults to 'newest'
      *
      * @link https://api.imgur.com/endpoints/account#account-gallery-favorites
      *
      * @return array Gallery Image (@see https://api.imgur.com/models/gallery_image) OR Gallery Album (@see https://api.imgur.com/models/gallery_album)
      */
-    public function galleryFavorites($username = 'me')
+    public function galleryFavorites($username = 'me', $page = 0, $sort = 'newest')
     {
-        return $this->get('account/' . $username . '/gallery_favorites');
+        return $this->get('account/' . $username . '/gallery_favorites/' . $page . '/' . $sort);
     }
 
     /**
@@ -85,14 +87,15 @@ class Account extends AbstractApi
      * Return the images a user has submitted to the gallery.
      *
      * @param string $username
+     * @param int    $page
      *
      * @link https://api.imgur.com/endpoints/account#account-submissions
      *
      * @return array Gallery Image (@see https://api.imgur.com/models/gallery_image) OR Gallery Album (@see https://api.imgur.com/models/gallery_album)
      */
-    public function submissions($username = 'me')
+    public function submissions($username = 'me', $page = 0)
     {
-        return $this->get('account/' . $username . '/submissions');
+        return $this->get('account/' . $username . '/submissions/' . $page);
     }
 
     /**
@@ -182,14 +185,15 @@ class Account extends AbstractApi
      * Get all the albums associated with the account. Must be logged in as the user to see secret and hidden albums.
      *
      * @param string $username
+     * @param int    $page
      *
      * @link https://api.imgur.com/endpoints/account#albums
      *
      * @return array Array of Album (@see https://api.imgur.com/models/album)
      */
-    public function albums($username = 'me')
+    public function albums($username = 'me', $page = 0)
     {
-        return $this->get('account/' . $username . '/albums');
+        return $this->get('account/' . $username . '/albums/' . $page);
     }
 
     /**
@@ -212,14 +216,15 @@ class Account extends AbstractApi
      * Return an array of all of the album IDs.
      *
      * @param string $username
+     * @param int    $page
      *
      * @link https://api.imgur.com/endpoints/account#album-ids
      *
      * @return array<int>
      */
-    public function albumIds($username = 'me')
+    public function albumIds($username = 'me', $page = 0)
     {
-        return $this->get('account/' . $username . '/albums/ids');
+        return $this->get('account/' . $username . '/albums/ids/' . $page);
     }
 
     /**
@@ -255,14 +260,16 @@ class Account extends AbstractApi
      * Return the comments the user has created.
      *
      * @param string $username
+     * @param int    $page
+     * @param string $sort     'best', 'worst', 'oldest', or 'newest'. Defaults to 'newest'
      *
      * @link https://api.imgur.com/endpoints/account#comments
      *
      * @return array Array of Comment (@see https://api.imgur.com/models/comment)
      */
-    public function comments($username = 'me')
+    public function comments($username = 'me', $page = 0, $sort = 'newest')
     {
-        return $this->get('account/' . $username . '/comments');
+        return $this->get('account/' . $username . '/comments/' . $sort . '/' . $page);
     }
 
     /**
@@ -285,14 +292,16 @@ class Account extends AbstractApi
      * Return an array of all of the comment IDs.
      *
      * @param string $username
+     * @param int    $page
+     * @param string $sort     'best', 'worst', 'oldest', or 'newest'. Defaults to 'newest'
      *
      * @link https://api.imgur.com/endpoints/account#comment-ids
      *
      * @return array<int>
      */
-    public function commentIds($username = 'me')
+    public function commentIds($username = 'me', $page = 0, $sort = 'newest')
     {
-        return $this->get('account/' . $username . '/comments/ids');
+        return $this->get('account/' . $username . '/comments/ids/' . $sort . '/' . $page);
     }
 
     /**
@@ -329,14 +338,15 @@ class Account extends AbstractApi
      * You can page through the images by setting the page, this defaults to 0.
      *
      * @param string $username
+     * @param int    $page
      *
      * @link https://api.imgur.com/endpoints/account#images
      *
      * @return array Array of Image (@see https://api.imgur.com/models/image)
      */
-    public function images($username = 'me')
+    public function images($username = 'me', $page = 0)
     {
-        return $this->get('account/' . $username . '/images');
+        return $this->get('account/' . $username . '/images/' . $page);
     }
 
     /**
@@ -359,14 +369,15 @@ class Account extends AbstractApi
      * Returns an array of Image IDs that are associated with the account.
      *
      * @param string $username
+     * @param int    $page
      *
      * @link https://api.imgur.com/endpoints/account#image-ids
      *
      * @return array<int>
      */
-    public function imageIds($username = 'me')
+    public function imageIds($username = 'me', $page = 0)
     {
-        return $this->get('account/' . $username . '/images/ids');
+        return $this->get('account/' . $username . '/images/ids/' . $page);
     }
 
     /**
