@@ -26,7 +26,10 @@ class Account extends AbstractApi
     }
 
     /**
-     * UNDOCUMENTED
+     * UNDOCUMENTED.
+     *
+     * @codeCoverageIgnore
+     *
      * Create a new user on Imgur.  Note: you MUST send recaptcha information with this request.
      * Use this as the public captcha key: 6LeZbt4SAAAAAG2ccJykgGk_oAqjFgQ1y6daNz-H.
      *

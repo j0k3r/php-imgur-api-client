@@ -26,7 +26,7 @@ class Gallery extends AbstractApi
      */
     public function gallery($section = 'hot', $sort = 'viral', $page = 0, $window = 'day', $showViral = true)
     {
-        return $this->get('gallery/' . $section . '/' . $sort . '/' . $window . '/' . $page, array('showViral' => var_export($showViral, true)));
+        return $this->get('gallery/' . $section . '/' . $sort . '/' . $window . '/' . $page, ['showViral' => var_export($showViral, true)]);
     }
 
     /**
@@ -42,13 +42,14 @@ class Gallery extends AbstractApi
      */
     public function memesSubgallery($sort = 'viral', $page = 0, $window = 'day')
     {
-        return $this->get('gallery/' . $sort . '/' . $window . '/' . $page);
+        return $this->get('g/memes/' . $sort . '/' . $window . '/' . $page);
     }
 
     /**
+     * DOES NOT WORK ATM
      * View a single image in the memes gallery.
      *
-     * @param type $imageId
+     * @param string $imageId
      *
      * @link https://api.imgur.com/endpoints/gallery#meme-subgallery-image
      *
@@ -56,7 +57,7 @@ class Gallery extends AbstractApi
      */
     public function memeSubgalleryImage($imageId)
     {
-        return $this->get('gallery/g/memes/' . $imageId);
+        return $this->get('g/memes/' . $imageId);
     }
 
     /**
@@ -104,7 +105,7 @@ class Gallery extends AbstractApi
      */
     public function search($query, $sort = 'time', $page = 0)
     {
-        return $this->get('gallery/search/' . $sort . '/' . $page, array('q' => $query));
+        return $this->get('gallery/search/' . $sort . '/' . $page, ['q' => $query]);
     }
 
     /**
@@ -218,7 +219,7 @@ class Gallery extends AbstractApi
      */
     public function vote($imageOrAlbumId, $vote)
     {
-        return $this->get('gallery/' . $imageOrAlbumId . '/vote/' . $vote);
+        return $this->post('gallery/' . $imageOrAlbumId . '/vote/' . $vote);
     }
 
     /**

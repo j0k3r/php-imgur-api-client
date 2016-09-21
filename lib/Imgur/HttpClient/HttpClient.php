@@ -5,7 +5,6 @@ namespace Imgur\HttpClient;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\ClientInterface;
 use Imgur\Exception\ErrorException;
-use Imgur\Exception\RuntimeException;
 use Imgur\Listener\ErrorListener;
 
 /**
@@ -27,35 +26,35 @@ class HttpClient implements HttpClientInterface
      *
      * @var array
      */
-    protected $options = array(
+    protected $options = [
         'base_url' => 'https://api.imgur.com/3/',
-    );
+    ];
 
     /**
      * @param array           $options
      * @param ClientInterface $client
      */
-    public function __construct(array $options = array(), ClientInterface $client = null)
+    public function __construct(array $options = [], ClientInterface $client = null)
     {
         $this->options = array_merge($options, $this->options);
 
-        $this->client = $client ?: new GuzzleClient(array('base_url' => $this->options['base_url']));
+        $this->client = $client ?: new GuzzleClient(['base_url' => $this->options['base_url']]);
 
         unset($this->options['base_url']);
 
         $this->addListener(
             'error',
-            array(
+            [
                 new ErrorListener(),
                 'error',
-            )
+            ]
         );
     }
 
     /**
      * {@inheritdoc}
      */
-    public function get($url, array $parameters = array())
+    public function get($url, array $parameters = [])
     {
         return $this->performRequest($url, $parameters, 'GET');
     }
@@ -63,7 +62,7 @@ class HttpClient implements HttpClientInterface
     /**
      * {@inheritdoc}
      */
-    public function delete($url, array $parameters = array())
+    public function delete($url, array $parameters = [])
     {
         return $this->performRequest($url, $parameters, 'DELETE');
     }
@@ -71,7 +70,7 @@ class HttpClient implements HttpClientInterface
     /**
      * {@inheritdoc}
      */
-    public function post($url, array $parameters = array())
+    public function post($url, array $parameters = [])
     {
         return $this->performRequest($url, $parameters, 'POST');
     }
@@ -85,10 +84,13 @@ class HttpClient implements HttpClientInterface
 
         try {
             return $this->client->send($request);
-        } catch (\LogicException $e) {
-            throw new ErrorException($e->getMessage(), $e->getCode(), null, null, null, $e);
-        } catch (\RuntimeException $e) {
-            throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
+        } catch (\Exception $e) {
+            // if there are a previous one it comes from the ErrorListener
+            if ($e->getPrevious()) {
+                throw $e->getPrevious();
+            }
+
+            throw new ErrorException($e->getMessage(), 0, E_ERROR, __FILE__, __LINE__, $e);
         }
     }
 
@@ -97,11 +99,14 @@ class HttpClient implements HttpClientInterface
      */
     public function createRequest($url, $parameters, $httpMethod = 'GET')
     {
-        $options = array(
-            'query' => $parameters,
-            'headers' => isset($this->options['headers']) ? $this->options['headers'] : array(),
+        $options = [
+            'headers' => isset($this->options['headers']) ? $this->options['headers'] : [],
             'body' => isset($this->options['body']) ? $this->options['body'] : '',
-        );
+        ];
+
+        if (isset($parameters['query'])) {
+            $options['query'] = $parameters['query'];
+        }
 
         if ($httpMethod === 'POST' || $httpMethod === 'DELETE') {
             $options['body'] = $parameters;
@@ -115,7 +120,7 @@ class HttpClient implements HttpClientInterface
      */
     public function parseResponse($response)
     {
-        $responseBody = array('data' => array(), 'success' => false);
+        $responseBody = ['data' => [], 'success' => false];
 
         if ($response) {
             $responseBody = json_decode($response->getBody(true), true);

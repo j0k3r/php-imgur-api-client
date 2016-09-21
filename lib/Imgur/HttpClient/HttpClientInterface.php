@@ -17,7 +17,7 @@ interface HttpClientInterface
      *
      * @return array
      */
-    public function get($url, array $parameters = array());
+    public function get($url, array $parameters = []);
 
     /**
      * Perform a POST request.
@@ -27,7 +27,7 @@ interface HttpClientInterface
      *
      * @return array
      */
-    public function post($url, array $parameters = array());
+    public function post($url, array $parameters = []);
 
     /**
      * Perform a DELETE request.
@@ -37,7 +37,7 @@ interface HttpClientInterface
      *
      * @return array
      */
-    public function delete($url, array $parameters = array());
+    public function delete($url, array $parameters = []);
 
     /**
      * Perform the actual request.

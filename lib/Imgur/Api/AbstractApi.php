@@ -34,7 +34,7 @@ abstract class AbstractApi
      *
      * @return array
      */
-    public function get($url, $parameters = array())
+    public function get($url, $parameters = [])
     {
         $httpClient = $this->client->getHttpClient();
 
@@ -43,7 +43,7 @@ abstract class AbstractApi
             $parameters['perPage'] = $this->pager->getResultsPerPage();
         }
 
-        $response = $httpClient->get($url, array('query' => $parameters));
+        $response = $httpClient->get($url, ['query' => $parameters]);
 
         return $httpClient->parseResponse($response);
     }
@@ -55,7 +55,7 @@ abstract class AbstractApi
      *
      * @return array
      */
-    public function post($url, $parameters = array())
+    public function post($url, $parameters = [])
     {
         $httpClient = $this->client->getHttpClient();
 
@@ -71,7 +71,7 @@ abstract class AbstractApi
      *
      * @return array
      */
-    public function delete($url, $parameters = array())
+    public function delete($url, $parameters = [])
     {
         $httpClient = $this->client->getHttpClient();
 

@@ -128,9 +128,9 @@ class Album extends AbstractApi
      *
      * @return bool
      */
-    public function setAlbumImages($albumId, $imageIds)
+    public function setAlbumImages($albumId, array $imageIds)
     {
-        return $this->post('album/' . $albumId, array('ids' => implode(',', $imageIds)));
+        return $this->post('album/' . $albumId, ['ids' => implode(',', $imageIds)]);
     }
 
     /**
@@ -144,9 +144,9 @@ class Album extends AbstractApi
      *
      * @return bool
      */
-    public function addImages($albumId, $imageIds)
+    public function addImages($albumId, array $imageIds)
     {
-        return $this->post('album/' . $albumId . '/add', array('ids' => implode(',', $imageIds)));
+        return $this->post('album/' . $albumId . '/add', ['ids' => implode(',', $imageIds)]);
     }
 
     /**
@@ -160,8 +160,8 @@ class Album extends AbstractApi
      *
      * @return bool
      */
-    public function removeImages($deletehashOrAlbumId, $imageIds)
+    public function removeImages($deletehashOrAlbumId, array $imageIds)
     {
-        return $this->delete('album/' . $deletehashOrAlbumId . '/remove_images', array('ids' => implode(',', $imageIds)));
+        return $this->delete('album/' . $deletehashOrAlbumId . '/remove_images', ['ids' => implode(',', $imageIds)]);
     }
 }

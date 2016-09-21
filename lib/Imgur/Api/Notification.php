@@ -24,7 +24,7 @@ class Notification extends AbstractApi
     {
         $new = $new ? 'true' : 'false';
 
-        return $this->get('notification?new=' . $new);
+        return $this->get('notification', ['new' => $new]);
     }
 
     /**

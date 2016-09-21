@@ -12,11 +12,11 @@ class Client
     /**
      * @var array
      */
-    private $options = array(
+    private $options = [
         'base_url' => 'https://api.imgur.com/3/',
         'client_id' => null,
         'client_secret' => null,
-    );
+    ];
 
     /**
      * The class handling communication with Imgur servers.

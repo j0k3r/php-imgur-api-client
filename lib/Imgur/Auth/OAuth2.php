@@ -84,11 +84,11 @@ class OAuth2 implements AuthInterface
      */
     public function getAuthenticationURL($responseType = 'code', $state = null)
     {
-        $httpQueryParameters = array(
+        $httpQueryParameters = [
             'client_id' => $this->clientId,
             'response_type' => $responseType,
             'state' => $state,
-        );
+        ];
 
         $httpQueryParameters = http_build_query($httpQueryParameters);
 
@@ -117,20 +117,20 @@ class OAuth2 implements AuthInterface
                 $type = 'code';
         }
 
-        $response = $this->httpClient->post(
-            self::ACCESS_TOKEN_ENDPOINT,
-            array(
-                'client_id' => $this->clientId,
-                'client_secret' => $this->clientSecret,
-                'grant_type' => $grantType,
-                $type => $code,
-            )
-        );
+        try {
+            $response = $this->httpClient->post(
+                self::ACCESS_TOKEN_ENDPOINT,
+                [
+                    'client_id' => $this->clientId,
+                    'client_secret' => $this->clientSecret,
+                    'grant_type' => $grantType,
+                    $type => $code,
+                ]
+            );
 
-        $responseBody = json_decode($response->getBody(true), true);
-
-        if ($response->getStatusCode() !== 200) {
-            throw new AuthException('Request for access token failed: ' . $responseBody['error'], $response->getStatusCode());
+            $responseBody = json_decode($response->getBody(true), true);
+        } catch (\Exception $e) {
+            throw new AuthException('Request for access token failed: ' . $e->getMessage(), $e->getCode());
         }
 
         $responseBody['created_at'] = time();
@@ -156,20 +156,20 @@ class OAuth2 implements AuthInterface
     {
         $token = $this->getAccessToken();
 
-        $response = $this->httpClient->post(
-            self::ACCESS_TOKEN_ENDPOINT,
-            array(
-                'refresh_token' => $token['refresh_token'],
-                'client_id' => $this->clientId,
-                'client_secret' => $this->clientSecret,
-                'grant_type' => 'refresh_token',
-            )
-        );
+        try {
+            $response = $this->httpClient->post(
+                self::ACCESS_TOKEN_ENDPOINT,
+                [
+                    'refresh_token' => $token['refresh_token'],
+                    'client_id' => $this->clientId,
+                    'client_secret' => $this->clientSecret,
+                    'grant_type' => 'refresh_token',
+                ]
+            );
 
-        $responseBody = json_decode($response->getBody(true), true);
-
-        if ($response->getStatusCode() !== 200) {
-            throw new AuthException('Request for refresh access token failed. ' . $responseBody['error'], $response->getStatusCode());
+            $responseBody = json_decode($response->getBody(true), true);
+        } catch (\Exception $e) {
+            throw new AuthException('Request for refresh access token failed: ' . $e->getMessage(), $e->getCode());
         }
 
         $this->setAccessToken($responseBody);
@@ -237,12 +237,12 @@ class OAuth2 implements AuthInterface
      */
     public function sign()
     {
-        $this->httpClient->addListener('before', array(
+        $this->httpClient->addListener('before', [
             new AuthListener(
                 $this->getAccessToken(),
                 $this->clientId
             ),
             'before',
-        ));
+        ]);
     }
 }

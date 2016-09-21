@@ -25,7 +25,12 @@
     ],
     "autoload": {
         "psr-4": {
-          "Imgur\\": "lib/Imgur/"
+            "Imgur\\": "lib/Imgur/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Imgur\\tests\\": "tests/"
         }
     },
     "require": {
