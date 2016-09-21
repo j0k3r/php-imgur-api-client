@@ -3,6 +3,7 @@
 namespace Imgur\Api;
 
 use Imgur\Client;
+use Imgur\Pager\PagerInterface;
 
 /**
  * Abstract class supporting API requests.
@@ -12,16 +13,16 @@ use Imgur\Client;
 abstract class AbstractApi
 {
     /**
-     * @var Imgur\Client
+     * @var \Imgur\Client
      */
     protected $client;
 
     /**
-     * @var Imgur\Pager\PagerInterface
+     * @var \Imgur\Pager\PagerInterface
      */
     protected $pager;
 
-    public function __construct(Client $client, $pager = null)
+    public function __construct(Client $client, PagerInterface $pager = null)
     {
         $this->client = $client;
         $this->pager = $pager;

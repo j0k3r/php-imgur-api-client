@@ -30,7 +30,7 @@ class OAuth2 implements AuthInterface
     /**
      * The class handling communication with Imgur servers.
      *
-     * @var HttpClient
+     * @var \Imgur\HttpClient\HttpClientInterface
      */
     private $httpClient;
 
@@ -190,7 +190,7 @@ class OAuth2 implements AuthInterface
      */
     public function setAccessToken($token)
     {
-        if (!$token) {
+        if (!is_array($token)) {
             throw new AuthException('Token is not a valid json string.');
         }
 
@@ -225,7 +225,7 @@ class OAuth2 implements AuthInterface
     public function checkAccessTokenExpired()
     {
         // don't have the data? Let's assume the token has expired
-        if (!$this->token || !isset($this->token['created_at']) || !isset($this->token['expires_in'])) {
+        if (!isset($this->token['created_at']) || !isset($this->token['expires_in'])) {
             return true;
         }
 

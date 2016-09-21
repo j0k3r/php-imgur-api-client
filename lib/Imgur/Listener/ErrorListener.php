@@ -17,7 +17,6 @@ class ErrorListener
      */
     public function error(ErrorEvent $event)
     {
-        $request = $event->getRequest();
         $response = $event->getResponse();
 
         if ($response->getStatusCode() < 400) {
@@ -42,7 +41,7 @@ class ErrorListener
             throw new RateLimitException('No application credits available. The limit is ' . $clientLimit . ' and will be reset at ' . $resetTime);
         }
 
-        $body = $response->getBody(true);
+        $body = $response->getBody();
         $responseData = json_decode($body, true);
         if (JSON_ERROR_NONE !== json_last_error()) {
             $responseData = $body;
