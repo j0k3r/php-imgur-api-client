@@ -10,7 +10,9 @@ class AuthListenerTest extends \PHPUnit_Framework_TestCase
 {
     public function testDefineClientIdOnBadToken()
     {
-        $request = $this->createMock('GuzzleHttp\Message\RequestInterface');
+        $request = $this->getMockBuilder('GuzzleHttp\Message\RequestInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $request->expects($this->once())
             ->method('setHeader')
             ->with('Authorization');
@@ -21,7 +23,9 @@ class AuthListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testDefineBeareOnGoodToken()
     {
-        $request = $this->createMock('GuzzleHttp\Message\RequestInterface');
+        $request = $this->getMockBuilder('GuzzleHttp\Message\RequestInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $request->expects($this->once())
             ->method('setHeader')
             ->with('Authorization');

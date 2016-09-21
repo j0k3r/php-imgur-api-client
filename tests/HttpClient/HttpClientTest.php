@@ -119,7 +119,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Imgur\Exception\RateLimitException
-     * @expectedExceptionMessage No application credits available. The limit is 10 and will be reset at 2016-09-19 22:47:06
+     * @expectedExceptionMessage No application credits available. The limit is 10 and will be reset at
      */
     public function testThrowExceptionWhenClientApiIsExceeded()
     {
@@ -228,9 +228,13 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
             ->method('getEmitter')
             ->willReturn(new \GuzzleHttp\Event\Emitter());
 
+        $request = $this->getMockBuilder('GuzzleHttp\Message\Request')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $client->expects($this->any())
             ->method('createRequest')
-            ->will($this->returnValue($this->createMock('GuzzleHttp\Message\Request', [], ['GET', 'some'])));
+            ->willReturn($request);
 
         $client->expects($this->any())
             ->method('send')
