@@ -2,7 +2,10 @@
 
 namespace Imgur;
 
+use Imgur\Auth\AuthInterface;
 use Imgur\Exception\InvalidArgumentException;
+use Imgur\HttpClient\HttpClient;
+use Imgur\HttpClient\HttpClientInterface;
 
 /**
  * PHP Imgur API wrapper.
@@ -21,14 +24,14 @@ class Client
     /**
      * The class handling communication with Imgur servers.
      *
-     * @var HttpClient
+     * @var \Imgur\HttpClient\HttpClientInterface
      */
     private $httpClient;
 
     /**
      * The class handling authentication.
      *
-     * @var Auth\AuthInterface
+     * @var \Imgur\Auth\AuthInterface
      */
     private $authenticationClient;
 
@@ -37,7 +40,7 @@ class Client
      *
      * @param null|HttpClientInterface $httpClient Imgur http client
      */
-    public function __construct(Auth\AuthInterface $authenticationClient = null, HttpClient\HttpClientInterface $httpClient = null)
+    public function __construct(AuthInterface $authenticationClient = null, HttpClientInterface $httpClient = null)
     {
         $this->httpClient = $httpClient;
         $this->authenticationClient = $authenticationClient;
@@ -88,12 +91,12 @@ class Client
     }
 
     /**
-     * @return HttpClient
+     * @return HttpClientInterface
      */
     public function getHttpClient()
     {
         if (null === $this->httpClient) {
-            $this->setHttpClient(new HttpClient\HttpClient($this->options));
+            $this->setHttpClient(new HttpClient($this->options));
         }
 
         return $this->httpClient;
@@ -102,7 +105,7 @@ class Client
     /**
      * @param HttpClientInterface $httpClient
      */
-    public function setHttpClient(HttpClient\HttpClientInterface $httpClient)
+    public function setHttpClient(HttpClientInterface $httpClient)
     {
         $this->httpClient = $httpClient;
     }
@@ -112,7 +115,7 @@ class Client
      *
      * @throws InvalidArgumentException
      *
-     * @return mixed
+     * @return string
      */
     public function getOption($name)
     {
@@ -141,7 +144,7 @@ class Client
     /**
      * Retrieves the Auth object and also instantiates it if not already present.
      *
-     * @return AuthInterface
+     * @return Auth\AuthInterface
      */
     public function getAuthenticationClient()
     {

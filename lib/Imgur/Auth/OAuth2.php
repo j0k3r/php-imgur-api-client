@@ -128,7 +128,7 @@ class OAuth2 implements AuthInterface
                 ]
             );
 
-            $responseBody = json_decode($response->getBody(true), true);
+            $responseBody = json_decode($response->getBody(), true);
         } catch (\Exception $e) {
             throw new AuthException('Request for access token failed: ' . $e->getMessage(), $e->getCode());
         }
@@ -167,7 +167,7 @@ class OAuth2 implements AuthInterface
                 ]
             );
 
-            $responseBody = json_decode($response->getBody(true), true);
+            $responseBody = json_decode($response->getBody(), true);
         } catch (\Exception $e) {
             throw new AuthException('Request for refresh access token failed: ' . $e->getMessage(), $e->getCode());
         }

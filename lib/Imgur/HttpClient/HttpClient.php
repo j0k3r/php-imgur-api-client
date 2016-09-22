@@ -17,7 +17,7 @@ class HttpClient implements HttpClientInterface
     /**
      * The Guzzle instance.
      *
-     * @var GuzzleHttp\Client
+     * @var \GuzzleHttp\ClientInterface
      */
     protected $client;
 
@@ -123,7 +123,7 @@ class HttpClient implements HttpClientInterface
         $responseBody = ['data' => [], 'success' => false];
 
         if ($response) {
-            $responseBody = json_decode($response->getBody(true), true);
+            $responseBody = json_decode($response->getBody(), true);
         }
 
         return $responseBody['data'];
