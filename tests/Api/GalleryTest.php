@@ -125,7 +125,7 @@ class GalleryTest extends ApiTestCase
         $api = $this->getApiMock();
         $api->expects($this->once())
             ->method('get')
-            ->with('gallery/hot/viral/day/0')
+            ->with('gallery/hot/viral/day/0', ['showViral' => 'true'])
             ->will($this->returnValue($expectedValue));
 
         $this->assertSame($expectedValue, $api->gallery());
@@ -291,7 +291,7 @@ class GalleryTest extends ApiTestCase
         $api = $this->getApiMock();
         $api->expects($this->once())
             ->method('get')
-            ->with('gallery/search/time/0')
+            ->with('gallery/search/time/0', ['q' => '20minutes'])
             ->will($this->returnValue($expectedValue));
 
         $this->assertSame($expectedValue, $api->search('20minutes'));
