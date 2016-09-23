@@ -69,7 +69,9 @@ class Account extends AbstractApi
      */
     public function galleryFavorites($username = 'me', $page = 0, $sort = 'newest')
     {
-        return $this->get('account/' . $username . '/gallery_favorites/' . $page . '/' . $sort);
+        $this->validateSortArgument($sort, ['oldest', 'newest']);
+
+        return $this->get('account/' . $username . '/gallery_favorites/' . (int) $page . '/' . $sort);
     }
 
     /**
@@ -98,7 +100,7 @@ class Account extends AbstractApi
      */
     public function submissions($username = 'me', $page = 0)
     {
-        return $this->get('account/' . $username . '/submissions/' . $page);
+        return $this->get('account/' . $username . '/submissions/' . (int) $page);
     }
 
     /**
@@ -196,7 +198,7 @@ class Account extends AbstractApi
      */
     public function albums($username = 'me', $page = 0)
     {
-        return $this->get('account/' . $username . '/albums/' . $page);
+        return $this->get('account/' . $username . '/albums/' . (int) $page);
     }
 
     /**
@@ -227,7 +229,7 @@ class Account extends AbstractApi
      */
     public function albumIds($username = 'me', $page = 0)
     {
-        return $this->get('account/' . $username . '/albums/ids/' . $page);
+        return $this->get('account/' . $username . '/albums/ids/' . (int) $page);
     }
 
     /**
@@ -272,7 +274,9 @@ class Account extends AbstractApi
      */
     public function comments($username = 'me', $page = 0, $sort = 'newest')
     {
-        return $this->get('account/' . $username . '/comments/' . $sort . '/' . $page);
+        $this->validateSortArgument($sort, ['best', 'worst', 'oldest', 'newest']);
+
+        return $this->get('account/' . $username . '/comments/' . $sort . '/' . (int) $page);
     }
 
     /**
@@ -304,7 +308,9 @@ class Account extends AbstractApi
      */
     public function commentIds($username = 'me', $page = 0, $sort = 'newest')
     {
-        return $this->get('account/' . $username . '/comments/ids/' . $sort . '/' . $page);
+        $this->validateSortArgument($sort, ['best', 'worst', 'oldest', 'newest']);
+
+        return $this->get('account/' . $username . '/comments/ids/' . $sort . '/' . (int) $page);
     }
 
     /**
@@ -349,7 +355,7 @@ class Account extends AbstractApi
      */
     public function images($username = 'me', $page = 0)
     {
-        return $this->get('account/' . $username . '/images/' . $page);
+        return $this->get('account/' . $username . '/images/' . (int) $page);
     }
 
     /**
@@ -380,7 +386,7 @@ class Account extends AbstractApi
      */
     public function imageIds($username = 'me', $page = 0)
     {
-        return $this->get('account/' . $username . '/images/ids/' . $page);
+        return $this->get('account/' . $username . '/images/ids/' . (int) $page);
     }
 
     /**
@@ -424,6 +430,8 @@ class Account extends AbstractApi
      */
     public function replies($username = 'me', $onlyNew = false)
     {
-        return $this->get('account/' . $username . '/notifications/replies?new=' . var_export($onlyNew, true));
+        $onlyNew = $onlyNew ? 'true' : 'false';
+
+        return $this->get('account/' . $username . '/notifications/replies', ['new' => $onlyNew]);
     }
 }

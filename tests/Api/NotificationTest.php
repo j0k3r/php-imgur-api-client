@@ -102,7 +102,7 @@ class NotificationTest extends ApiTestCase
         $api = $this->getApiMock();
         $api->expects($this->once())
             ->method('get')
-            ->with('notification')
+            ->with('notification', ['new' => 'true'])
             ->will($this->returnValue($expectedValue));
 
         $this->assertSame($expectedValue, $api->notifications());

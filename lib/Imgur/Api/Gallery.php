@@ -26,7 +26,9 @@ class Gallery extends AbstractApi
      */
     public function gallery($section = 'hot', $sort = 'viral', $page = 0, $window = 'day', $showViral = true)
     {
-        return $this->get('gallery/' . $section . '/' . $sort . '/' . $window . '/' . $page, ['showViral' => var_export($showViral, true)]);
+        $this->validateSortArgument($sort, ['viral', 'top', 'time', 'rising']);
+
+        return $this->get('gallery/' . $section . '/' . $sort . '/' . $window . '/' . (int) $page, ['showViral' => var_export($showViral, true)]);
     }
 
     /**
@@ -42,7 +44,9 @@ class Gallery extends AbstractApi
      */
     public function memesSubgallery($sort = 'viral', $page = 0, $window = 'day')
     {
-        return $this->get('g/memes/' . $sort . '/' . $window . '/' . $page);
+        $this->validateSortArgument($sort, ['viral', 'top', 'time']);
+
+        return $this->get('g/memes/' . $sort . '/' . $window . '/' . (int) $page);
     }
 
     /**
@@ -74,7 +78,9 @@ class Gallery extends AbstractApi
      */
     public function subredditGalleries($subreddit, $sort = 'time', $page = 0, $window = 'day')
     {
-        return $this->get('gallery/r/' . $subreddit . '/' . $sort . '/' . $window . '/' . $page);
+        $this->validateSortArgument($sort, ['top', 'time']);
+
+        return $this->get('gallery/r/' . $subreddit . '/' . $sort . '/' . $window . '/' . (int) $page);
     }
 
     /**
@@ -105,7 +111,9 @@ class Gallery extends AbstractApi
      */
     public function search($query, $sort = 'time', $page = 0)
     {
-        return $this->get('gallery/search/' . $sort . '/' . $page, ['q' => $query]);
+        $this->validateSortArgument($sort, ['viral', 'top', 'time']);
+
+        return $this->get('gallery/search/' . $sort . '/' . (int) $page, ['q' => $query]);
     }
 
     /**
@@ -119,7 +127,7 @@ class Gallery extends AbstractApi
      */
     public function randomGalleryImages($page = 0)
     {
-        return $this->get('gallery/random/random/' . $page);
+        return $this->get('gallery/random/random/' . (int) $page);
     }
 
     /**
@@ -234,6 +242,8 @@ class Gallery extends AbstractApi
      */
     public function comments($imageOrAlbumId, $sort = 'best')
     {
+        $this->validateSortArgument($sort, ['best', 'top', 'new']);
+
         return $this->get('gallery/' . $imageOrAlbumId . '/comments/' . $sort);
     }
 

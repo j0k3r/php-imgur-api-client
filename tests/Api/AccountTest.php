@@ -121,6 +121,15 @@ class AccountTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->galleryFavorites());
     }
 
+    /**
+     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedExceptionMessage is wrong. Possible values are
+     */
+    public function testGalleryFavoritesWrongValues()
+    {
+        $this->getApiMock()->galleryFavorites('me', 0, 'bad sort');
+    }
+
     public function testFavorites()
     {
         $expectedValue = [
@@ -405,6 +414,15 @@ class AccountTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->comments());
     }
 
+    /**
+     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedExceptionMessage is wrong. Possible values are
+     */
+    public function testCommentsWrongValues()
+    {
+        $this->getApiMock()->comments('me', 0, 'bad sort');
+    }
+
     public function testComment()
     {
         $expectedValue = [
@@ -445,6 +463,15 @@ class AccountTest extends ApiTestCase
             ->will($this->returnValue($expectedValue));
 
         $this->assertSame($expectedValue, $api->commentIds());
+    }
+
+    /**
+     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedExceptionMessage is wrong. Possible values are
+     */
+    public function testCommentIdsWrongValues()
+    {
+        $this->getApiMock()->commentIds('me', 0, 'bad sort');
     }
 
     public function testCommentCount()
@@ -601,7 +628,7 @@ class AccountTest extends ApiTestCase
         $api = $this->getApiMock();
         $api->expects($this->once())
             ->method('get')
-            ->with('account/me/notifications/replies?new=false')
+            ->with('account/me/notifications/replies', ['new' => 'false'])
             ->will($this->returnValue($expectedValue));
 
         $this->assertSame($expectedValue, $api->replies());

@@ -3,6 +3,7 @@
 namespace Imgur\Api;
 
 use Imgur\Client;
+use Imgur\Exception\InvalidArgumentException;
 use Imgur\Pager\PagerInterface;
 
 /**
@@ -79,5 +80,18 @@ abstract class AbstractApi
         $response = $httpClient->delete($url, $parameters);
 
         return $httpClient->parseResponse($response);
+    }
+
+    /**
+     * Validate "sort" parameter and throw an exception if it's a bad value.
+     *
+     * @param string $sort           Input value
+     * @param array  $possibleValues
+     */
+    protected function validateSortArgument($sort, $possibleValues)
+    {
+        if (!in_array($sort, $possibleValues, true)) {
+            throw new InvalidArgumentException('Sort parameter "' . $sort . '" is wrong. Possible values are: ' . implode(', ', $possibleValues));
+        }
     }
 }

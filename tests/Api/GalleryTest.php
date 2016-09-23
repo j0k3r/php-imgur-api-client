@@ -131,6 +131,15 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->gallery());
     }
 
+    /**
+     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedExceptionMessage is wrong. Possible values are
+     */
+    public function testGalleryWrongValues()
+    {
+        $this->getApiMock()->gallery('hot', 'bad sort');
+    }
+
     public function testMemesSubgallery()
     {
         $expectedValue = [
@@ -150,6 +159,15 @@ class GalleryTest extends ApiTestCase
             ->will($this->returnValue($expectedValue));
 
         $this->assertSame($expectedValue, $api->memesSubgallery());
+    }
+
+    /**
+     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedExceptionMessage is wrong. Possible values are
+     */
+    public function testMemesSubgalleryWrongValues()
+    {
+        $this->getApiMock()->memesSubgallery('bad sort');
     }
 
     public function testMemeSubgalleryImage()
@@ -192,6 +210,15 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->subredditGalleries('pics'));
     }
 
+    /**
+     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedExceptionMessage is wrong. Possible values are
+     */
+    public function testSubredditGalleriesWrongValues()
+    {
+        $this->getApiMock()->subredditGalleries('pics', 'bad sort');
+    }
+
     public function testSubredditImage()
     {
         $expectedValue = [
@@ -232,6 +259,15 @@ class GalleryTest extends ApiTestCase
             ->will($this->returnValue($expectedValue));
 
         $this->assertSame($expectedValue, $api->search('20minutes'));
+    }
+
+    /**
+     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedExceptionMessage is wrong. Possible values are
+     */
+    public function testSearchWrongValues()
+    {
+        $this->getApiMock()->search('pics', 'bad sort');
     }
 
     public function testRandomGalleryImages()
@@ -399,6 +435,15 @@ class GalleryTest extends ApiTestCase
             ->will($this->returnValue($expectedValue));
 
         $this->assertSame($expectedValue, $api->comments('VOMXz'));
+    }
+
+    /**
+     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedExceptionMessage is wrong. Possible values are
+     */
+    public function testCommentsWrongValues()
+    {
+        $this->getApiMock()->comments('VOMXz', 'bad sort');
     }
 
     public function testComment()
