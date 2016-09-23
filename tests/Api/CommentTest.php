@@ -190,6 +190,15 @@ class CommentTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->vote('726305564', 'up'));
     }
 
+    /**
+     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedExceptionMessage is wrong. Possible values are
+     */
+    public function testVoteWrongVoteValue()
+    {
+        $this->getApiMock()->vote('726305564', 'bad vote');
+    }
+
     public function testReport()
     {
         $expectedValue = [

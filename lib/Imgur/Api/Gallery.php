@@ -2,6 +2,8 @@
 
 namespace Imgur\Api;
 
+use Imgur\Exception\InvalidArgumentException;
+
 /**
  * CRUD for Gallery.
  *
@@ -11,6 +13,18 @@ namespace Imgur\Api;
  */
 class Gallery extends AbstractApi
 {
+    /**
+     * Validate "window" parameter and throw an exception if it's a bad value.
+     *
+     * @param string $window         Input value
+     * @param array  $possibleValues
+     */
+    private function validateWindowArgument($window, $possibleValues)
+    {
+        if (!in_array($window, $possibleValues, true)) {
+            throw new InvalidArgumentException('Window parameter "' . $window . '" is wrong. Possible values are: ' . implode(', ', $possibleValues));
+        }
+    }
     /**
      * Returns the images in the gallery. For example the main gallery is https://api.imgur.com/3/gallery/hot/viral/0.json.
      *
@@ -27,8 +41,16 @@ class Gallery extends AbstractApi
     public function gallery($section = 'hot', $sort = 'viral', $page = 0, $window = 'day', $showViral = true)
     {
         $this->validateSortArgument($sort, ['viral', 'top', 'time', 'rising']);
+        $this->validateWindowArgument($window, ['day', 'week', 'month', 'year', 'all']);
 
-        return $this->get('gallery/' . $section . '/' . $sort . '/' . $window . '/' . (int) $page, ['showViral' => var_export($showViral, true)]);
+        $sectionValues = ['hot', 'top', 'user'];
+        if (!in_array($section, $sectionValues, true)) {
+            throw new InvalidArgumentException('Section parameter "' . $section . '" is wrong. Possible values are: ' . implode(', ', $sectionValues));
+        }
+
+        $showViral = $showViral ? 'true' : 'false';
+
+        return $this->get('gallery/' . $section . '/' . $sort . '/' . $window . '/' . (int) $page, ['showViral' => $showViral]);
     }
 
     /**
@@ -45,6 +67,7 @@ class Gallery extends AbstractApi
     public function memesSubgallery($sort = 'viral', $page = 0, $window = 'day')
     {
         $this->validateSortArgument($sort, ['viral', 'top', 'time']);
+        $this->validateWindowArgument($window, ['day', 'week', 'month', 'year', 'all']);
 
         return $this->get('g/memes/' . $sort . '/' . $window . '/' . (int) $page);
     }
@@ -79,6 +102,7 @@ class Gallery extends AbstractApi
     public function subredditGalleries($subreddit, $sort = 'time', $page = 0, $window = 'day')
     {
         $this->validateSortArgument($sort, ['top', 'time']);
+        $this->validateWindowArgument($window, ['day', 'week', 'month', 'year', 'all']);
 
         return $this->get('gallery/r/' . $subreddit . '/' . $sort . '/' . $window . '/' . (int) $page);
     }
@@ -216,10 +240,10 @@ class Gallery extends AbstractApi
     }
 
     /**
-     * Vote for an image, 'up' or 'down' vote. Send the same value again to undo a vote.
+     * Vote for an image, 'up' or 'down' vote. Send 'veto' to undo a vote.
      *
      * @param string $imageOrAlbumId
-     * @param string $vote           (up|down)
+     * @param string $vote           (up | down | veto)
      *
      * @link https://api.imgur.com/endpoints/gallery#gallery-voting
      *
@@ -227,6 +251,11 @@ class Gallery extends AbstractApi
      */
     public function vote($imageOrAlbumId, $vote)
     {
+        $voteValues = ['up', 'down', 'veto'];
+        if (!in_array($vote, $voteValues, true)) {
+            throw new InvalidArgumentException('Vote parameter "' . $vote . '" is wrong. Possible values are: ' . implode(', ', $voteValues));
+        }
+
         return $this->post('gallery/' . $imageOrAlbumId . '/vote/' . $vote);
     }
 

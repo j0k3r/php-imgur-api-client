@@ -135,9 +135,27 @@ class GalleryTest extends ApiTestCase
      * @expectedException Imgur\Exception\InvalidArgumentException
      * @expectedExceptionMessage is wrong. Possible values are
      */
-    public function testGalleryWrongValues()
+    public function testGalleryWrongSortValue()
     {
         $this->getApiMock()->gallery('hot', 'bad sort');
+    }
+
+    /**
+     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedExceptionMessage is wrong. Possible values are
+     */
+    public function testGalleryWrongSectionValue()
+    {
+        $this->getApiMock()->gallery('bad section');
+    }
+
+    /**
+     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedExceptionMessage is wrong. Possible values are
+     */
+    public function testGalleryWrongWindowValue()
+    {
+        $this->getApiMock()->gallery('hot', 'viral', 0, 'bad window');
     }
 
     public function testMemesSubgallery()
@@ -165,9 +183,18 @@ class GalleryTest extends ApiTestCase
      * @expectedException Imgur\Exception\InvalidArgumentException
      * @expectedExceptionMessage is wrong. Possible values are
      */
-    public function testMemesSubgalleryWrongValues()
+    public function testMemesSubgalleryWrongSortValue()
     {
         $this->getApiMock()->memesSubgallery('bad sort');
+    }
+
+    /**
+     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedExceptionMessage is wrong. Possible values are
+     */
+    public function testMemesSubgalleryWrongWindowValue()
+    {
+        $this->getApiMock()->memesSubgallery('viral', 0, 'bad window');
     }
 
     public function testMemeSubgalleryImage()
@@ -214,9 +241,18 @@ class GalleryTest extends ApiTestCase
      * @expectedException Imgur\Exception\InvalidArgumentException
      * @expectedExceptionMessage is wrong. Possible values are
      */
-    public function testSubredditGalleriesWrongValues()
+    public function testSubredditGalleriesWrongSortValue()
     {
         $this->getApiMock()->subredditGalleries('pics', 'bad sort');
+    }
+
+    /**
+     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedExceptionMessage is wrong. Possible values are
+     */
+    public function testSubredditGalleriesWrongWindowValue()
+    {
+        $this->getApiMock()->subredditGalleries('pics', 'time', 0, 'bad window');
     }
 
     public function testSubredditImage()
@@ -414,6 +450,15 @@ class GalleryTest extends ApiTestCase
             ->will($this->returnValue($expectedValue));
 
         $this->assertSame($expectedValue, $api->vote('VOMXz', 'up'));
+    }
+
+    /**
+     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedExceptionMessage is wrong. Possible values are
+     */
+    public function testVoteWrongVoteValue()
+    {
+        $this->getApiMock()->vote('VOMXz', 'bad vote');
     }
 
     public function testComments()
