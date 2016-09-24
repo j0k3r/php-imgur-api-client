@@ -117,7 +117,16 @@ class CommentTest extends ApiTestCase
             ->with('comment')
             ->will($this->returnValue($expectedValue));
 
-        $this->assertSame($expectedValue, $api->create('726305564'));
+        $this->assertSame($expectedValue, $api->create(['image_id' => 'ZOY11VC', 'comment' => 'I agree']));
+    }
+
+    /**
+     * @expectedException Imgur\Exception\MissingArgumentException
+     * @expectedExceptionMessage parameters is missing
+     */
+    public function testCreateParamMissing()
+    {
+        $this->getApiMock()->create('726305564');
     }
 
     public function testDeleteComment()
@@ -170,7 +179,16 @@ class CommentTest extends ApiTestCase
             ->with('comment/726305565')
             ->will($this->returnValue($expectedValue));
 
-        $this->assertSame($expectedValue, $api->createReply('726305565', 'yes !'));
+        $this->assertSame($expectedValue, $api->createReply('726305565', ['image_id' => 'ZOY11VC', 'comment' => 'I agree']));
+    }
+
+    /**
+     * @expectedException Imgur\Exception\MissingArgumentException
+     * @expectedExceptionMessage parameters is missing
+     */
+    public function testCreateReplyParamMissing()
+    {
+        $this->getApiMock()->createReply('726305564', []);
     }
 
     public function testVote()

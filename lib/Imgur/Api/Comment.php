@@ -3,6 +3,7 @@
 namespace Imgur\Api;
 
 use Imgur\Exception\InvalidArgumentException;
+use Imgur\Exception\MissingArgumentException;
 
 /**
  * CRUD for Comment.
@@ -38,6 +39,10 @@ class Comment extends AbstractApi
      */
     public function create($data)
     {
+        if (!isset($data['image_id'], $data['comment'])) {
+            throw new MissingArgumentException(['image_id', 'comment']);
+        }
+
         return $this->post('comment', $data);
     }
 
@@ -81,6 +86,10 @@ class Comment extends AbstractApi
      */
     public function createReply($commentId, $data)
     {
+        if (!isset($data['image_id'], $data['comment'])) {
+            throw new MissingArgumentException(['image_id', 'comment']);
+        }
+
         return $this->post('comment/' . $commentId, $data);
     }
 

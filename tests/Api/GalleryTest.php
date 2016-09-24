@@ -344,6 +344,15 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->submitToGallery('y1Od4', ['title' => 'yo']));
     }
 
+    /**
+     * @expectedException Imgur\Exception\MissingArgumentException
+     * @expectedExceptionMessage parameters is missing
+     */
+    public function testSubmitToGalleryParamMissing()
+    {
+        $this->getApiMock()->submitToGallery('y1Od4', []);
+    }
+
     public function testRemoveFromGallery()
     {
         $expectedValue = [
@@ -525,6 +534,15 @@ class GalleryTest extends ApiTestCase
             ->will($this->returnValue($expectedValue));
 
         $this->assertSame($expectedValue, $api->createComment('VOMXz', ['comment' => 'yo']));
+    }
+
+    /**
+     * @expectedException Imgur\Exception\MissingArgumentException
+     * @expectedExceptionMessage parameters is missing
+     */
+    public function testCreateCommentParamMissing()
+    {
+        $this->getApiMock()->createComment('y1Od4', []);
     }
 
     public function testCommentIds()

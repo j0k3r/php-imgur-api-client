@@ -62,7 +62,7 @@ class Album extends AbstractApi
      *
      * @param array $data
      *
-     * @link https://api.imgur.com/endpoints/album#album-uploada
+     * @link https://api.imgur.com/endpoints/album#album-upload
      *
      * @return bool
      */

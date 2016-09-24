@@ -2,6 +2,8 @@
 
 namespace Imgur\Api;
 
+use Imgur\Exception\MissingArgumentException;
+
 /**
  * CRUD for Conversations.
  *
@@ -38,18 +40,22 @@ class Conversation extends AbstractApi
     }
 
     /**
-     * Create a new message. Check the link for the structure of the $parameters
+     * Create a new message. Check the link for the structure of the $data
      * (current structure should contain the 'recipient' and 'body' keys ('recipient' being the username of the receiver)).
      *
-     * @param array $parameters
+     * @param array $data
      *
      * @link https://api.imgur.com/endpoints/conversation#message-create
      *
      * @return bool
      */
-    public function messageCreate($parameters)
+    public function messageCreate($data)
     {
-        return $this->post('conversations/' . $parameters['recipient'], $parameters);
+        if (!isset($data['recipient'], $data['body'])) {
+            throw new MissingArgumentException(['recipient', 'body']);
+        }
+
+        return $this->post('conversations/' . $data['recipient'], $data);
     }
 
     /**

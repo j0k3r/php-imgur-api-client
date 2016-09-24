@@ -3,6 +3,7 @@
 namespace Imgur\Api;
 
 use Imgur\Exception\InvalidArgumentException;
+use Imgur\Exception\MissingArgumentException;
 
 /**
  * CRUD for Gallery.
@@ -166,6 +167,10 @@ class Gallery extends AbstractApi
      */
     public function submitToGallery($imageOrAlbumId, $data)
     {
+        if (!isset($data['title'])) {
+            throw new MissingArgumentException('title');
+        }
+
         return $this->post('gallery/' . $imageOrAlbumId, $data);
     }
 
@@ -303,6 +308,10 @@ class Gallery extends AbstractApi
      */
     public function createComment($imageOrAlbumId, $data)
     {
+        if (!isset($data['comment'])) {
+            throw new MissingArgumentException('comment');
+        }
+
         return $this->post('gallery/' . $imageOrAlbumId . '/comment', $data);
     }
 

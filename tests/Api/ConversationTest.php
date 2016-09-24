@@ -123,6 +123,15 @@ class ConversationTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->messageCreate(['recipient' => 'imgur', 'body' => 'YO !']));
     }
 
+    /**
+     * @expectedException Imgur\Exception\MissingArgumentException
+     * @expectedExceptionMessage parameters is missing
+     */
+    public function testMessageCreateParamMissing()
+    {
+        $this->getApiMock()->messageCreate([]);
+    }
+
     public function testConversationDelete()
     {
         $expectedValue = [

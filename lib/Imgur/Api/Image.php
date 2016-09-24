@@ -2,6 +2,8 @@
 
 namespace Imgur\Api;
 
+use Imgur\Exception\MissingArgumentException;
+
 /**
  * CRUD for Images.
  *
@@ -22,7 +24,11 @@ class Image extends AbstractApi
      */
     public function upload($data)
     {
-        if ($data['type'] === 'file') {
+        if (!isset($data['image'])) {
+            throw new MissingArgumentException(['image']);
+        }
+
+        if (isset($data['type']) && 'file' === $data['type']) {
             $data['image'] = '@' . $data['image'];
         }
 

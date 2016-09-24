@@ -149,6 +149,15 @@ class ImageTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->upload(['type' => 'file', 'image' => './ZOY11VC.png']));
     }
 
+    /**
+     * @expectedException Imgur\Exception\MissingArgumentException
+     * @expectedExceptionMessage parameters is missing
+     */
+    public function testUploadWithUrlParamMissing()
+    {
+        $this->getApiMock()->upload([]);
+    }
+
     public function testDeleteImage()
     {
         $expectedValue = [
