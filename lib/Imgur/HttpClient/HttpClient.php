@@ -2,9 +2,9 @@
 
 namespace Imgur\HttpClient;
 
-use Guzzle\Http\Client as GuzzleClient;
-use Guzzle\Http\Message\Request;
-use Imgur\Exception;
+use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\ClientInterface;
+use Imgur\Exception\ErrorException;
 use Imgur\Listener\ErrorListener;
 
 /**
@@ -12,44 +12,49 @@ use Imgur\Listener\ErrorListener;
  *
  * @author Adrian Ghiuta <adrian.ghiuta@gmail.com>
  */
-class HttpClient implements \Imgur\HttpClient\HttpClientInterface
+class HttpClient implements HttpClientInterface
 {
     /**
      * The Guzzle instance.
      *
-     * @var Guzzle\Http\Client
+     * @var \GuzzleHttp\ClientInterface
      */
-    private $client;
+    protected $client;
 
     /**
      * HTTP Client Settings.
      *
      * @var array
      */
-    private $options = array(
-        'headers' => array(),
-        'body' => array(),
-    );
+    protected $options = [
+        'base_url' => 'https://api.imgur.com/3/',
+    ];
 
     /**
-     * @param array                        $options
-     * @param \Guzzle\Http\ClientInterface $client
+     * @param array           $options
+     * @param ClientInterface $client
      */
-    public function __construct(array $options = array())
+    public function __construct(array $options = [], ClientInterface $client = null)
     {
         $this->options = array_merge($options, $this->options);
-        $this->client = new GuzzleClient($this->options['base_url']);
 
-        $this->addListener('request.error', array(
-                            new ErrorListener($this->options),
-                            'onRequestError', )
-                );
+        $this->client = $client ?: new GuzzleClient(['base_url' => $this->options['base_url']]);
+
+        unset($this->options['base_url']);
+
+        $this->addListener(
+            'error',
+            [
+                new ErrorListener(),
+                'error',
+            ]
+        );
     }
 
     /**
      * {@inheritdoc}
      */
-    public function get($url, array $parameters = array())
+    public function get($url, array $parameters = [])
     {
         return $this->performRequest($url, $parameters, 'GET');
     }
@@ -57,7 +62,7 @@ class HttpClient implements \Imgur\HttpClient\HttpClientInterface
     /**
      * {@inheritdoc}
      */
-    public function delete($url, array $parameters = array())
+    public function delete($url, array $parameters = [])
     {
         return $this->performRequest($url, $parameters, 'DELETE');
     }
@@ -65,7 +70,7 @@ class HttpClient implements \Imgur\HttpClient\HttpClientInterface
     /**
      * {@inheritdoc}
      */
-    public function post($url, array $parameters = array())
+    public function post($url, array $parameters = [])
     {
         return $this->performRequest($url, $parameters, 'POST');
     }
@@ -78,21 +83,15 @@ class HttpClient implements \Imgur\HttpClient\HttpClientInterface
         $request = $this->createRequest($url, $parameters, $httpMethod);
 
         try {
-            $response = $this->client->send($request);
+            return $this->client->send($request);
+        } catch (\Exception $e) {
+            // if there are a previous one it comes from the ErrorListener
+            if ($e->getPrevious()) {
+                throw $e->getPrevious();
+            }
 
-            return $response;
-        } catch (\Imgur\Exception\LogicException $e) {
-            error_log($e->getMessage());
-        } catch (\Imgur\Exception\RuntimeException $e) {
-            error_log($e->getMessage());
-        } catch (\Guzzle\Http\Exception\ClientErrorResponseException $e) {
-            $responseData = $e->getResponse()->json();
-            error_log('Request to: ' . $responseData['data']['request'] . ' failed with: [' . $responseData['status'] . ']"' . $responseData['data']['error'] . '"');
-        } catch (Exception $e) {
-            error_log($e->getMessage());
+            throw new ErrorException($e->getMessage(), 0, E_ERROR, __FILE__, __LINE__, $e);
         }
-
-        return false;
     }
 
     /**
@@ -100,11 +99,20 @@ class HttpClient implements \Imgur\HttpClient\HttpClientInterface
      */
     public function createRequest($url, $parameters, $httpMethod = 'GET')
     {
-        if ($httpMethod === 'POST' || $httpMethod === 'DELETE') {
-            return $this->client->createRequest($httpMethod, $url, $this->options['headers'], $parameters);
-        } else {
-            return $this->client->createRequest($httpMethod, $url, $this->options['headers'], $this->options['body'], $parameters);
+        $options = [
+            'headers' => isset($this->options['headers']) ? $this->options['headers'] : [],
+            'body' => isset($this->options['body']) ? $this->options['body'] : '',
+        ];
+
+        if (isset($parameters['query'])) {
+            $options['query'] = $parameters['query'];
         }
+
+        if ($httpMethod === 'POST' || $httpMethod === 'DELETE') {
+            $options['body'] = $parameters;
+        }
+
+        return $this->client->createRequest($httpMethod, $url, $options);
     }
 
     /**
@@ -112,24 +120,26 @@ class HttpClient implements \Imgur\HttpClient\HttpClientInterface
      */
     public function parseResponse($response)
     {
-        $responseBody = array('data' => array(), 'success' => false);
+        $responseBody = ['data' => [], 'success' => false];
 
         if ($response) {
-            $responseBody = json_decode($response->getBody(true), true);
+            $responseBody = json_decode($response->getBody(), true);
         }
 
-        return $responseBody;
+        return $responseBody['data'];
     }
 
     /**
      * Attaches a listener to a HttpClient event.
      *
-     * @param HttpClient $httpClient
-     * @param string     $eventName
-     * @param array      $listener
+     * @param string $eventName
+     * @param array  $listener
      */
     public function addListener($eventName, $listener)
     {
-        $this->client->getEventDispatcher()->addListener($eventName, $listener);
+        $this
+            ->client
+            ->getEmitter()
+            ->on($eventName, $listener);
     }
 }

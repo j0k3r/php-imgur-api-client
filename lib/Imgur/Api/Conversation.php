@@ -2,6 +2,8 @@
 
 namespace Imgur\Api;
 
+use Imgur\Exception\MissingArgumentException;
+
 /**
  * CRUD for Conversations.
  *
@@ -14,19 +16,13 @@ class Conversation extends AbstractApi
     /**
      * Get list of all conversations for the logged in user.
      *
-     * @return \Imgur\Api\Model\Conversation|array
+     * @link https://api.imgur.com/endpoints/conversation#conversation-list
+     *
+     * @return array Array of Conversation (@see https://api.imgur.com/models/conversation)
      */
-    public function conversationList()
+    public function conversations()
     {
-        $parameters = $this->get('conversations');
-
-        $conversations = array();
-
-        foreach ($parameters['data'] as $parameter) {
-            $conversations[] = new Model\Conversation($parameter);
-        }
-
-        return $conversations;
+        return $this->get('conversations');
     }
 
     /**
@@ -34,32 +30,32 @@ class Conversation extends AbstractApi
      *
      * @param string $conversationId
      *
-     * @return \Imgur\Api\Model\Conversation|array
+     * @link https://api.imgur.com/endpoints/conversation#conversation
+     *
+     * @return array Conversation (@see https://api.imgur.com/models/conversation)
      */
     public function conversation($conversationId)
     {
-        $parameters = $this->get('conversations/' . $conversationId);
-
-        $conversation = new Model\Conversation($parameters['data']);
-
-        return $conversation;
+        return $this->get('conversations/' . $conversationId);
     }
 
     /**
-     * Create a new message. Check the link for the structure of the $parameters
+     * Create a new message. Check the link for the structure of the $data
      * (current structure should contain the 'recipient' and 'body' keys ('recipient' being the username of the receiver)).
      *
-     * @param array $parameters
+     * @param array $data
      *
      * @link https://api.imgur.com/endpoints/conversation#message-create
      *
-     * @return \Imgur\Api\Model\Basic
+     * @return bool
      */
-    public function messageCreate($parameters)
+    public function messageCreate($data)
     {
-        $parameters = $this->post('conversations/' . $parameters['recipient'], $parameters);
+        if (!isset($data['recipient'], $data['body'])) {
+            throw new MissingArgumentException(['recipient', 'body']);
+        }
 
-        return new Model\Basic($parameters);
+        return $this->post('conversations/' . $data['recipient'], $data);
     }
 
     /**
@@ -67,13 +63,13 @@ class Conversation extends AbstractApi
      *
      * @param string $conversationId
      *
-     * @return \Imgur\Api\Model\Basic
+     * @link https://api.imgur.com/endpoints/conversation#message-delete
+     *
+     * @return bool
      */
     public function conversationDelete($conversationId)
     {
-        $parameters = $this->delete('conversations/' . $conversationId);
-
-        return new Model\Basic($parameters);
+        return $this->delete('conversations/' . $conversationId);
     }
 
     /**
@@ -81,13 +77,13 @@ class Conversation extends AbstractApi
      *
      * @param string $username
      *
-     * @return \Imgur\Api\Model\Basic
+     * @link https://api.imgur.com/endpoints/conversation#message-report
+     *
+     * @return bool
      */
     public function reportSender($username)
     {
-        $parameters = $this->post('conversations/report/' . $username);
-
-        return new Model\Basic($parameters);
+        return $this->post('conversations/report/' . $username);
     }
 
     /**
@@ -95,12 +91,12 @@ class Conversation extends AbstractApi
      *
      * @param string $username
      *
-     * @return \Imgur\Api\Model\Basic
+     * @link https://api.imgur.com/endpoints/conversation#message-block
+     *
+     * @return bool
      */
     public function blockSender($username)
     {
-        $parameters = $this->post('conversations/block/' . $username);
-
-        return new Model\Basic($parameters);
+        return $this->post('conversations/block/' . $username);
     }
 }

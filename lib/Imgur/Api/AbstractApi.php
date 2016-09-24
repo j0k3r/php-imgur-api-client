@@ -3,6 +3,8 @@
 namespace Imgur\Api;
 
 use Imgur\Client;
+use Imgur\Exception\InvalidArgumentException;
+use Imgur\Pager\PagerInterface;
 
 /**
  * Abstract class supporting API requests.
@@ -12,16 +14,16 @@ use Imgur\Client;
 abstract class AbstractApi
 {
     /**
-     * @var Imgur\Client
+     * @var \Imgur\Client
      */
-    private $client;
+    protected $client;
 
     /**
-     * @var Imgur\Pager\PagerInterface
+     * @var \Imgur\Pager\PagerInterface
      */
-    private $pager;
+    protected $pager;
 
-    public function __construct($client, $pager)
+    public function __construct(Client $client, PagerInterface $pager = null)
     {
         $this->client = $client;
         $this->pager = $pager;
@@ -34,7 +36,7 @@ abstract class AbstractApi
      *
      * @return array
      */
-    public function get($url, $parameters = array())
+    public function get($url, $parameters = [])
     {
         $httpClient = $this->client->getHttpClient();
 
@@ -43,7 +45,7 @@ abstract class AbstractApi
             $parameters['perPage'] = $this->pager->getResultsPerPage();
         }
 
-        $response = $httpClient->get($url, array('query' => $parameters));
+        $response = $httpClient->get($url, ['query' => $parameters]);
 
         return $httpClient->parseResponse($response);
     }
@@ -55,7 +57,7 @@ abstract class AbstractApi
      *
      * @return array
      */
-    public function post($url, $parameters = array())
+    public function post($url, $parameters = [])
     {
         $httpClient = $this->client->getHttpClient();
 
@@ -71,12 +73,25 @@ abstract class AbstractApi
      *
      * @return array
      */
-    public function delete($url, $parameters = array())
+    public function delete($url, $parameters = [])
     {
         $httpClient = $this->client->getHttpClient();
 
         $response = $httpClient->delete($url, $parameters);
 
         return $httpClient->parseResponse($response);
+    }
+
+    /**
+     * Validate "sort" parameter and throw an exception if it's a bad value.
+     *
+     * @param string $sort           Input value
+     * @param array  $possibleValues
+     */
+    protected function validateSortArgument($sort, $possibleValues)
+    {
+        if (!in_array($sort, $possibleValues, true)) {
+            throw new InvalidArgumentException('Sort parameter "' . $sort . '" is wrong. Possible values are: ' . implode(', ', $possibleValues));
+        }
     }
 }

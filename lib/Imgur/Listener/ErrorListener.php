@@ -2,7 +2,11 @@
 
 namespace Imgur\Listener;
 
-use Guzzle\Common\Event;
+use GuzzleHttp\Event\ErrorEvent;
+use GuzzleHttp\Message\ResponseInterface;
+use Imgur\Exception\ErrorException;
+use Imgur\Exception\RateLimitException;
+use Imgur\Exception\RuntimeException;
 
 /**
  * @author Adrian Ghiuta <adrian.ghiuta@gmail.com>
@@ -10,50 +14,63 @@ use Guzzle\Common\Event;
 class ErrorListener
 {
     /**
-     * @var array
+     * {@inheritdoc}
      */
-    private $options;
-
-    /**
-     * @param array $options
-     */
-    public function __construct($options)
+    public function error(ErrorEvent $event)
     {
-        $this->options = $options;
+        $response = $event->getResponse();
+
+        if (null === $response || $response->getStatusCode() < 400) {
+            return;
+        }
+
+        //check if any limit was hit
+        $this->checkUserRateLimit($response);
+        $this->checkClientRateLimit($response);
+
+        $body = $response->getBody();
+        $responseData = json_decode($body, true);
+        if (JSON_ERROR_NONE !== json_last_error()) {
+            $responseData = $body;
+        }
+
+        if (is_array($responseData) && isset($responseData['data']) && isset($responseData['data']['error'])) {
+            throw new ErrorException('Request to: ' . $responseData['data']['request'] . ' failed with: "' . $responseData['data']['error'] . '"');
+        }
+
+        throw new RuntimeException(is_array($responseData) && isset($responseData['message']) ? $responseData['message'] : $responseData, $response->getStatusCode());
     }
 
     /**
-     * {@inheritdoc}
+     * Check if user hit limit.
+     *
+     * @param ResponseInterface $response
      */
-    public function onRequestError(Event $event)
+    private function checkUserRateLimit(ResponseInterface $response)
     {
-        $request = $event['request'];
-        $response = $request->getResponse();
+        $userRemaining = (string) $response->getHeader('X-RateLimit-UserRemaining');
+        $userLimit = (string) $response->getHeader('X-RateLimit-UserLimit');
 
-        if ($response->isClientError() || $response->isServerError()) {
-            //check if any limit was hit
-            $userAvailableCallsCount = $response->getHeader('X-RateLimit-UserRemaining');
-            $userTotalCallsAvailable = $response->getHeader('X-RateLimit-UserLimit');
+        if ('' !== $userRemaining && $userRemaining < 1) {
+            throw new RateLimitException('No user credits available. The limit is ' . $userLimit);
+        }
+    }
 
-            $applicationAvailableCallsCount = $response->getHeader('X-RateLimit-ClientLimit');
-            $applicationTotalCallsAvailable = $response->getHeader('X-RateLimit-ClientRemaining');
+    /**
+     * Check if client hit limit.
+     *
+     * @param ResponseInterface $response
+     */
+    private function checkClientRateLimit(ResponseInterface $response)
+    {
+        $clientRemaining = (string) $response->getHeader('X-RateLimit-ClientRemaining');
+        $clientLimit = (string) $response->getHeader('X-RateLimit-ClientLimit');
 
-            if (!empty($userAvailableCallsCount) && $userAvailableCallsCount < 1) {
-                throw new \Imgur\Exception\RateLimitException('No user credits available. The limit is ' . $userTotalCallsAvailable);
-            }
+        if ('' !== $clientRemaining && $clientRemaining < 1) {
+            // X-RateLimit-UserReset: unix epoch
+            $resetTime = date('Y-m-d H:i:s', $response->getHeader('X-RateLimit-UserReset'));
 
-            if (!empty($applicationAvailableCallsCount) && $applicationTotalCallsAvailable < 1) {
-                $applicationTotalCallsResetTime = $response->getHeader('X-RateLimit-UserReset'); // unix epoch
-                $applicationTotalCallsResetTime = date('Y-m-d H:i:s', $applicationTotalCallsResetTime);
-                throw new \Imgur\Exception\RateLimitException('No application credits available. The limit is ' . $applicationTotalCallsAvailable . ' '
-                        . 'and will be reset at ' . $applicationTotalCallsResetTime);
-            }
-
-            $responseData = $response->json();
-
-            if (!empty($responseData['data']) && !empty($responseData['error'])) {
-                throw new \Imgur\Exception\RateLimitException('Request to: ' . $responseData['data']['request'] . ' failed with: "' . $responseData['data']['error'] . '"');
-            }
+            throw new RateLimitException('No application credits available. The limit is ' . $clientLimit . ' and will be reset at ' . $resetTime);
         }
     }
 }

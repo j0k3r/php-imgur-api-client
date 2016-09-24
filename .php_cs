@@ -10,10 +10,10 @@ return Symfony\CS\Config\Config::create()
         'phpdoc_order',
         'strict',
         'strict_param',
-        'long_array_syntax',
+        'short_array_syntax',
     ))
     ->finder(
-        Symfony\CS\Finder\DefaultFinder::create()
+        Symfony\CS\Finder::create()
             ->in(__DIR__)
             ->exclude(array('vendor'))
     )

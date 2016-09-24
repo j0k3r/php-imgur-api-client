@@ -2,6 +2,9 @@
 
 namespace Imgur\Api;
 
+use Imgur\Exception\InvalidArgumentException;
+use Imgur\Exception\MissingArgumentException;
+
 /**
  * CRUD for Comment.
  *
@@ -16,13 +19,13 @@ class Comment extends AbstractApi
      *
      * @param string $commentId
      *
-     * @return \Imgur\Api\Model\Comment
+     * @link https://api.imgur.com/endpoints/comment#comment
+     *
+     * @return array Comment (@see https://api.imgur.com/endpoints/gallery#gallery-comments)
      */
     public function comment($commentId)
     {
-        $parameters = $this->get('comment/' . $commentId);
-
-        return new Model\Comment($parameters);
+        return $this->get('comment/' . $commentId);
     }
 
     /**
@@ -30,13 +33,17 @@ class Comment extends AbstractApi
      *
      * @param array $data
      *
-     * @return \Imgur\Api\Model\Basic
+     * @link https://api.imgur.com/endpoints/comment#comment-create
+     *
+     * @return bool
      */
     public function create($data)
     {
-        $parameters = $this->post('comment', $data);
+        if (!isset($data['image_id'], $data['comment'])) {
+            throw new MissingArgumentException(['image_id', 'comment']);
+        }
 
-        return new Model\Basic($parameters);
+        return $this->post('comment', $data);
     }
 
     /**
@@ -44,13 +51,13 @@ class Comment extends AbstractApi
      *
      * @param string $commentId
      *
-     * @return \Imgur\Api\Model\Basic
+     * @link https://api.imgur.com/endpoints/comment#comment-delete
+     *
+     * @return bool
      */
     public function deleteComment($commentId)
     {
-        $parameters = $this->delete('comment/' . $commentId);
-
-        return new Model\Basic($parameters);
+        return $this->delete('comment/' . $commentId);
     }
 
     /**
@@ -58,48 +65,13 @@ class Comment extends AbstractApi
      *
      * @param string $commentId
      *
-     * @return \Imgur\Api\Model\Comment
+     * @link https://api.imgur.com/endpoints/comment#comment-replies
+     *
+     * @return array Comment (@see https://api.imgur.com/endpoints/gallery#gallery-comments)
      */
     public function replies($commentId)
     {
-        $parameters = $this->get('comment/' . $commentId . '/replied');
-
-        $replies = array();
-
-        foreach ($parameters['data'] as $parameter) {
-            $replies[] = new Model\Comment($parameter['content']);
-        }
-
-        return $replies;
-    }
-
-    /**
-     * Vote on a comment. The $vote variable can only be set as "up" or "down".
-     *
-     * @param string $commentId
-     * @param string $vote
-     *
-     * @return \Imgur\Api\Model\Basic
-     */
-    public function vote($commentId, $vote)
-    {
-        $parameters = $this->post('comment/' . $commentId . '/vote/' . $vote);
-
-        return new Model\Basic($parameters);
-    }
-
-    /**
-     * Report a comment for being inappropriate.
-     *
-     * @param string $commentId
-     *
-     * @return \Imgur\Api\Model\Basic
-     */
-    public function report($commentId)
-    {
-        $parameters = $this->post('comment/' . $commentId . '/report');
-
-        return new Model\Basic($parameters);
+        return $this->get('comment/' . $commentId . '/replied');
     }
 
     /**
@@ -108,12 +80,50 @@ class Comment extends AbstractApi
      * @param string $commentId
      * @param array  $data
      *
-     * @return \Imgur\Api\Model\Basic
+     * @link https://api.imgur.com/endpoints/comment#comment-reply-create
+     *
+     * @return bool
      */
     public function createReply($commentId, $data)
     {
-        $parameters = $this->post('comment/' . $commentId, $data);
+        if (!isset($data['image_id'], $data['comment'])) {
+            throw new MissingArgumentException(['image_id', 'comment']);
+        }
 
-        return new Model\Basic($parameters);
+        return $this->post('comment/' . $commentId, $data);
+    }
+
+    /**
+     * Vote on a comment. The $vote variable can only be set as "up" or "down".
+     *
+     * @param string $commentId
+     * @param string $vote
+     *
+     * @link https://api.imgur.com/endpoints/comment#comment-vote
+     *
+     * @return bool
+     */
+    public function vote($commentId, $vote)
+    {
+        $voteValues = ['up', 'down'];
+        if (!in_array($vote, $voteValues, true)) {
+            throw new InvalidArgumentException('Vote parameter "' . $vote . '" is wrong. Possible values are: ' . implode(', ', $voteValues));
+        }
+
+        return $this->post('comment/' . $commentId . '/vote/' . $vote);
+    }
+
+    /**
+     * Report a comment for being inappropriate.
+     *
+     * @param string $commentId
+     *
+     * @link https://api.imgur.com/endpoints/comment#comment-report
+     *
+     * @return bool
+     */
+    public function report($commentId)
+    {
+        return $this->post('comment/' . $commentId . '/report');
     }
 }

@@ -2,6 +2,11 @@
 
 namespace Imgur;
 
+use Imgur\Auth\AuthInterface;
+use Imgur\Exception\InvalidArgumentException;
+use Imgur\HttpClient\HttpClient;
+use Imgur\HttpClient\HttpClientInterface;
+
 /**
  * PHP Imgur API wrapper.
  */
@@ -10,17 +15,16 @@ class Client
     /**
      * @var array
      */
-    private $options = array(
+    private $options = [
         'base_url' => 'https://api.imgur.com/3/',
-
         'client_id' => null,
         'client_secret' => null,
-    );
+    ];
 
     /**
      * The class handling communication with Imgur servers.
      *
-     * @var HttpClient
+     * @var \Imgur\HttpClient\HttpClientInterface
      */
     private $httpClient;
 
@@ -36,7 +40,7 @@ class Client
      *
      * @param null|HttpClientInterface $httpClient Imgur http client
      */
-    public function __construct(Auth\AuthInterface $authenticationClient = null, HttpClient\HttpClientInterface $httpClient = null)
+    public function __construct(AuthInterface $authenticationClient = null, HttpClientInterface $httpClient = null)
     {
         $this->httpClient = $httpClient;
         $this->authenticationClient = $authenticationClient;
@@ -58,51 +62,41 @@ class Client
 
         switch ($name) {
             case 'account':
-                $api = new Api\Account($this, $pager);
-                break;
+                return new Api\Account($this, $pager);
 
             case 'album':
-                $api = new Api\Album($this, $pager);
-                break;
+                return new Api\Album($this, $pager);
 
             case 'comment':
-                $api = new Api\Comment($this, $pager);
-                break;
+                return new Api\Comment($this, $pager);
 
             case 'gallery':
-                $api = new Api\Gallery($this, $pager);
-                break;
+                return new Api\Gallery($this, $pager);
 
             case 'image':
-                $api = new Api\Image($this, $pager);
-                break;
+                return new Api\Image($this, $pager);
 
             case 'conversation':
-                $api = new Api\Conversation($this, $pager);
-                break;
+                return new Api\Conversation($this, $pager);
 
             case 'notification':
-                $api = new Api\Notification($this, $pager);
-                break;
+                return new Api\Notification($this, $pager);
 
             case 'memegen':
-                $api = new Api\Memegen($this, $pager);
-                break;
+                return new Api\Memegen($this, $pager);
 
             default:
                 throw new InvalidArgumentException('API Method not supported: ' . $name);
         }
-
-        return $api;
     }
 
     /**
-     * @return HttpClient
+     * @return HttpClientInterface
      */
     public function getHttpClient()
     {
         if (null === $this->httpClient) {
-            $this->httpClient = new \Imgur\HttpClient\HttpClient($this->options);
+            $this->setHttpClient(new HttpClient($this->options));
         }
 
         return $this->httpClient;
@@ -111,7 +105,7 @@ class Client
     /**
      * @param HttpClientInterface $httpClient
      */
-    public function setHttpClient(HttpClient\HttpClientInterface $httpClient)
+    public function setHttpClient(HttpClientInterface $httpClient)
     {
         $this->httpClient = $httpClient;
     }
@@ -121,7 +115,7 @@ class Client
      *
      * @throws InvalidArgumentException
      *
-     * @return mixed
+     * @return string
      */
     public function getOption($name)
     {
@@ -150,12 +144,16 @@ class Client
     /**
      * Retrieves the Auth object and also instantiates it if not already present.
      *
-     * @return AuthInterface
+     * @return Auth\AuthInterface
      */
     public function getAuthenticationClient()
     {
         if (empty($this->authenticationClient)) {
-            $this->authenticationClient = new Auth\OAuth2($this->getOption('client_id'), $this->getOption('client_secret'));
+            $this->authenticationClient = new Auth\OAuth2(
+                $this->getHttpClient(),
+                $this->getOption('client_id'),
+                $this->getOption('client_secret')
+            );
         }
 
         return $this->authenticationClient;
@@ -171,9 +169,7 @@ class Client
      */
     public function getAuthenticationUrl($responseType = 'code', $state = null)
     {
-        $authenticationClient = $this->getAuthenticationClient();
-
-        return $authenticationClient->getAuthenticationUrl($responseType, $state);
+        return $this->getAuthenticationClient()->getAuthenticationUrl($responseType, $state);
     }
 
     /**
@@ -186,9 +182,7 @@ class Client
      */
     public function requestAccessToken($code, $responseType = 'code')
     {
-        $authenticationClient = $this->getAuthenticationClient();
-
-        return $authenticationClient->requestAccessToken($code, $responseType, $this->getHttpClient());
+        return $this->getAuthenticationClient()->requestAccessToken($code, $responseType);
     }
 
     /**
@@ -198,9 +192,7 @@ class Client
      */
     public function getAccessToken()
     {
-        $authenticationClient = $this->getAuthenticationClient();
-
-        return $authenticationClient->getAccessToken();
+        return $this->getAuthenticationClient()->getAccessToken();
     }
 
     /**
@@ -210,9 +202,7 @@ class Client
      */
     public function checkAccessTokenExpired()
     {
-        $authenticationClient = $this->getAuthenticationClient();
-
-        return $authenticationClient->checkAccessTokenExpired();
+        return $this->getAuthenticationClient()->checkAccessTokenExpired();
     }
 
     /**
@@ -222,10 +212,7 @@ class Client
      */
     public function refreshToken()
     {
-        $authenticationClient = $this->getAuthenticationClient();
-        $httpClient = $this->getHttpClient();
-
-        return $authenticationClient->refreshToken($httpClient);
+        return $this->getAuthenticationClient()->refreshToken();
     }
 
     /**
@@ -235,10 +222,7 @@ class Client
      */
     public function setAccessToken($token)
     {
-        $authenticationClient = $this->getAuthenticationClient();
-        $httpClient = $this->getHttpClient();
-
-        $authenticationClient->setAccessToken($token, $httpClient);
+        $this->getAuthenticationClient()->setAccessToken($token);
     }
 
     /**
@@ -246,9 +230,6 @@ class Client
      */
     public function sign()
     {
-        $authenticationClient = $this->getAuthenticationClient();
-        $httpClient = $this->getHttpClient();
-
-        $authenticationClient->sign($httpClient);
+        $this->getAuthenticationClient()->sign();
     }
 }

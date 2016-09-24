@@ -14,21 +14,17 @@ class Notification extends AbstractApi
     /**
      * Get all notifications for the user that's currently logged in.
      *
-     * @param bool $new
+     * @param string $new false for all notifications, true for only non-viewed notification
      *
-     * @return \Imgur\Api\Model\Notification|array
+     * @link https://api.imgur.com/endpoints/notification#notifications
+     *
+     * @return array With keys "replies" & "messages"
      */
-    public function getNotifications($new = true)
+    public function notifications($new = true)
     {
-        $parameters = $this->get('notification?new=' . var_export($new, true));
+        $new = $new ? 'true' : 'false';
 
-        $notifications = array();
-
-        foreach ($parameters['data'] as $parameter) {
-            $notifications[] = new Model\Notification($parameter);
-        }
-
-        return $notifications;
+        return $this->get('notification', ['new' => $new]);
     }
 
     /**
@@ -36,13 +32,13 @@ class Notification extends AbstractApi
      *
      * @param string $notificationId
      *
-     * @return \Imgur\Api\Model\Notification
+     * @link https://api.imgur.com/endpoints/notification#notification
+     *
+     * @return array (@see https://api.imgur.com/models/notification)
      */
     public function notification($notificationId)
     {
-        $parameters = $this->get('notification/' . $notificationId);
-
-        return new Model\Notification($parameters);
+        return $this->get('notification/' . $notificationId);
     }
 
     /**
@@ -50,12 +46,12 @@ class Notification extends AbstractApi
      *
      * @param string $notificationId
      *
-     * @return \Imgur\Api\Model\Basic
+     * @link https://api.imgur.com/endpoints/notification#notification-viewed
+     *
+     * @return bool
      */
     public function notificationViewed($notificationId)
     {
-        $parameters = $this->post('notification/' . $notificationId);
-
-        return new Model\Basic($parameters);
+        return $this->post('notification/' . $notificationId);
     }
 }

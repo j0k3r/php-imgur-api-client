@@ -24,14 +24,22 @@
         }
     ],
     "autoload": {
-        "psr-0": {
-            "Imgur\\": "lib/"
+        "psr-4": {
+            "Imgur\\": "lib/Imgur/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Imgur\\tests\\": "tests/"
         }
     },
     "require": {
-        "php": ">=5.3.3",
+        "php": ">=5.5.0",
         "ext-curl": "*",
-        "guzzle/guzzle": "~3.7"
+        "guzzlehttp/guzzle": "^5.3.1"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "~1.9"
     },
     "extra": {
         "branch-alias": {

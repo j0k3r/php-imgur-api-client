@@ -10,7 +10,6 @@ namespace Imgur\Pager;
 class BasicPager implements PagerInterface
 {
     private $page;
-
     private $resultsPerPage;
 
     public function __construct($page = 1, $resultsPerPage = 10)
@@ -51,7 +50,7 @@ class BasicPager implements PagerInterface
      *
      * @param int $page
      *
-     * @return \Imgur\Pager\BasicPager
+     * @return BasicPager
      */
     public function setPage($page)
     {
@@ -65,7 +64,7 @@ class BasicPager implements PagerInterface
      *
      * @param int $resultsPerPage
      *
-     * @return \Imgur\Pager\BasicPager
+     * @return BasicPager
      */
     public function setResultsPerPage($resultsPerPage)
     {

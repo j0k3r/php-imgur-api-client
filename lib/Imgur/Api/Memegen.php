@@ -14,18 +14,10 @@ class Memegen extends AbstractApi
     /**
      * Get the list of default memes.
      *
-     * @return \Imgur\Api\Model\Image|array
+     * @return array Of images (@see Image.php)
      */
     public function defaultMemes()
     {
-        $parameters = $this->get('memegen/defaults');
-
-        $images = array();
-
-        foreach ($parameters['data'] as $parameter) {
-            $images[] = new Model\Image($parameter);
-        }
-
-        return $images;
+        return $this->get('memegen/defaults');
     }
 }

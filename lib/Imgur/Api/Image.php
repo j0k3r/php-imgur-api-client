@@ -2,6 +2,8 @@
 
 namespace Imgur\Api;
 
+use Imgur\Exception\MissingArgumentException;
+
 /**
  * CRUD for Images.
  *
@@ -18,17 +20,19 @@ class Image extends AbstractApi
      *
      * @link https://api.imgur.com/endpoints/image#image-upload
      *
-     * @return \Imgur\Api\Model\Basic
+     * @return bool
      */
     public function upload($data)
     {
-        if ($data['type'] === 'file') {
+        if (!isset($data['image'])) {
+            throw new MissingArgumentException(['image']);
+        }
+
+        if (isset($data['type']) && 'file' === $data['type']) {
             $data['image'] = '@' . $data['image'];
         }
 
-        $parameters = $this->post('image', $data);
-
-        return new Model\Basic($parameters);
+        return $this->post('image', $data);
     }
 
     /**
@@ -36,13 +40,13 @@ class Image extends AbstractApi
      *
      * @param string $imageId
      *
-     * @return \Imgur\Api\Model\Image
+     * @link https://api.imgur.com/endpoints/image#image
+     *
+     * @return array (@see https://api.imgur.com/models/image)
      */
     public function image($imageId)
     {
-        $parameters = $this->get('image/' . $imageId);
-
-        return new Model\Image($parameters);
+        return $this->get('image/' . $imageId);
     }
 
     /**
@@ -51,13 +55,13 @@ class Image extends AbstractApi
      *
      * @param string $imageIdOrDeleteHash
      *
-     * @return \Imgur\Api\Model\Basic
+     * @link https://api.imgur.com/endpoints/image#image-delete
+     *
+     * @return bool
      */
     public function deleteImage($imageIdOrDeleteHash)
     {
-        $parameters = $this->delete('image/' . $imageIdOrDeleteHash);
-
-        return new Model\Basic($parameters);
+        return $this->delete('image/' . $imageIdOrDeleteHash);
     }
 
     /**
@@ -70,13 +74,11 @@ class Image extends AbstractApi
      *
      * @link https://api.imgur.com/endpoints/image#image-update
      *
-     * @return \Imgur\Api\Model\Basic
+     * @return bool
      */
     public function update($imageIdOrDeleteHash, $data)
     {
-        $parameters = $this->post('image/' . $imageIdOrDeleteHash, $data);
-
-        return new Model\Basic($parameters);
+        return $this->post('image/' . $imageIdOrDeleteHash, $data);
     }
 
     /**
@@ -84,12 +86,12 @@ class Image extends AbstractApi
      *
      * @param string $imageIdOrDeleteHash
      *
-     * @return \Imgur\Api\Model\Basic
+     * @link https://api.imgur.com/endpoints/image#image-favorite
+     *
+     * @return bool
      */
     public function favorite($imageIdOrDeleteHash)
     {
-        $parameters = $this->post('image/' . $imageIdOrDeleteHash . '/favorite');
-
-        return new Model\Basic($parameters);
+        return $this->post('image/' . $imageIdOrDeleteHash . '/favorite');
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Imgur\Listener;
 
-use Guzzle\Common\Event;
+use GuzzleHttp\Event\BeforeEvent;
 
 class AuthListener
 {
@@ -15,15 +15,17 @@ class AuthListener
         $this->clientId = $clientId;
     }
 
-    public function onRequestBeforeSend(Event $event)
+    public function before(BeforeEvent $event)
     {
-        if (!empty($this->token['access_token'])) {
-            $event['request']->setHeader(
+        $request = $event->getRequest();
+
+        if (is_array($this->token) && !empty($this->token['access_token'])) {
+            $request->setHeader(
                 'Authorization',
                 'Bearer ' . $this->token['access_token']
             );
         } else {
-            $event['request']->setHeader(
+            $request->setHeader(
                 'Authorization',
                 'Client-ID ' . $this->clientId
             );

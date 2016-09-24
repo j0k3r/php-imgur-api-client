@@ -16,13 +16,13 @@ class Album extends AbstractApi
      *
      * @param string $albumId
      *
-     * @return \Imgur\Api\Model\Album
+     * @link https://api.imgur.com/endpoints/album#album
+     *
+     * @return array Album (@see https://api.imgur.com/models/album)
      */
     public function album($albumId)
     {
-        $parameters = $this->get('album/' . $albumId);
-
-        return new Model\Album($parameters);
+        return $this->get('album/' . $albumId);
     }
 
     /**
@@ -30,19 +30,13 @@ class Album extends AbstractApi
      *
      * @param string $albumId
      *
-     * @return \Imgur\Api\Model\Image|array
+     * @link https://api.imgur.com/endpoints/album#album-images
+     *
+     * @return array Array of Image (@see https://api.imgur.com/models/image)
      */
     public function albumImages($albumId)
     {
-        $parameters = $this->get('album/' . $albumId . '/images');
-
-        $images = array();
-
-        foreach ($parameters['data'] as $parameter) {
-            $images[] = new Model\Image($parameter);
-        }
-
-        return $images;
+        return $this->get('album/' . $albumId . '/images');
     }
 
     /**
@@ -51,13 +45,13 @@ class Album extends AbstractApi
      * @param string $albumId
      * @param string $imageId
      *
-     * @return \Imgur\Api\Model\Image
+     * @link https://api.imgur.com/endpoints/album#album-image
+     *
+     * @return array Image (@see https://api.imgur.com/models/image)
      */
     public function albumImage($albumId, $imageId)
     {
-        $parameters = $this->get('album/' . $albumId . '/image/' . $imageId);
-
-        return new Model\Image($parameters);
+        return $this->get('album/' . $albumId . '/image/' . $imageId);
     }
 
     /**
@@ -68,13 +62,13 @@ class Album extends AbstractApi
      *
      * @param array $data
      *
-     * @return \Imgur\Api\Model\Basic
+     * @link https://api.imgur.com/endpoints/album#album-upload
+     *
+     * @return bool
      */
     public function create($data)
     {
-        $parameters = $this->post('album', $data);
-
-        return new Model\Basic($parameters);
+        return $this->post('album', $data);
     }
 
     /**
@@ -84,13 +78,13 @@ class Album extends AbstractApi
      * @param string $deletehashOrAlbumId
      * @param array  $data
      *
-     * @return \Imgur\Api\Model\Basic
+     * @link https://api.imgur.com/endpoints/album#album-update
+     *
+     * @return bool
      */
     public function update($deletehashOrAlbumId, $data)
     {
-        $parameters = $this->post('album/' . $deletehashOrAlbumId, $data);
-
-        return new Model\Basic($parameters);
+        return $this->post('album/' . $deletehashOrAlbumId, $data);
     }
 
     /**
@@ -100,13 +94,13 @@ class Album extends AbstractApi
      *
      * @param string $deletehashOrAlbumId
      *
-     * @return \Imgur\Api\Model\Basic
+     * @link https://api.imgur.com/endpoints/album#album-delete
+     *
+     * @return bool
      */
     public function deleteAlbum($deletehashOrAlbumId)
     {
-        $parameters = $this->delete('album/' . $deletehashOrAlbumId);
-
-        return new Model\Basic($parameters);
+        return $this->delete('album/' . $deletehashOrAlbumId);
     }
 
     /**
@@ -114,13 +108,13 @@ class Album extends AbstractApi
      *
      * @param string $albumId
      *
-     * @return \Imgur\Api\Model\Basic
+     * @link https://api.imgur.com/endpoints/album#album-favorite
+     *
+     * @return bool
      */
     public function favoriteAlbum($albumId)
     {
-        $parameters = $this->post('album/' . $albumId . '/favorite');
-
-        return new Model\Basic($parameters);
+        return $this->post('album/' . $albumId . '/favorite');
     }
 
     /**
@@ -130,13 +124,13 @@ class Album extends AbstractApi
      * @param string $albumId
      * @param array  $imageIds
      *
-     * @return \Imgur\Api\Model\Basic
+     * @link https://api.imgur.com/endpoints/album#album-set-to
+     *
+     * @return bool
      */
-    public function setAlbumImages($albumId, $imageIds)
+    public function setAlbumImages($albumId, array $imageIds)
     {
-        $parameters = $this->post('album/' . $albumId, array('ids' => implode(',', $imageIds)));
-
-        return new Model\Basic($parameters);
+        return $this->post('album/' . $albumId, ['ids' => implode(',', $imageIds)]);
     }
 
     /**
@@ -146,13 +140,13 @@ class Album extends AbstractApi
      * @param string $albumId
      * @param array  $imageIds
      *
-     * @return \Imgur\Api\Model\Basic
+     * @link https://api.imgur.com/endpoints/album#album-add-to
+     *
+     * @return bool
      */
-    public function addImages($albumId, $imageIds)
+    public function addImages($albumId, array $imageIds)
     {
-        $parameters = $this->post('album/' . $albumId . '/add', array('ids' => implode(',', $imageIds)));
-
-        return new Model\Basic($parameters);
+        return $this->post('album/' . $albumId . '/add', ['ids' => implode(',', $imageIds)]);
     }
 
     /**
@@ -162,12 +156,12 @@ class Album extends AbstractApi
      * @param string $deletehashOrAlbumId
      * @param array  $imageIds
      *
-     * @return \Imgur\Api\Model\Basic
+     * @link https://api.imgur.com/endpoints/album#album-remove-from
+     *
+     * @return bool
      */
-    public function removeImages($deletehashOrAlbumId, $imageIds)
+    public function removeImages($deletehashOrAlbumId, array $imageIds)
     {
-        $parameters = $this->delete('album/' . $deletehashOrAlbumId . '/remove_images', array('ids' => implode(',', $imageIds)));
-
-        return new Model\Basic($parameters);
+        return $this->delete('album/' . $deletehashOrAlbumId . '/remove_images', ['ids' => implode(',', $imageIds)]);
     }
 }
