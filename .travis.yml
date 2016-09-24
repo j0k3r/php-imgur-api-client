@@ -10,6 +10,9 @@ php:
 # run build against nightly but allow them to fail
 matrix:
     fast_finish: true
+    include:
+        - php: 7.0
+          env: CS_FIXER=run
     allow_failures:
         - php: hhvm
 
@@ -30,6 +33,7 @@ before_script:
 
 script:
     - phpunit --coverage-clover=coverage.clover
+    - if [ "$CS_FIXER" = "run" ]; then php vendor/bin/php-cs-fixer fix --verbose --dry-run ; fi;
 
 after_script:
     - |
