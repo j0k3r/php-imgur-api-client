@@ -99,6 +99,20 @@ abstract class AbstractApi
     }
 
     /**
+     * Global method to validate an argument.
+     *
+     * @param  string $type           The required parameter (used for the error message)
+     * @param  string $input          Input value
+     * @param  array $possibleValues Possible values for this argument
+     */
+    private function validateArgument($type, $input, $possibleValues)
+    {
+        if (!in_array($input, $possibleValues, true)) {
+            throw new InvalidArgumentException($type . ' parameter "' . $input . '" is wrong. Possible values are: ' . implode(', ', $possibleValues));
+        }
+    }
+
+    /**
      * Validate "sort" parameter and throw an exception if it's a bad value.
      *
      * @param string $sort           Input value
@@ -106,9 +120,7 @@ abstract class AbstractApi
      */
     protected function validateSortArgument($sort, $possibleValues)
     {
-        if (!in_array($sort, $possibleValues, true)) {
-            throw new InvalidArgumentException('Sort parameter "' . $sort . '" is wrong. Possible values are: ' . implode(', ', $possibleValues));
-        }
+        $this->validateArgument('Sort', $sort, $possibleValues);
     }
 
     /**
@@ -119,9 +131,7 @@ abstract class AbstractApi
      */
     protected function validateWindowArgument($window, $possibleValues)
     {
-        if (!in_array($window, $possibleValues, true)) {
-            throw new InvalidArgumentException('Window parameter "' . $window . '" is wrong. Possible values are: ' . implode(', ', $possibleValues));
-        }
+        $this->validateArgument('Window', $window, $possibleValues);
     }
 
     /**
@@ -132,8 +142,6 @@ abstract class AbstractApi
      */
     protected function validateVoteArgument($vote, $possibleValues)
     {
-        if (!in_array($vote, $possibleValues, true)) {
-            throw new InvalidArgumentException('Vote parameter "' . $vote . '" is wrong. Possible values are: ' . implode(', ', $possibleValues));
-        }
+        $this->validateArgument('Vote', $vote, $possibleValues);
     }
 }
