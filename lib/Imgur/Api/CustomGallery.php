@@ -50,7 +50,7 @@ class CustomGallery extends AbstractApi
     /**
      * View a single image in a user's custom gallery.
      *
-     * @param string $image_id
+     * @param string $imageId The ID for the gallery item
      *
      * @link https://api.imgur.com/endpoints/custom_gallery#custom-gallery-image
      *

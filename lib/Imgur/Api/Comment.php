@@ -2,7 +2,6 @@
 
 namespace Imgur\Api;
 
-use Imgur\Exception\InvalidArgumentException;
 use Imgur\Exception\MissingArgumentException;
 
 /**
@@ -105,10 +104,7 @@ class Comment extends AbstractApi
      */
     public function vote($commentId, $vote)
     {
-        $voteValues = ['up', 'down'];
-        if (!in_array($vote, $voteValues, true)) {
-            throw new InvalidArgumentException('Vote parameter "' . $vote . '" is wrong. Possible values are: ' . implode(', ', $voteValues));
-        }
+        $this->validateVoteArgument($vote, ['up', 'down']);
 
         return $this->post('comment/' . $commentId . '/vote/' . $vote);
     }
