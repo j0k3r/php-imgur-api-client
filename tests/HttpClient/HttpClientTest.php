@@ -58,6 +58,25 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('ok !', $result);
     }
 
+    public function testDoPUTRequest()
+    {
+        $path = '/some/path';
+        $parameters = ['a' => 'b'];
+
+        $client = new GuzzleClient();
+        $mock = new Mock([
+            new Response(200, ['Content-Type' => 'application/json'], Stream::factory(json_encode(['data' => 'ok !']))),
+        ]);
+        $client->getEmitter()->attach($mock);
+
+        $httpClient = new HttpClient([], $client);
+        $response = $httpClient->put($path, $parameters);
+
+        $result = $httpClient->parseResponse($response);
+
+        $this->assertSame('ok !', $result);
+    }
+
     public function testDoDELETERequest()
     {
         $path = '/some/path';
