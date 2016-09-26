@@ -101,9 +101,9 @@ abstract class AbstractApi
     /**
      * Global method to validate an argument.
      *
-     * @param  string $type           The required parameter (used for the error message)
-     * @param  string $input          Input value
-     * @param  array $possibleValues Possible values for this argument
+     * @param string $type           The required parameter (used for the error message)
+     * @param string $input          Input value
+     * @param array  $possibleValues Possible values for this argument
      */
     private function validateArgument($type, $input, $possibleValues)
     {

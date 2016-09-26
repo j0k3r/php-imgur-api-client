@@ -60,12 +60,12 @@ class Client
             $this->sign();
         }
 
-        $apiClass = 'Imgur\\Api\\'.ucfirst($name);
+        $apiClass = 'Imgur\\Api\\' . ucfirst($name);
         if (class_exists($apiClass)) {
             return new $apiClass($this, $pager);
         }
 
-        throw new InvalidArgumentException('API Method not supported: "' . $name . '" (apiClass: "'.$apiClass.'")');
+        throw new InvalidArgumentException('API Method not supported: "' . $name . '" (apiClass: "' . $apiClass . '")');
     }
 
     /**
