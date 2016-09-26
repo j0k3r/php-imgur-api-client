@@ -14,6 +14,20 @@ use Imgur\Exception\MissingArgumentException;
 class Image extends AbstractApi
 {
     /**
+     * Get information about an image.
+     *
+     * @param string $imageId
+     *
+     * @link https://api.imgur.com/endpoints/image#image
+     *
+     * @return array (@see https://api.imgur.com/models/image)
+     */
+    public function image($imageId)
+    {
+        return $this->get('image/' . $imageId);
+    }
+
+    /**
      * Upload a new image.
      *
      * @param array $data
@@ -33,20 +47,6 @@ class Image extends AbstractApi
         }
 
         return $this->post('image', $data);
-    }
-
-    /**
-     * Get information about an image.
-     *
-     * @param string $imageId
-     *
-     * @link https://api.imgur.com/endpoints/image#image
-     *
-     * @return array (@see https://api.imgur.com/models/image)
-     */
-    public function image($imageId)
-    {
-        return $this->get('image/' . $imageId);
     }
 
     /**

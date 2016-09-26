@@ -67,6 +67,22 @@ abstract class AbstractApi
     }
 
     /**
+     * Perform a PUT request and return the parsed response.
+     *
+     * @param string $url
+     *
+     * @return array
+     */
+    public function put($url, $parameters = [])
+    {
+        $httpClient = $this->client->getHttpClient();
+
+        $response = $httpClient->put($url, $parameters);
+
+        return $httpClient->parseResponse($response);
+    }
+
+    /**
      * Perform a DELETE request and return the parsed response.
      *
      * @param string $url
@@ -92,6 +108,32 @@ abstract class AbstractApi
     {
         if (!in_array($sort, $possibleValues, true)) {
             throw new InvalidArgumentException('Sort parameter "' . $sort . '" is wrong. Possible values are: ' . implode(', ', $possibleValues));
+        }
+    }
+
+    /**
+     * Validate "window" parameter and throw an exception if it's a bad value.
+     *
+     * @param string $window         Input value
+     * @param array  $possibleValues
+     */
+    protected function validateWindowArgument($window, $possibleValues)
+    {
+        if (!in_array($window, $possibleValues, true)) {
+            throw new InvalidArgumentException('Window parameter "' . $window . '" is wrong. Possible values are: ' . implode(', ', $possibleValues));
+        }
+    }
+
+    /**
+     * Validate "vote" parameter and throw an exception if it's a bad value.
+     *
+     * @param string $vote           Input value
+     * @param array  $possibleValues
+     */
+    protected function validateVoteArgument($vote, $possibleValues)
+    {
+        if (!in_array($vote, $possibleValues, true)) {
+            throw new InvalidArgumentException('Vote parameter "' . $vote . '" is wrong. Possible values are: ' . implode(', ', $possibleValues));
         }
     }
 }

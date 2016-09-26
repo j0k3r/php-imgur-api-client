@@ -15,18 +15,6 @@ use Imgur\Exception\MissingArgumentException;
 class Gallery extends AbstractApi
 {
     /**
-     * Validate "window" parameter and throw an exception if it's a bad value.
-     *
-     * @param string $window         Input value
-     * @param array  $possibleValues
-     */
-    private function validateWindowArgument($window, $possibleValues)
-    {
-        if (!in_array($window, $possibleValues, true)) {
-            throw new InvalidArgumentException('Window parameter "' . $window . '" is wrong. Possible values are: ' . implode(', ', $possibleValues));
-        }
-    }
-    /**
      * Returns the images in the gallery. For example the main gallery is https://api.imgur.com/3/gallery/hot/viral/0.json.
      *
      * @param string $section   (hot | top | user)
@@ -124,9 +112,78 @@ class Gallery extends AbstractApi
     }
 
     /**
+     * View images for a gallery tag.
+     *
+     * @param string $name   The name of the tag
+     * @param string $sort   (top | time | viral)
+     * @param int    $page
+     * @param string $window (day | week | month | year | all)
+     *
+     * @link https://api.imgur.com/endpoints/gallery#gallery-tag
+     *
+     * @return array Tag (@see https://api.imgur.com/models/tag)
+     */
+    public function galleryTag($name, $sort = 'viral', $page = 0, $window = 'week')
+    {
+        $this->validateSortArgument($sort, ['top', 'time', 'viral']);
+        $this->validateWindowArgument($window, ['day', 'week', 'month', 'year', 'all']);
+
+        return $this->get('gallery/t/' . $name . '/' . $sort . '/' . $window . '/' . (int) $page);
+    }
+
+    /**
+     * View a single image in a gallery tag.
+     *
+     * @param string $name    The name of the tag
+     * @param string $imageId The ID for the image
+     *
+     * @link https://api.imgur.com/endpoints/gallery#gallery-tag-image
+     *
+     * @return array Gallery Image (@see https://api.imgur.com/models/gallery_image)
+     */
+    public function galleryTagImage($name, $imageId)
+    {
+        return $this->get('gallery/t/' . $name . '/' . $imageId);
+    }
+
+    /**
+     * View tags for a gallery item.
+     *
+     * @param string $imageOrAlbumId ID of the gallery item
+     *
+     * @link https://api.imgur.com/endpoints/gallery#gallery-item-tags
+     *
+     * @return array of Tag Votes (@see https://api.imgur.com/models/tag_vote)
+     */
+    public function galleryItemTags($imageOrAlbumId)
+    {
+        return $this->get('gallery/' . $imageOrAlbumId . '/tags');
+    }
+
+    /**
+     * Vote for a tag, 'up' or 'down' vote. Send the same value again to undo a vote.
+     *
+     * @param string $id   ID of the gallery item
+     * @param string $name Name of the tag (implicitly created, if doesn't exist)
+     * @param string $vote 'up' or 'down'
+     *
+     * @link https://api.imgur.com/endpoints/gallery#gallery-tag-vote
+     *
+     * @return bool
+     */
+    public function galleryVoteTag($id, $name, $vote)
+    {
+        $this->validateVoteArgument($vote, ['up', 'down']);
+
+        return $this->post('gallery/' . $id . '/vote/tag/' . $name . '/' . $vote);
+    }
+
+    /**
      * Search the gallery with a given query string.
      *
-     * @param string $query
+     * @param string $query Query string (note: if advanced search parameters are set, this query string is ignored).
+     *                      This parameter also supports boolean operators (AND, OR, NOT) and indices (tag: user: title: ext: subreddit: album: meme:).
+     *                      An example compound query would be 'title: cats AND dogs ext: gif'
      * @param string $sort  (time | viral | top)
      * @param int    $page
      *
@@ -156,7 +213,7 @@ class Gallery extends AbstractApi
     }
 
     /**
-     * Add an Album or Image to the Gallery.
+     * Share an Album or Image to the Gallery.
      *
      * @param string $imageOrAlbumId
      * @param array  $data
@@ -256,10 +313,7 @@ class Gallery extends AbstractApi
      */
     public function vote($imageOrAlbumId, $vote)
     {
-        $voteValues = ['up', 'down', 'veto'];
-        if (!in_array($vote, $voteValues, true)) {
-            throw new InvalidArgumentException('Vote parameter "' . $vote . '" is wrong. Possible values are: ' . implode(', ', $voteValues));
-        }
+        $this->validateVoteArgument($vote, ['up', 'down', 'veto']);
 
         return $this->post('gallery/' . $imageOrAlbumId . '/vote/' . $vote);
     }
@@ -313,6 +367,26 @@ class Gallery extends AbstractApi
         }
 
         return $this->post('gallery/' . $imageOrAlbumId . '/comment', $data);
+    }
+
+    /**
+     * Reply to a comment that has been created for an image.
+     *
+     * @param string $imageOrAlbumId
+     * @param string $commentId
+     * @param array  $data
+     *
+     * @link https://api.imgur.com/endpoints/gallery#gallery-comment-reply
+     *
+     * @return bool
+     */
+    public function createReply($imageOrAlbumId, $commentId, $data)
+    {
+        if (!isset($data['comment'])) {
+            throw new MissingArgumentException('comment');
+        }
+
+        return $this->post('gallery/' . $imageOrAlbumId . '/comment/' . $commentId, $data);
     }
 
     /**

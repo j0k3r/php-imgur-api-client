@@ -22,11 +22,14 @@ abstract class ApiTestCase extends \PHPUnit_Framework_TestCase
         $httpClient
             ->expects($this->any())
             ->method('post');
+        $httpClient
+            ->expects($this->any())
+            ->method('put');
 
         $client = new Client(null, $httpClient);
 
         return $this->getMockBuilder($this->getApiClass())
-            ->setMethods(['get', 'post', 'delete'])
+            ->setMethods(['get', 'post', 'put', 'delete'])
             ->setConstructorArgs([$client])
             ->getMock();
     }

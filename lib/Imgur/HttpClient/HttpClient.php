@@ -78,6 +78,14 @@ class HttpClient implements HttpClientInterface
     /**
      * {@inheritdoc}
      */
+    public function put($url, array $parameters = [])
+    {
+        return $this->performRequest($url, $parameters, 'PUT');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function performRequest($url, $parameters, $httpMethod = 'GET')
     {
         $request = $this->createRequest($url, $parameters, $httpMethod);
@@ -108,7 +116,7 @@ class HttpClient implements HttpClientInterface
             $options['query'] = $parameters['query'];
         }
 
-        if ($httpMethod === 'POST' || $httpMethod === 'DELETE') {
+        if ($httpMethod === 'POST' || $httpMethod === 'PUT' || $httpMethod === 'DELETE') {
             $options['body'] = $parameters;
         }
 

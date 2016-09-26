@@ -85,6 +85,12 @@ class Client
             case 'memegen':
                 return new Api\Memegen($this, $pager);
 
+            case 'customGallery':
+                return new Api\CustomGallery($this, $pager);
+
+            case 'topic':
+                return new Api\Topic($this, $pager);
+
             default:
                 throw new InvalidArgumentException('API Method not supported: ' . $name);
         }
