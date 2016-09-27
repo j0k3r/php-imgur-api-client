@@ -17,6 +17,10 @@ class TopicTest extends ApiTestCase
         return 'Imgur\Api\Topic';
     }
 
+    /**
+     * @expectedException Imgur\Exception\ErrorException
+     * @expectedExceptionMessage Authentication required
+     */
     public function testBaseReal()
     {
         $guzzleClient = new GuzzleClient(['base_url' => 'https://api.imgur.com/3/']);
@@ -24,9 +28,7 @@ class TopicTest extends ApiTestCase
         $client = new Client(null, $httpClient);
         $topic = new Topic($client);
 
-        $res = $topic->defaultTopics();
-
-        $this->assertNotEmpty($res);
+        $topic->defaultTopics();
     }
 
     public function testBaseWithResponse()
