@@ -276,6 +276,107 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->subredditImage('pics', 'yB1PpjL'));
     }
 
+    public function testGalleryTag()
+    {
+        $expectedValue = [
+            'data' => [
+                'name' => 'funny',
+            ],
+            'success' => true,
+            'status' => 200,
+        ];
+
+        $api = $this->getApiMock();
+        $api->expects($this->once())
+            ->method('get')
+            ->with('gallery/t/funny/viral/week/0')
+            ->will($this->returnValue($expectedValue));
+
+        $this->assertSame($expectedValue, $api->galleryTag('funny'));
+    }
+
+    /**
+     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedExceptionMessage is wrong. Possible values are
+     */
+    public function testGalleryTagWrongSortValue()
+    {
+        $this->getApiMock()->galleryTag('funny', 'bad sort');
+    }
+
+    /**
+     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedExceptionMessage is wrong. Possible values are
+     */
+    public function testGalleryTagWrongWindowValue()
+    {
+        $this->getApiMock()->galleryTag('funny', 'time', 0, 'bad window');
+    }
+
+    public function testGalleryTagImage()
+    {
+        $expectedValue = [
+            'data' => [
+                'id' => 'yB1PpjL',
+            ],
+            'success' => true,
+            'status' => 200,
+        ];
+
+        $api = $this->getApiMock();
+        $api->expects($this->once())
+            ->method('get')
+            ->with('gallery/t/funny/yB1PpjL')
+            ->will($this->returnValue($expectedValue));
+
+        $this->assertSame($expectedValue, $api->galleryTagImage('funny', 'yB1PpjL'));
+    }
+
+    public function testGalleryItemTags()
+    {
+        $expectedValue = [
+            'data' => [
+                'tags' => [],
+            ],
+            'success' => true,
+            'status' => 200,
+        ];
+
+        $api = $this->getApiMock();
+        $api->expects($this->once())
+            ->method('get')
+            ->with('gallery/y1Od4/tags')
+            ->will($this->returnValue($expectedValue));
+
+        $this->assertSame($expectedValue, $api->galleryItemTags('y1Od4'));
+    }
+
+    public function testGalleryVoteTag()
+    {
+        $expectedValue = [
+            'data' => true,
+            'success' => true,
+            'status' => 200,
+        ];
+
+        $api = $this->getApiMock();
+        $api->expects($this->once())
+            ->method('post')
+            ->with('gallery/y1Od4/vote/tag/funny/up')
+            ->will($this->returnValue($expectedValue));
+
+        $this->assertSame($expectedValue, $api->galleryVoteTag('y1Od4', 'funny', 'up'));
+    }
+
+    /**
+     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedExceptionMessage is wrong. Possible values are
+     */
+    public function testGalleryVoteTagWrongVoteValue()
+    {
+        $this->getApiMock()->galleryVoteTag('y1Od4', 'funny', 'bad vote');
+    }
+
     public function testSearch()
     {
         $expectedValue = [
@@ -543,6 +644,32 @@ class GalleryTest extends ApiTestCase
     public function testCreateCommentParamMissing()
     {
         $this->getApiMock()->createComment('y1Od4', []);
+    }
+
+    public function testCreateReply()
+    {
+        $expectedValue = [
+            'data' => true,
+            'success' => true,
+            'status' => 200,
+        ];
+
+        $api = $this->getApiMock();
+        $api->expects($this->once())
+            ->method('post')
+            ->with('gallery/VOMXz/comment/123')
+            ->will($this->returnValue($expectedValue));
+
+        $this->assertSame($expectedValue, $api->createReply('VOMXz', '123', ['comment' => 'yo']));
+    }
+
+    /**
+     * @expectedException Imgur\Exception\MissingArgumentException
+     * @expectedExceptionMessage parameters is missing
+     */
+    public function testCreateReplyParamMissing()
+    {
+        $this->getApiMock()->createReply('y1Od4', '123', []);
     }
 
     public function testCommentIds()

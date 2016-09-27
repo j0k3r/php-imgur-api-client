@@ -67,6 +67,22 @@ abstract class AbstractApi
     }
 
     /**
+     * Perform a PUT request and return the parsed response.
+     *
+     * @param string $url
+     *
+     * @return array
+     */
+    public function put($url, $parameters = [])
+    {
+        $httpClient = $this->client->getHttpClient();
+
+        $response = $httpClient->put($url, $parameters);
+
+        return $httpClient->parseResponse($response);
+    }
+
+    /**
      * Perform a DELETE request and return the parsed response.
      *
      * @param string $url
@@ -83,6 +99,20 @@ abstract class AbstractApi
     }
 
     /**
+     * Global method to validate an argument.
+     *
+     * @param string $type           The required parameter (used for the error message)
+     * @param string $input          Input value
+     * @param array  $possibleValues Possible values for this argument
+     */
+    private function validateArgument($type, $input, $possibleValues)
+    {
+        if (!in_array($input, $possibleValues, true)) {
+            throw new InvalidArgumentException($type . ' parameter "' . $input . '" is wrong. Possible values are: ' . implode(', ', $possibleValues));
+        }
+    }
+
+    /**
      * Validate "sort" parameter and throw an exception if it's a bad value.
      *
      * @param string $sort           Input value
@@ -90,8 +120,28 @@ abstract class AbstractApi
      */
     protected function validateSortArgument($sort, $possibleValues)
     {
-        if (!in_array($sort, $possibleValues, true)) {
-            throw new InvalidArgumentException('Sort parameter "' . $sort . '" is wrong. Possible values are: ' . implode(', ', $possibleValues));
-        }
+        $this->validateArgument('Sort', $sort, $possibleValues);
+    }
+
+    /**
+     * Validate "window" parameter and throw an exception if it's a bad value.
+     *
+     * @param string $window         Input value
+     * @param array  $possibleValues
+     */
+    protected function validateWindowArgument($window, $possibleValues)
+    {
+        $this->validateArgument('Window', $window, $possibleValues);
+    }
+
+    /**
+     * Validate "vote" parameter and throw an exception if it's a bad value.
+     *
+     * @param string $vote           Input value
+     * @param array  $possibleValues
+     */
+    protected function validateVoteArgument($vote, $possibleValues)
+    {
+        $this->validateArgument('Vote', $vote, $possibleValues);
     }
 }

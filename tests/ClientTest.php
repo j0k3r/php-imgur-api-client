@@ -80,6 +80,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ['conversation', 'Imgur\Api\Conversation'],
             ['notification', 'Imgur\Api\Notification'],
             ['memegen', 'Imgur\Api\Memegen'],
+            ['customGallery', 'Imgur\Api\CustomGallery'],
+            ['topic', 'Imgur\Api\Topic'],
         ];
     }
 

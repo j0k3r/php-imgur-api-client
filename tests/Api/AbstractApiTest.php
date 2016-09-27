@@ -26,6 +26,12 @@ class AbstractApiTest extends \PHPUnit_Framework_TestCase
         $image->post('album/VOMXz', ['title' => 'yo']);
     }
 
+    public function testPut()
+    {
+        $image = $this->getApiMock('put');
+        $image->put('album/VOMXz', ['title' => 'yo']);
+    }
+
     protected function getApiMock($method)
     {
         $httpClient = $this->getMockBuilder('Imgur\HttpClient\HttpClient')

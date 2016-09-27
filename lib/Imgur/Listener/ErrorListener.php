@@ -13,9 +13,6 @@ use Imgur\Exception\RuntimeException;
  */
 class ErrorListener
 {
-    /**
-     * {@inheritdoc}
-     */
     public function error(ErrorEvent $event)
     {
         $response = $event->getResponse();

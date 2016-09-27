@@ -60,34 +60,12 @@ class Client
             $this->sign();
         }
 
-        switch ($name) {
-            case 'account':
-                return new Api\Account($this, $pager);
-
-            case 'album':
-                return new Api\Album($this, $pager);
-
-            case 'comment':
-                return new Api\Comment($this, $pager);
-
-            case 'gallery':
-                return new Api\Gallery($this, $pager);
-
-            case 'image':
-                return new Api\Image($this, $pager);
-
-            case 'conversation':
-                return new Api\Conversation($this, $pager);
-
-            case 'notification':
-                return new Api\Notification($this, $pager);
-
-            case 'memegen':
-                return new Api\Memegen($this, $pager);
-
-            default:
-                throw new InvalidArgumentException('API Method not supported: ' . $name);
+        $apiClass = 'Imgur\\Api\\' . ucfirst($name);
+        if (class_exists($apiClass)) {
+            return new $apiClass($this, $pager);
         }
+
+        throw new InvalidArgumentException('API Method not supported: "' . $name . '" (apiClass: "' . $apiClass . '")');
     }
 
     /**
