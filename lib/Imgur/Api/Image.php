@@ -2,6 +2,7 @@
 
 namespace Imgur\Api;
 
+use Imgur\Exception\InvalidArgumentException;
 use Imgur\Exception\MissingArgumentException;
 
 /**
@@ -42,7 +43,12 @@ class Image extends AbstractApi
             throw new MissingArgumentException(['image']);
         }
 
-        if (isset($data['type']) && 'file' === $data['type']) {
+        $typeValues = ['file', 'base64', 'url'];
+        if (isset($data['type']) && !in_array(strtolower($data['type']), $typeValues, true)) {
+            throw new InvalidArgumentException('Type parameter "' . $data['type'] . '" is wrong. Possible values are: ' . implode(', ', $typeValues));
+        }
+
+        if ('file' === $data['type']) {
             $data['image'] = '@' . $data['image'];
         }
 
