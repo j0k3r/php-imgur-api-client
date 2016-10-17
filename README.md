@@ -67,6 +67,8 @@ $memes = $client->api('memegen')->defaultMemes();
 
 ## Documentation
 
+### Basic information
+
 This client follow the same tree as the [Imgur API](https://api.imgur.com/endpoints).
 
 Here is the list of available _endpoints_: `account`, `album`, `comment`, `custom gallery`, `gallery`, `image`, `conversation`, `notification`, `memegen` & `topic`.
@@ -96,6 +98,8 @@ $client->api('gallery')->randomGalleryImages();
 
 // etc ...
 ```
+
+### Uploading an image
 
 If you want to **upload an image** you can use one of these solutions:
 
@@ -135,11 +139,23 @@ $imageData = [
 $client->api('image')->upload($imageData);
 ```
 
+### Pagination
+
 And about the **pagination**, for any API call that supports pagination and is not explicitly available via the method parameters, it can be achieved by using the `BasicPager` object and passing it as the second parameter in the `api()` call.
 
 ```php
 $pager = new \Imgur\Pager\BasicPager(0, 1);
 $images = $client->api('account', $pager)->images();
+```
+
+### Image id or Album id ?
+
+When you got an Imgur link it's almost impossible to be 100% sure if it's an image or an album.
+That's why we have an endpoint which might fix that by first checking an id as an image and if it's fail, test it as an album:
+
+
+```php
+$data = $client->api('albumOrImage')->find($id);
 ```
 
 ## License
