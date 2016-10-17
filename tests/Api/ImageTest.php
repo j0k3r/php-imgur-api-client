@@ -150,6 +150,15 @@ class ImageTest extends ApiTestCase
     }
 
     /**
+     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedExceptionMessage is wrong. Possible values are
+     */
+    public function testUploadWithBadType()
+    {
+        $this->getApiMock()->upload(['type' => 'other', 'image' => 'http://i.imgur.com/ZOY11VC.png']);
+    }
+
+    /**
      * @expectedException Imgur\Exception\MissingArgumentException
      * @expectedExceptionMessage parameters is missing
      */
