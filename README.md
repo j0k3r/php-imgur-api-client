@@ -8,10 +8,13 @@ Object Oriented PHP wrapper for the Imgur API.
 
 Uses [Imgur API v3](https://api.imgur.com/).
 
-## Requirements
+## Information
 
-* PHP >= 5.5
-* [Guzzle](https://github.com/guzzle/guzzle) 5
+* Branch [1.x](tree/2.x) use Guzzle 3 (but is not maintained)
+* Branch [2.x](tree/2.x) use Guzzle 5
+* Branch [3.x](tree/3.x) use Guzzle 6
+
+All actives branches required PHP >= 5.5
 
 ## Composer
 
