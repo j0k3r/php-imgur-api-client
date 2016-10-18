@@ -6,7 +6,6 @@ use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
-use GuzzleHttp\Psr7\Request;
 use Imgur\Middleware\AuthMiddleware;
 use Imgur\Middleware\ErrorMiddleware;
 use Psr\Http\Message\RequestInterface;

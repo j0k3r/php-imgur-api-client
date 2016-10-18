@@ -10,6 +10,8 @@ use Psr\Http\Message\ResponseInterface;
 
 class ErrorMiddleware
 {
+    private $nextHandler;
+
     /**
      * @param callable $nextHandler Next handler to invoke
      */
@@ -37,7 +39,7 @@ class ErrorMiddleware
     /**
      * Middleware that handles rate limit errors.
      *
-     * @return callable Returns a function that accepts the next handler
+     * @return \Closure Returns a function that accepts the next handler
      */
     public static function error()
     {
