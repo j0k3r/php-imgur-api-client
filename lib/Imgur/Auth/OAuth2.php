@@ -237,12 +237,19 @@ class OAuth2 implements AuthInterface
      */
     public function sign()
     {
-        $this->httpClient->addListener('before', [
-            new AuthListener(
+        if ($this->httpClient->isGuzzle5()) {
+            $this->httpClient->addListener('before', [
+                new AuthListener(
+                    $this->getAccessToken(),
+                    $this->clientId
+                ),
+                'before',
+            ]);
+        } else {
+            $this->httpClient->addAuthMiddleware(
                 $this->getAccessToken(),
                 $this->clientId
-            ),
-            'before',
-        ]);
+            );
+        }
     }
 }

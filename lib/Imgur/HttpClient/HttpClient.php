@@ -4,8 +4,12 @@ namespace Imgur\HttpClient;
 
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
 use Imgur\Exception\ErrorException;
 use Imgur\Listener\ErrorListener;
+use Imgur\Middleware\ErrorMiddleware;
+use Psr\Http\Message\RequestInterface;
 
 /**
  * Basic client for performing HTTP requests.
@@ -30,6 +34,8 @@ class HttpClient implements HttpClientInterface
         'base_url' => 'https://api.imgur.com/3/',
     ];
 
+    protected $stack;
+
     /**
      * @param array           $options
      * @param ClientInterface $client
@@ -38,17 +44,18 @@ class HttpClient implements HttpClientInterface
     {
         $this->options = array_merge($options, $this->options);
 
-        $this->client = $client ?: new GuzzleClient(['base_url' => $this->options['base_url']]);
-
+        $baseUrl = $this->options['base_url'];
         unset($this->options['base_url']);
 
-        $this->addListener(
-            'error',
-            [
-                new ErrorListener(),
-                'error',
-            ]
-        );
+        $this->stack = HandlerStack::create();
+        $this->stack->push(function (callable $handler) {
+            return new ErrorMiddleware($handler);
+        });
+
+        $this->client = $client ?: new GuzzleClient([
+            'base_uri' => $baseUrl,
+            'handler' => $this->stack,
+        ]);
     }
 
     /**
@@ -90,6 +97,9 @@ class HttpClient implements HttpClientInterface
     {
         $request = $this->createRequest($url, $parameters, $httpMethod);
 
+        var_dump($request);
+        die();
+
         try {
             return $this->client->send($request);
         } catch (\Exception $e) {
@@ -120,7 +130,7 @@ class HttpClient implements HttpClientInterface
             $options['body'] = $parameters;
         }
 
-        return $this->client->createRequest($httpMethod, $url, $options);
+        return $this->client->request($httpMethod, $url, $options);
     }
 
     /**
@@ -137,17 +147,20 @@ class HttpClient implements HttpClientInterface
         return $responseBody['data'];
     }
 
-    /**
-     * Attaches a listener to a HttpClient event.
-     *
-     * @param string $eventName
-     * @param array  $listener
-     */
-    public function addListener($eventName, $listener)
+    public function addAuthMiddleware($token, $clientId)
     {
-        $this
-            ->client
-            ->getEmitter()
-            ->on($eventName, $listener);
+        $this->stack->push(Middleware::mapRequest(function (RequestInterface $request) use ($token, $clientId) {
+            if (is_array($token) && !empty($token['access_token'])) {
+                return $request->withHeader(
+                    'Authorization',
+                    'Bearer ' . $token['access_token']
+                );
+            }
+
+            return $request->withHeader(
+                'Authorization',
+                'Client-ID ' . $clientId
+            );
+        }));
     }
 }
