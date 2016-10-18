@@ -6,6 +6,7 @@ use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
+use GuzzleHttp\Psr7\Request;
 use Imgur\Exception\ErrorException;
 use Imgur\Listener\ErrorListener;
 use Imgur\Middleware\ErrorMiddleware;
@@ -95,28 +96,6 @@ class HttpClient implements HttpClientInterface
      */
     public function performRequest($url, $parameters, $httpMethod = 'GET')
     {
-        $request = $this->createRequest($url, $parameters, $httpMethod);
-
-        var_dump($request);
-        die();
-
-        try {
-            return $this->client->send($request);
-        } catch (\Exception $e) {
-            // if there are a previous one it comes from the ErrorListener
-            if ($e->getPrevious()) {
-                throw $e->getPrevious();
-            }
-
-            throw new ErrorException($e->getMessage(), 0, E_ERROR, __FILE__, __LINE__, $e);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function createRequest($url, $parameters, $httpMethod = 'GET')
-    {
         $options = [
             'headers' => isset($this->options['headers']) ? $this->options['headers'] : [],
             'body' => isset($this->options['body']) ? $this->options['body'] : '',
@@ -127,10 +106,19 @@ class HttpClient implements HttpClientInterface
         }
 
         if ($httpMethod === 'POST' || $httpMethod === 'PUT' || $httpMethod === 'DELETE') {
-            $options['body'] = $parameters;
+            $options['form_params'] = $parameters;
         }
 
-        return $this->client->request($httpMethod, $url, $options);
+        try {
+            return $this->client->request($httpMethod, $url, $options);
+        } catch (\Exception $e) {
+            // if there are a previous one it comes from the ErrorListener
+            if ($e->getPrevious()) {
+                throw $e->getPrevious();
+            }
+
+            throw new ErrorException($e->getMessage(), 0, E_ERROR, __FILE__, __LINE__, $e);
+        }
     }
 
     /**

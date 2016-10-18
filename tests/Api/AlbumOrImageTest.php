@@ -3,9 +3,10 @@
 namespace Imgur\tests\Api;
 
 use GuzzleHttp\Client as GuzzleClient;
-use GuzzleHttp\Message\Response;
-use GuzzleHttp\Stream\Stream;
-use GuzzleHttp\Subscriber\Mock;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 use Imgur\Api\AlbumOrImage;
 use Imgur\Client;
 use Imgur\HttpClient\HttpClient;
@@ -14,11 +15,11 @@ class AlbumOrImageTest extends \PHPUnit_Framework_TestCase
 {
     public function testWithImageId()
     {
-        $client = new GuzzleClient();
-        $mock = new Mock([
-            new Response(200, ['Content-Type' => 'application/json'], Stream::factory(json_encode(['data' => 'ok !']))),
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json'], json_encode(['data' => 'ok !'])),
         ]);
-        $client->getEmitter()->attach($mock);
+        $handler = HandlerStack::create($mock);
+        $client = new GuzzleClient(['handler' => $handler]);
 
         $httpClient = new HttpClient([], $client);
 
@@ -30,9 +31,8 @@ class AlbumOrImageTest extends \PHPUnit_Framework_TestCase
 
     public function testWithAlbumId()
     {
-        $client = new GuzzleClient();
-        $mock = new Mock([
-            new Response(404, ['Content-Type' => 'application/json'], Stream::factory(json_encode([
+        $mock = new MockHandler([
+            new Response(404, ['Content-Type' => 'application/json'], json_encode([
                 'data' => [
                     'error' => 'Unable to find an image with the id, 8pCqe',
                     'request' => '/3/image/8pCqe',
@@ -40,10 +40,11 @@ class AlbumOrImageTest extends \PHPUnit_Framework_TestCase
                 ],
                 'success' => false,
                 'status' => 404,
-            ]))),
-            new Response(200, ['Content-Type' => 'application/json'], Stream::factory(json_encode(['data' => 'ok !']))),
+            ])),
+            new Response(200, ['Content-Type' => 'application/json'], json_encode(['data' => 'ok !'])),
         ]);
-        $client->getEmitter()->attach($mock);
+        $handler = HandlerStack::create($mock);
+        $client = new GuzzleClient(['handler' => $handler]);
 
         $httpClient = new HttpClient([], $client);
 
@@ -59,9 +60,8 @@ class AlbumOrImageTest extends \PHPUnit_Framework_TestCase
      */
     public function testWithBadId()
     {
-        $client = new GuzzleClient();
-        $mock = new Mock([
-            new Response(404, ['Content-Type' => 'application/json'], Stream::factory(json_encode([
+        $mock = new MockHandler([
+            new Response(404, ['Content-Type' => 'application/json'], json_encode([
                 'data' => [
                     'error' => 'Unable to find an image with the id, xxxxxxx',
                     'request' => '/3/image/xxxxxxx',
@@ -69,8 +69,8 @@ class AlbumOrImageTest extends \PHPUnit_Framework_TestCase
                 ],
                 'success' => false,
                 'status' => 404,
-            ]))),
-            new Response(404, ['Content-Type' => 'application/json'], Stream::factory(json_encode([
+            ])),
+            new Response(404, ['Content-Type' => 'application/json'], json_encode([
                 'data' => [
                     'error' => 'Unable to find an album with the id, xxxxxxx',
                     'request' => '/3/album/xxxxxxx',
@@ -78,9 +78,10 @@ class AlbumOrImageTest extends \PHPUnit_Framework_TestCase
                 ],
                 'success' => false,
                 'status' => 404,
-            ]))),
+            ])),
         ]);
-        $client->getEmitter()->attach($mock);
+        $handler = HandlerStack::create($mock);
+        $client = new GuzzleClient(['handler' => $handler]);
 
         $httpClient = new HttpClient([], $client);
 
@@ -96,9 +97,8 @@ class AlbumOrImageTest extends \PHPUnit_Framework_TestCase
      */
     public function testWithImageIdButBadResponse()
     {
-        $client = new GuzzleClient();
-        $mock = new Mock([
-            new Response(500, ['Content-Type' => 'application/json'], Stream::factory(json_encode([
+        $mock = new MockHandler([
+            new Response(500, ['Content-Type' => 'application/json'], json_encode([
                 'data' => [
                     'error' => 'oops !',
                     'request' => '/3/image/xxxxxxx',
@@ -106,9 +106,10 @@ class AlbumOrImageTest extends \PHPUnit_Framework_TestCase
                 ],
                 'success' => false,
                 'status' => 404,
-            ]))),
+            ])),
         ]);
-        $client->getEmitter()->attach($mock);
+        $handler = HandlerStack::create($mock);
+        $client = new GuzzleClient(['handler' => $handler]);
 
         $httpClient = new HttpClient([], $client);
 
@@ -124,9 +125,8 @@ class AlbumOrImageTest extends \PHPUnit_Framework_TestCase
      */
     public function testWithAlbumIdButBadResponse()
     {
-        $client = new GuzzleClient();
-        $mock = new Mock([
-            new Response(404, ['Content-Type' => 'application/json'], Stream::factory(json_encode([
+        $mock = new MockHandler([
+            new Response(404, ['Content-Type' => 'application/json'], json_encode([
                 'data' => [
                     'error' => 'Unable to find an image with the id, xxxxxxx',
                     'request' => '/3/image/xxxxxxx',
@@ -134,8 +134,8 @@ class AlbumOrImageTest extends \PHPUnit_Framework_TestCase
                 ],
                 'success' => false,
                 'status' => 404,
-            ]))),
-            new Response(500, ['Content-Type' => 'application/json'], Stream::factory(json_encode([
+            ])),
+            new Response(500, ['Content-Type' => 'application/json'], json_encode([
                 'data' => [
                     'error' => 'oops !',
                     'request' => '/3/image/xxxxxxx',
@@ -143,9 +143,10 @@ class AlbumOrImageTest extends \PHPUnit_Framework_TestCase
                 ],
                 'success' => false,
                 'status' => 404,
-            ]))),
+            ])),
         ]);
-        $client->getEmitter()->attach($mock);
+        $handler = HandlerStack::create($mock);
+        $client = new GuzzleClient(['handler' => $handler]);
 
         $httpClient = new HttpClient([], $client);
 

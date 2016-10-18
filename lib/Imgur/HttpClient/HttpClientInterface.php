@@ -51,17 +51,6 @@ interface HttpClientInterface
     public function performRequest($url, $parameters, $httpMethod = 'GET');
 
     /**
-     * Create the request object.
-     *
-     * @param string $url        URL to which the request should point
-     * @param array  $parameters Request parameters
-     * @param string $httpMethod HTTP method to use
-     *
-     * @return \GuzzleHttp\Message\RequestInterface
-     */
-    public function createRequest($url, $parameters, $httpMethod = 'GET');
-
-    /**
      * Parses the Imgur server response.
      *
      * @param object $response

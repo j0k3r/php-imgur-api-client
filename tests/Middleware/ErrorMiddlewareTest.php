@@ -1,11 +1,11 @@
 <?php
 
-namespace Imgur\Tests\HttpClient;
+namespace Imgur\tests\Middleware;
 
 use Guzzle\Http\Message\Request;
-use Imgur\Listener\ErrorListener;
+use Imgur\Middleware\ErrorMiddleware;
 
-class ErrorListenerTest extends \PHPUnit_Framework_TestCase
+class ErrorMiddlewareTest extends \PHPUnit_Framework_TestCase
 {
     public function testNothinHappenOnOKResponse()
     {
@@ -16,7 +16,7 @@ class ErrorListenerTest extends \PHPUnit_Framework_TestCase
             ->method('getStatusCode')
             ->will($this->returnValue(200));
 
-        $listener = new ErrorListener();
+        $listener = new ErrorMiddleware();
         $listener->error($this->getEventMock($response));
     }
 
@@ -41,7 +41,7 @@ class ErrorListenerTest extends \PHPUnit_Framework_TestCase
             ->with('X-RateLimit-UserLimit')
             ->will($this->returnValue(10));
 
-        $listener = new ErrorListener();
+        $listener = new ErrorMiddleware();
         $listener->error($this->getEventMock($response));
     }
 
@@ -78,7 +78,7 @@ class ErrorListenerTest extends \PHPUnit_Framework_TestCase
             ->with('X-RateLimit-UserReset')
             ->will($this->returnValue('1441401387')); // 4/9/2015  23:16:27
 
-        $listener = new ErrorListener();
+        $listener = new ErrorMiddleware();
         $listener->error($this->getEventMock($response));
     }
 
@@ -114,7 +114,7 @@ class ErrorListenerTest extends \PHPUnit_Framework_TestCase
             ->with('X-RateLimit-ClientLimit')
             ->will($this->returnValue(10));
 
-        $listener = new ErrorListener();
+        $listener = new ErrorMiddleware();
         $listener->error($this->getEventMock($response));
     }
 
@@ -150,7 +150,7 @@ class ErrorListenerTest extends \PHPUnit_Framework_TestCase
             ->with('X-RateLimit-ClientLimit')
             ->will($this->returnValue(10));
 
-        $listener = new ErrorListener();
+        $listener = new ErrorMiddleware();
         $listener->error($this->getEventMock($response));
     }
 
