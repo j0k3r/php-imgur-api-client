@@ -126,7 +126,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function getOptions()
     {
         return [
-            ['base_uri', 'url'],
+            ['base_url', 'url'],
             ['client_id', 'id'],
             ['client_secret', 'secret'],
         ];

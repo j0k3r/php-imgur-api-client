@@ -1,6 +1,6 @@
 <?php
 
-namespace Imgur\Tests\HttpClient;
+namespace Imgur\tests\HttpClient;
 
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Handler\MockHandler;
@@ -126,7 +126,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
         $parameters = ['a' => 'b'];
 
         $mock = new MockHandler([
-            new Response(403, [
+            new Response(429, [
                 'X-RateLimit-UserLimit' => 10,
                 'X-RateLimit-UserRemaining' => 0,
             ]),
@@ -147,7 +147,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
         $path = '/some/path';
         $parameters = ['a' => 'b'];
 
-        $response = new Response(403, [
+        $response = new Response(429, [
             'X-RateLimit-UserLimit' => 10,
             'X-RateLimit-UserRemaining' => 10,
             'X-RateLimit-ClientLimit' => 10,
@@ -172,7 +172,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
         $path = '/some/path';
         $parameters = ['a' => 'b'];
 
-        $response = new Response(403, [
+        $response = new Response(429, [
             'X-RateLimit-UserLimit' => 10,
             'X-RateLimit-UserRemaining' => 10,
             'X-RateLimit-ClientLimit' => 10,
@@ -196,7 +196,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
         $path = '/some/path';
         $parameters = ['a' => 'b'];
 
-        $response = new Response(403, [
+        $response = new Response(429, [
             'X-RateLimit-UserLimit' => 10,
             'X-RateLimit-UserRemaining' => 10,
             'X-RateLimit-ClientLimit' => 10,
@@ -220,7 +220,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
         $path = '/some/path';
         $parameters = ['a' => 'b'];
 
-        $response = new Response(403, [
+        $response = new Response(429, [
             'X-RateLimit-UserLimit' => 10,
             'X-RateLimit-UserRemaining' => 10,
             'X-RateLimit-ClientLimit' => 10,

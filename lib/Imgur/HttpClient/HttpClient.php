@@ -7,8 +7,7 @@ use GuzzleHttp\ClientInterface;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Request;
-use Imgur\Exception\ErrorException;
-use Imgur\Listener\ErrorListener;
+use Imgur\Middleware\AuthMiddleware;
 use Imgur\Middleware\ErrorMiddleware;
 use Psr\Http\Message\RequestInterface;
 
@@ -48,10 +47,14 @@ class HttpClient implements HttpClientInterface
         $baseUrl = $this->options['base_url'];
         unset($this->options['base_url']);
 
+        // during test (at least) handler can be injected into the client
+        // so we need to retrieve it to be able to inject our own middleware
         $this->stack = HandlerStack::create();
-        $this->stack->push(function (callable $handler) {
-            return new ErrorMiddleware($handler);
-        });
+        if (null !== $client) {
+            $this->stack = $client->getConfig('handler');
+        }
+
+        $this->stack->push(ErrorMiddleware::error());
 
         $this->client = $client ?: new GuzzleClient([
             'base_uri' => $baseUrl,
@@ -109,16 +112,8 @@ class HttpClient implements HttpClientInterface
             $options['form_params'] = $parameters;
         }
 
-        try {
-            return $this->client->request($httpMethod, $url, $options);
-        } catch (\Exception $e) {
-            // if there are a previous one it comes from the ErrorListener
-            if ($e->getPrevious()) {
-                throw $e->getPrevious();
-            }
-
-            throw new ErrorException($e->getMessage(), 0, E_ERROR, __FILE__, __LINE__, $e);
-        }
+        // will throw an Imgur\Exception\ExceptionInterface if sth goes wrong
+        return $this->client->request($httpMethod, $url, $options);
     }
 
     /**
@@ -135,20 +130,16 @@ class HttpClient implements HttpClientInterface
         return $responseBody['data'];
     }
 
+    /**
+     * Push authorization middleware.
+     *
+     * @param array  $token
+     * @param string $clientId
+     */
     public function addAuthMiddleware($token, $clientId)
     {
         $this->stack->push(Middleware::mapRequest(function (RequestInterface $request) use ($token, $clientId) {
-            if (is_array($token) && !empty($token['access_token'])) {
-                return $request->withHeader(
-                    'Authorization',
-                    'Bearer ' . $token['access_token']
-                );
-            }
-
-            return $request->withHeader(
-                'Authorization',
-                'Client-ID ' . $clientId
-            );
+            return (new AuthMiddleware($token, $clientId))->addAuthHeader($request);
         }));
     }
 }

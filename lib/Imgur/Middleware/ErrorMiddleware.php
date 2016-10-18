@@ -29,19 +29,29 @@ class ErrorMiddleware
         $fn = $this->nextHandler;
 
         return $fn($request, $options)
-            ->then(function (ResponseInterface $response) use ($request, $options) {
-                return $this->checkError($request, $options, $response);
+            ->then(function (ResponseInterface $response) {
+                return $this->checkError($response);
             });
+    }
+
+    /**
+     * Middleware that handles rate limit errors.
+     *
+     * @return callable Returns a function that accepts the next handler
+     */
+    public static function error()
+    {
+        return function (callable $handler) {
+            return new self($handler);
+        };
     }
 
     /**
      * Check for an error.
      *
-     * @param RequestInterface  $request
-     * @param array             $options
      * @param ResponseInterface $response
      */
-    public function checkError(RequestInterface $request, array $options, ResponseInterface $response)
+    public function checkError(ResponseInterface $response)
     {
         if ($response->getStatusCode() < 400) {
             return $response;
@@ -92,7 +102,7 @@ class ErrorMiddleware
 
         if ('' !== $clientRemaining && $clientRemaining < 1) {
             // X-RateLimit-UserReset: Timestamp (unix epoch) for when the credits will be reset.
-            $resetTime = date('Y-m-d H:i:s', $response->getHeader('X-RateLimit-UserReset'));
+            $resetTime = date('Y-m-d H:i:s', $response->getHeaderLine('X-RateLimit-UserReset'));
 
             throw new RateLimitException('No application credits available. The limit is ' . $clientLimit . ' and will be reset at ' . $resetTime);
         }
@@ -110,9 +120,9 @@ class ErrorMiddleware
 
         if ('' !== $postRemaining && $postRemaining < 1) {
             // X-Post-Rate-Limit-Reset: Time in seconds until your POST ratelimit is reset
-            $resetTime = date('Y-m-d H:i:s', $response->getHeader('X-Post-Rate-Limit-Reset'));
+            $resetTime = date('Y-m-d H:i:s', $response->getHeaderLine('X-Post-Rate-Limit-Reset'));
 
-            throw new RateLimitException('No application credits available. The limit is ' . $postLimit . ' and will be reset at ' . $resetTime);
+            throw new RateLimitException('No post credits available. The limit is ' . $postLimit . ' and will be reset at ' . $resetTime);
         }
     }
 }

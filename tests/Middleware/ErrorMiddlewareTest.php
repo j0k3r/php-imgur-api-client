@@ -2,22 +2,28 @@
 
 namespace Imgur\tests\Middleware;
 
-use Guzzle\Http\Message\Request;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 use Imgur\Middleware\ErrorMiddleware;
 
 class ErrorMiddlewareTest extends \PHPUnit_Framework_TestCase
 {
     public function testNothinHappenOnOKResponse()
     {
-        $response = $this->getMockBuilder('GuzzleHttp\Message\ResponseInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $response->expects($this->once())
-            ->method('getStatusCode')
-            ->will($this->returnValue(200));
+        $mock = new MockHandler([
+            new Response(200),
+        ]);
+        $stack = new HandlerStack($mock);
+        $stack->push(ErrorMiddleware::error());
 
-        $listener = new ErrorMiddleware();
-        $listener->error($this->getEventMock($response));
+        $handler = $stack->resolve();
+        $request = new Request('GET', 'http://example.com?a=b');
+        $promise = $handler($request, []);
+        $response = $promise->wait();
+
+        $this->assertEquals(200, $response->getStatusCode());
     }
 
     /**
@@ -26,23 +32,18 @@ class ErrorMiddlewareTest extends \PHPUnit_Framework_TestCase
      */
     public function testRateLimitUser()
     {
-        $response = $this->getMockBuilder('GuzzleHttp\Message\ResponseInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $response->expects($this->once())
-            ->method('getStatusCode')
-            ->will($this->returnValue(400));
-        $response->expects($this->at(1))
-            ->method('getHeader')
-            ->with('X-RateLimit-UserRemaining')
-            ->will($this->returnValue(0));
-        $response->expects($this->at(2))
-            ->method('getHeader')
-            ->with('X-RateLimit-UserLimit')
-            ->will($this->returnValue(10));
+        $mock = new MockHandler([
+            new Response(429, [
+                'X-RateLimit-UserRemaining' => 0,
+                'X-RateLimit-UserLimit' => 10,
+            ]),
+        ]);
+        $stack = new HandlerStack($mock);
+        $stack->push(ErrorMiddleware::error());
 
-        $listener = new ErrorMiddleware();
-        $listener->error($this->getEventMock($response));
+        $handler = $stack->resolve();
+        $request = new Request('GET', 'http://example.com?a=b');
+        $handler($request, [])->wait();
     }
 
     /**
@@ -51,35 +52,21 @@ class ErrorMiddlewareTest extends \PHPUnit_Framework_TestCase
      */
     public function testRateLimitClient()
     {
-        $response = $this->getMockBuilder('GuzzleHttp\Message\ResponseInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $response->expects($this->once())
-            ->method('getStatusCode')
-            ->will($this->returnValue(400));
-        $response->expects($this->at(1))
-            ->method('getHeader')
-            ->with('X-RateLimit-UserRemaining')
-            ->will($this->returnValue(9));
-        $response->expects($this->at(2))
-            ->method('getHeader')
-            ->with('X-RateLimit-UserLimit')
-            ->will($this->returnValue(10));
-        $response->expects($this->at(3))
-            ->method('getHeader')
-            ->with('X-RateLimit-ClientRemaining')
-            ->will($this->returnValue(0));
-        $response->expects($this->at(4))
-            ->method('getHeader')
-            ->with('X-RateLimit-ClientLimit')
-            ->will($this->returnValue(10));
-        $response->expects($this->at(5))
-            ->method('getHeader')
-            ->with('X-RateLimit-UserReset')
-            ->will($this->returnValue('1441401387')); // 4/9/2015  23:16:27
+        $mock = new MockHandler([
+            new Response(429, [
+                'X-RateLimit-UserRemaining' => 9,
+                'X-RateLimit-UserLimit' => 10,
+                'X-RateLimit-ClientRemaining' => 0,
+                'X-RateLimit-ClientLimit' => 10,
+                'X-RateLimit-UserReset' => 1441401387, // 4/9/2015  23:16:27
+            ]),
+        ]);
+        $stack = new HandlerStack($mock);
+        $stack->push(ErrorMiddleware::error());
 
-        $listener = new ErrorMiddleware();
-        $listener->error($this->getEventMock($response));
+        $handler = $stack->resolve();
+        $request = new Request('GET', 'http://example.com?a=b');
+        $handler($request, [])->wait();
     }
 
     /**
@@ -88,34 +75,20 @@ class ErrorMiddlewareTest extends \PHPUnit_Framework_TestCase
      */
     public function testErrorWithJson()
     {
-        $response = $this->getMockBuilder('GuzzleHttp\Message\ResponseInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $response->expects($this->once())
-            ->method('getStatusCode')
-            ->will($this->returnValue(400));
-        $response->expects($this->once())
-            ->method('getBody')
-            ->will($this->returnValue(json_encode(['data' => ['request' => '/here', 'error' => 'oops']])));
-        $response->expects($this->at(1))
-            ->method('getHeader')
-            ->with('X-RateLimit-UserRemaining')
-            ->will($this->returnValue(9));
-        $response->expects($this->at(2))
-            ->method('getHeader')
-            ->with('X-RateLimit-UserLimit')
-            ->will($this->returnValue(10));
-        $response->expects($this->at(3))
-            ->method('getHeader')
-            ->with('X-RateLimit-ClientRemaining')
-            ->will($this->returnValue(9));
-        $response->expects($this->at(4))
-            ->method('getHeader')
-            ->with('X-RateLimit-ClientLimit')
-            ->will($this->returnValue(10));
+        $mock = new MockHandler([
+            new Response(429, [
+                'X-RateLimit-UserRemaining' => 9,
+                'X-RateLimit-UserLimit' => 10,
+                'X-RateLimit-ClientRemaining' => 9,
+                'X-RateLimit-ClientLimit' => 10,
+            ], json_encode(['data' => ['request' => '/here', 'error' => 'oops']])),
+        ]);
+        $stack = new HandlerStack($mock);
+        $stack->push(ErrorMiddleware::error());
 
-        $listener = new ErrorMiddleware();
-        $listener->error($this->getEventMock($response));
+        $handler = $stack->resolve();
+        $request = new Request('GET', 'http://example.com?a=b');
+        $handler($request, [])->wait();
     }
 
     /**
@@ -124,53 +97,40 @@ class ErrorMiddlewareTest extends \PHPUnit_Framework_TestCase
      */
     public function testErrorWithoutJson()
     {
-        $response = $this->getMockBuilder('GuzzleHttp\Message\ResponseInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $response->expects($this->exactly(2))
-            ->method('getStatusCode')
-            ->will($this->returnValue(400));
-        $response->expects($this->once())
-            ->method('getBody')
-            ->will($this->returnValue('hihi'));
-        $response->expects($this->at(1))
-            ->method('getHeader')
-            ->with('X-RateLimit-UserRemaining')
-            ->will($this->returnValue(9));
-        $response->expects($this->at(2))
-            ->method('getHeader')
-            ->with('X-RateLimit-UserLimit')
-            ->will($this->returnValue(10));
-        $response->expects($this->at(3))
-            ->method('getHeader')
-            ->with('X-RateLimit-ClientRemaining')
-            ->will($this->returnValue(9));
-        $response->expects($this->at(4))
-            ->method('getHeader')
-            ->with('X-RateLimit-ClientLimit')
-            ->will($this->returnValue(10));
+        $mock = new MockHandler([
+            new Response(429, [
+                'X-RateLimit-UserRemaining' => 9,
+                'X-RateLimit-UserLimit' => 10,
+                'X-RateLimit-ClientRemaining' => 9,
+                'X-RateLimit-ClientLimit' => 10,
+            ], 'hihi'),
+        ]);
+        $stack = new HandlerStack($mock);
+        $stack->push(ErrorMiddleware::error());
 
-        $listener = new ErrorMiddleware();
-        $listener->error($this->getEventMock($response));
+        $handler = $stack->resolve();
+        $request = new Request('GET', 'http://example.com?a=b');
+        $handler($request, [])->wait();
     }
 
-    private function getEventMock($response)
+    /**
+     * @expectedException \Imgur\Exception\RateLimitException
+     * @expectedExceptionMessage No post credits available. The limit is 10 and will be reset at 2015-09-04
+     */
+    public function testRateLimitPost()
     {
-        $mock = $this->getMockBuilder('GuzzleHttp\Event\ErrorEvent')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $request = $this->getMockBuilder('Guzzle\Http\Message\Request')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mock = new MockHandler([
+            new Response(429, [
+                'X-Post-Rate-Limit-Remaining' => 0,
+                'X-Post-Rate-Limit-Limit' => 10,
+                'X-Post-Rate-Limit-Reset' => 1441401387, // 4/9/2015  23:16:27
+            ]),
+        ]);
+        $stack = new HandlerStack($mock);
+        $stack->push(ErrorMiddleware::error());
 
-        $mock->expects($this->any())
-            ->method('getResponse')
-            ->will($this->returnValue($response));
-
-        $mock->expects($this->any())
-            ->method('getRequest')
-            ->will($this->returnValue($request));
-
-        return $mock;
+        $handler = $stack->resolve();
+        $request = new Request('GET', 'http://example.com?a=b');
+        $handler($request, [])->wait();
     }
 }

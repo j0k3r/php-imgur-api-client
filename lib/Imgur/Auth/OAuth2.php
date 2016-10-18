@@ -232,7 +232,7 @@ class OAuth2 implements AuthInterface
     }
 
     /**
-     * Attaches the triggers needed for attaching the header signature to each request.
+     * Add middleware for attaching header signature to each request.
      */
     public function sign()
     {
