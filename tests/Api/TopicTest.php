@@ -23,6 +23,8 @@ class TopicTest extends ApiTestCase
      */
     public function testBaseReal()
     {
+        $this->markTestSkipped('Topic endpoint does not always return 401 with no authentication ...');
+
         $guzzleClient = new GuzzleClient(['base_url' => 'https://api.imgur.com/3/']);
         $httpClient = new HttpClient([], $guzzleClient);
         $client = new Client(null, $httpClient);
