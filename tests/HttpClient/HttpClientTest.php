@@ -124,7 +124,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
         $path = '/some/path';
         $parameters = ['a' => 'b'];
 
-        $response = new Response(403);
+        $response = new Response(429);
         $response->addHeader('X-RateLimit-UserLimit', 10);
         $response->addHeader('X-RateLimit-UserRemaining', 0);
 
@@ -145,7 +145,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
         $path = '/some/path';
         $parameters = ['a' => 'b'];
 
-        $response = new Response(403);
+        $response = new Response(429);
         $response->addHeader('X-RateLimit-UserLimit', 10);
         $response->addHeader('X-RateLimit-UserRemaining', 10);
         $response->addHeader('X-RateLimit-ClientLimit', 10);
@@ -169,7 +169,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
         $path = '/some/path';
         $parameters = ['a' => 'b'];
 
-        $response = new Response(403, [], Stream::factory('oops'));
+        $response = new Response(429, [], Stream::factory('oops'));
         $response->addHeader('X-RateLimit-UserLimit', 10);
         $response->addHeader('X-RateLimit-UserRemaining', 10);
         $response->addHeader('X-RateLimit-ClientLimit', 10);
@@ -192,7 +192,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
         $path = '/some/path';
         $parameters = ['a' => 'b'];
 
-        $response = new Response(403, [], Stream::factory(json_encode(['data' => ['request' => '/3/account', 'error' => 'oops2', 'method' => 'GET'], 'success' => false, 'status' => 403])));
+        $response = new Response(429, [], Stream::factory(json_encode(['data' => ['request' => '/3/account', 'error' => 'oops2', 'method' => 'GET'], 'success' => false, 'status' => 429])));
         $response->addHeader('X-RateLimit-UserLimit', 10);
         $response->addHeader('X-RateLimit-UserRemaining', 10);
         $response->addHeader('X-RateLimit-ClientLimit', 10);
@@ -215,7 +215,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
         $path = '/some/path';
         $parameters = ['a' => 'b'];
 
-        $response = new Response(403, [], Stream::factory('oops'));
+        $response = new Response(429, [], Stream::factory('oops'));
         $response->addHeader('X-RateLimit-UserLimit', 10);
         $response->addHeader('X-RateLimit-UserRemaining', 10);
         $response->addHeader('X-RateLimit-ClientLimit', 10);

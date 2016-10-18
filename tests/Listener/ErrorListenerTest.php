@@ -31,7 +31,7 @@ class ErrorListenerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $response->expects($this->once())
             ->method('getStatusCode')
-            ->will($this->returnValue(400));
+            ->will($this->returnValue(429));
         $response->expects($this->at(1))
             ->method('getHeader')
             ->with('X-RateLimit-UserRemaining')
@@ -56,7 +56,7 @@ class ErrorListenerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $response->expects($this->once())
             ->method('getStatusCode')
-            ->will($this->returnValue(400));
+            ->will($this->returnValue(429));
         $response->expects($this->at(1))
             ->method('getHeader')
             ->with('X-RateLimit-UserRemaining')
@@ -93,7 +93,7 @@ class ErrorListenerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $response->expects($this->once())
             ->method('getStatusCode')
-            ->will($this->returnValue(400));
+            ->will($this->returnValue(429));
         $response->expects($this->once())
             ->method('getBody')
             ->will($this->returnValue(json_encode(['data' => ['request' => '/here', 'error' => 'oops']])));
@@ -129,7 +129,7 @@ class ErrorListenerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $response->expects($this->exactly(2))
             ->method('getStatusCode')
-            ->will($this->returnValue(400));
+            ->will($this->returnValue(429));
         $response->expects($this->once())
             ->method('getBody')
             ->will($this->returnValue('hihi'));
@@ -149,6 +149,51 @@ class ErrorListenerTest extends \PHPUnit_Framework_TestCase
             ->method('getHeader')
             ->with('X-RateLimit-ClientLimit')
             ->will($this->returnValue(10));
+
+        $listener = new ErrorListener();
+        $listener->error($this->getEventMock($response));
+    }
+
+    /**
+     * @expectedException \Imgur\Exception\RateLimitException
+     * @expectedExceptionMessage No post credits available. The limit is 10 and will be reset at 2015-09-04
+     */
+    public function testRateLimitPost()
+    {
+        $response = $this->getMockBuilder('GuzzleHttp\Message\ResponseInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $response->expects($this->once())
+            ->method('getStatusCode')
+            ->will($this->returnValue(429));
+        $response->expects($this->at(1))
+            ->method('getHeader')
+            ->with('X-RateLimit-UserRemaining')
+            ->will($this->returnValue(9));
+        $response->expects($this->at(2))
+            ->method('getHeader')
+            ->with('X-RateLimit-UserLimit')
+            ->will($this->returnValue(10));
+        $response->expects($this->at(3))
+            ->method('getHeader')
+            ->with('X-RateLimit-ClientRemaining')
+            ->will($this->returnValue(9));
+        $response->expects($this->at(4))
+            ->method('getHeader')
+            ->with('X-RateLimit-ClientLimit')
+            ->will($this->returnValue(10));
+        $response->expects($this->at(5))
+            ->method('getHeader')
+            ->with('X-Post-Rate-Limit-Remaining')
+            ->will($this->returnValue(0));
+        $response->expects($this->at(6))
+            ->method('getHeader')
+            ->with('X-Post-Rate-Limit-Limit')
+            ->will($this->returnValue(10));
+        $response->expects($this->at(7))
+            ->method('getHeader')
+            ->with('X-Post-Rate-Limit-Reset')
+            ->will($this->returnValue('1441401387')); // 4/9/2015  23:16:27
 
         $listener = new ErrorListener();
         $listener->error($this->getEventMock($response));
