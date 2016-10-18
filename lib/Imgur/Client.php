@@ -6,6 +6,7 @@ use Imgur\Auth\AuthInterface;
 use Imgur\Exception\InvalidArgumentException;
 use Imgur\HttpClient\HttpClient;
 use Imgur\HttpClient\HttpClientInterface;
+use Imgur\Pager\PagerInterface;
 
 /**
  * PHP Imgur API wrapper.
@@ -54,7 +55,7 @@ class Client
      *
      * @return ApiInterface
      */
-    public function api($name, $pager = null)
+    public function api($name, PagerInterface $pager = null)
     {
         if (!$this->getAccessToken()) {
             $this->sign();
@@ -126,7 +127,7 @@ class Client
      */
     public function getAuthenticationClient()
     {
-        if (empty($this->authenticationClient)) {
+        if (null === $this->authenticationClient) {
             $this->authenticationClient = new Auth\OAuth2(
                 $this->getHttpClient(),
                 $this->getOption('client_id'),
