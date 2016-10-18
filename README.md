@@ -28,7 +28,7 @@ Add the library details to your composer.json
 
 ```json
 "require": {
-    "j0k3r/php-imgur-api-client": "^2.0.0"
+    "j0k3r/php-imgur-api-client": "^3.0.0"
 }
 ```
 
