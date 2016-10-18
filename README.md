@@ -120,7 +120,7 @@ or
 
 
 ```php
-$pathToFile = 'http://0.0.0.0/path/to/file.jpg';
+$urlToFile = 'http://0.0.0.0/path/to/file.jpg';
 $imageData = [
     'image' => $urlToFile,
     'type'  => 'url',
