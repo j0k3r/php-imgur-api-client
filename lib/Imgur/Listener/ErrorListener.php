@@ -24,6 +24,7 @@ class ErrorListener
         //check if any limit was hit
         $this->checkUserRateLimit($response);
         $this->checkClientRateLimit($response);
+        $this->checkPostRateLimit($response);
 
         $body = $response->getBody();
         $responseData = json_decode($body, true);
@@ -65,9 +66,27 @@ class ErrorListener
 
         if ('' !== $clientRemaining && $clientRemaining < 1) {
             // X-RateLimit-UserReset: unix epoch
-            $resetTime = date('Y-m-d H:i:s', $response->getHeader('X-RateLimit-UserReset'));
+            $resetTime = date('Y-m-d H:i:s', (string) $response->getHeader('X-RateLimit-UserReset'));
 
             throw new RateLimitException('No application credits available. The limit is ' . $clientLimit . ' and will be reset at ' . $resetTime);
+        }
+    }
+
+    /**
+     * Check if client hit post limit.
+     *
+     * @param ResponseInterface $response
+     */
+    private function checkPostRateLimit(ResponseInterface $response)
+    {
+        $postRemaining = (string) $response->getHeader('X-Post-Rate-Limit-Remaining');
+        $postLimit = (string) $response->getHeader('X-Post-Rate-Limit-Limit');
+
+        if ('' !== $postRemaining && $postRemaining < 1) {
+            // X-Post-Rate-Limit-Reset: Time in seconds until your POST ratelimit is reset
+            $resetTime = date('Y-m-d H:i:s', (string) $response->getHeader('X-Post-Rate-Limit-Reset'));
+
+            throw new RateLimitException('No post credits available. The limit is ' . $postLimit . ' and will be reset at ' . $resetTime);
         }
     }
 }
