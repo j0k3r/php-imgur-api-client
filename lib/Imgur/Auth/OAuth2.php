@@ -4,7 +4,6 @@ namespace Imgur\Auth;
 
 use Imgur\Exception\AuthException;
 use Imgur\HttpClient\HttpClientInterface;
-use Imgur\Listener\AuthListener;
 
 /**
  * Authentication class used for handling OAuth2.
@@ -233,16 +232,13 @@ class OAuth2 implements AuthInterface
     }
 
     /**
-     * Attaches the triggers needed for attaching the header signature to each request.
+     * Add middleware for attaching header signature to each request.
      */
     public function sign()
     {
-        $this->httpClient->addListener('before', [
-            new AuthListener(
-                $this->getAccessToken(),
-                $this->clientId
-            ),
-            'before',
-        ]);
+        $this->httpClient->addAuthMiddleware(
+            $this->getAccessToken(),
+            $this->clientId
+        );
     }
 }

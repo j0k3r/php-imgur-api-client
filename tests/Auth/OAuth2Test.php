@@ -3,9 +3,10 @@
 namespace Imgur\tests\Auth;
 
 use GuzzleHttp\Client as GuzzleClient;
-use GuzzleHttp\Message\Response;
-use GuzzleHttp\Stream\Stream;
-use GuzzleHttp\Subscriber\Mock;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 use Imgur\Auth\OAuth2;
 use Imgur\HttpClient\HttpClient;
 
@@ -32,11 +33,11 @@ class OAuth2Test extends \PHPUnit_Framework_TestCase
      */
     public function testRequestAccessTokenBadStatusCode()
     {
-        $client = new GuzzleClient();
-        $mock = new Mock([
+        $mock = new MockHandler([
             new Response(400),
         ]);
-        $client->getEmitter()->attach($mock);
+        $handler = HandlerStack::create($mock);
+        $client = new GuzzleClient(['handler' => $handler]);
 
         $auth = new OAuth2(new HttpClient([], $client), 123, 456);
         $auth->requestAccessToken('code', null);
@@ -44,11 +45,11 @@ class OAuth2Test extends \PHPUnit_Framework_TestCase
 
     public function testRequestAccessTokenWithCode()
     {
-        $client = new GuzzleClient();
-        $mock = new Mock([
-            new Response(200, ['Content-Type' => 'application/json'], Stream::factory(json_encode(['access_token' => 'T0K3N']))),
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json'], json_encode(['access_token' => 'T0K3N'])),
         ]);
-        $client->getEmitter()->attach($mock);
+        $handler = HandlerStack::create($mock);
+        $client = new GuzzleClient(['handler' => $handler]);
 
         $auth = new OAuth2(new HttpClient([], $client), 123, 456);
         $result = $auth->requestAccessToken('code', null);
@@ -61,11 +62,11 @@ class OAuth2Test extends \PHPUnit_Framework_TestCase
 
     public function testRequestAccessTokenWithPin()
     {
-        $client = new GuzzleClient();
-        $mock = new Mock([
-            new Response(200, ['Content-Type' => 'application/json'], Stream::factory(json_encode(['access_token' => 'T0K3N']))),
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json'], json_encode(['access_token' => 'T0K3N'])),
         ]);
-        $client->getEmitter()->attach($mock);
+        $handler = HandlerStack::create($mock);
+        $client = new GuzzleClient(['handler' => $handler]);
 
         $auth = new OAuth2(new HttpClient([], $client), 123, 456);
         $result = $auth->requestAccessToken('code', 'pin');
@@ -82,11 +83,11 @@ class OAuth2Test extends \PHPUnit_Framework_TestCase
      */
     public function testRefreshTokenBadStatusCode()
     {
-        $client = new GuzzleClient();
-        $mock = new Mock([
-            new Response(400, ['Content-Type' => 'application/json'], Stream::factory(json_encode(['data' => ['request' => '/3/account', 'error' => 'oops2', 'method' => 'GET'], 'success' => false, 'status' => 400]))),
+        $mock = new MockHandler([
+            new Response(400, ['Content-Type' => 'application/json'], json_encode(['data' => ['request' => '/3/account', 'error' => 'oops2', 'method' => 'GET'], 'success' => false, 'status' => 400])),
         ]);
-        $client->getEmitter()->attach($mock);
+        $handler = HandlerStack::create($mock);
+        $client = new GuzzleClient(['handler' => $handler]);
 
         $auth = new OAuth2(new HttpClient([], $client), 123, 456);
         $auth->refreshToken();
@@ -94,11 +95,11 @@ class OAuth2Test extends \PHPUnit_Framework_TestCase
 
     public function testRefreshToken()
     {
-        $client = new GuzzleClient();
-        $mock = new Mock([
-            new Response(200, ['Content-Type' => 'application/json'], Stream::factory(json_encode(['access_token' => 'T0K3N', 'refresh_token' => 'FR35H']))),
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json'], json_encode(['access_token' => 'T0K3N', 'refresh_token' => 'FR35H'])),
         ]);
-        $client->getEmitter()->attach($mock);
+        $handler = HandlerStack::create($mock);
+        $client = new GuzzleClient(['handler' => $handler]);
 
         $auth = new OAuth2(new HttpClient([], $client), 123, 456);
         $result = $auth->refreshToken();
@@ -138,11 +139,11 @@ class OAuth2Test extends \PHPUnit_Framework_TestCase
 
     public function testCheckAccessTokenExpired()
     {
-        $client = new GuzzleClient();
-        $mock = new Mock([
-            new Response(200, ['Content-Type' => 'application/json'], Stream::factory(json_encode(['access_token' => 'T0K3N', 'expires_in' => 3600]))),
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json'], json_encode(['access_token' => 'T0K3N', 'expires_in' => 3600])),
         ]);
-        $client->getEmitter()->attach($mock);
+        $handler = HandlerStack::create($mock);
+        $client = new GuzzleClient(['handler' => $handler]);
 
         $auth = new OAuth2(new HttpClient([], $client), 123, 456);
         $auth->requestAccessToken('code', null);
@@ -152,12 +153,12 @@ class OAuth2Test extends \PHPUnit_Framework_TestCase
 
     public function testAuthenticatedRequest()
     {
-        $client = new GuzzleClient();
-        $mock = new Mock([
-            new Response(200, ['Content-Type' => 'application/json'], Stream::factory(json_encode(['data' => ['access_token' => 'T0K3N', 'expires_in' => 3600]]))),
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json'], json_encode(['data' => ['access_token' => 'T0K3N', 'expires_in' => 3600]])),
             new Response(200),
         ]);
-        $client->getEmitter()->attach($mock);
+        $handler = HandlerStack::create($mock);
+        $client = new GuzzleClient(['handler' => $handler]);
 
         $httpClient = new HttpClient([], $client);
 

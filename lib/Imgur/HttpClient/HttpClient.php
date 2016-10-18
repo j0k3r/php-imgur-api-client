@@ -4,8 +4,11 @@ namespace Imgur\HttpClient;
 
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\ClientInterface;
-use Imgur\Exception\ErrorException;
-use Imgur\Listener\ErrorListener;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
+use Imgur\Middleware\AuthMiddleware;
+use Imgur\Middleware\ErrorMiddleware;
+use Psr\Http\Message\RequestInterface;
 
 /**
  * Basic client for performing HTTP requests.
@@ -30,6 +33,8 @@ class HttpClient implements HttpClientInterface
         'base_url' => 'https://api.imgur.com/3/',
     ];
 
+    protected $stack;
+
     /**
      * @param array           $options
      * @param ClientInterface $client
@@ -38,17 +43,22 @@ class HttpClient implements HttpClientInterface
     {
         $this->options = array_merge($options, $this->options);
 
-        $this->client = $client ?: new GuzzleClient(['base_url' => $this->options['base_url']]);
-
+        $baseUrl = $this->options['base_url'];
         unset($this->options['base_url']);
 
-        $this->addListener(
-            'error',
-            [
-                new ErrorListener(),
-                'error',
-            ]
-        );
+        // during test (at least) handler can be injected into the client
+        // so we need to retrieve it to be able to inject our own middleware
+        $this->stack = HandlerStack::create();
+        if (null !== $client) {
+            $this->stack = $client->getConfig('handler');
+        }
+
+        $this->stack->push(ErrorMiddleware::error());
+
+        $this->client = $client ?: new GuzzleClient([
+            'base_uri' => $baseUrl,
+            'handler' => $this->stack,
+        ]);
     }
 
     /**
@@ -88,25 +98,6 @@ class HttpClient implements HttpClientInterface
      */
     public function performRequest($url, $parameters, $httpMethod = 'GET')
     {
-        $request = $this->createRequest($url, $parameters, $httpMethod);
-
-        try {
-            return $this->client->send($request);
-        } catch (\Exception $e) {
-            // if there are a previous one it comes from the ErrorListener
-            if ($e->getPrevious()) {
-                throw $e->getPrevious();
-            }
-
-            throw new ErrorException($e->getMessage(), 0, E_ERROR, __FILE__, __LINE__, $e);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function createRequest($url, $parameters, $httpMethod = 'GET')
-    {
         $options = [
             'headers' => isset($this->options['headers']) ? $this->options['headers'] : [],
             'body' => isset($this->options['body']) ? $this->options['body'] : '',
@@ -117,10 +108,11 @@ class HttpClient implements HttpClientInterface
         }
 
         if ($httpMethod === 'POST' || $httpMethod === 'PUT' || $httpMethod === 'DELETE') {
-            $options['body'] = $parameters;
+            $options['form_params'] = $parameters;
         }
 
-        return $this->client->createRequest($httpMethod, $url, $options);
+        // will throw an Imgur\Exception\ExceptionInterface if sth goes wrong
+        return $this->client->request($httpMethod, $url, $options);
     }
 
     /**
@@ -138,16 +130,15 @@ class HttpClient implements HttpClientInterface
     }
 
     /**
-     * Attaches a listener to a HttpClient event.
+     * Push authorization middleware.
      *
-     * @param string $eventName
-     * @param array  $listener
+     * @param array  $token
+     * @param string $clientId
      */
-    public function addListener($eventName, $listener)
+    public function addAuthMiddleware($token, $clientId)
     {
-        $this
-            ->client
-            ->getEmitter()
-            ->on($eventName, $listener);
+        $this->stack->push(Middleware::mapRequest(function (RequestInterface $request) use ($token, $clientId) {
+            return (new AuthMiddleware($token, $clientId))->addAuthHeader($request);
+        }));
     }
 }

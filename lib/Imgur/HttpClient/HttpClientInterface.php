@@ -15,7 +15,7 @@ interface HttpClientInterface
      * @param string $url        URL to which the request should point
      * @param array  $parameters Request parameters
      *
-     * @return \GuzzleHttp\Message\ResponseInterface
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function get($url, array $parameters = []);
 
@@ -25,7 +25,7 @@ interface HttpClientInterface
      * @param string $url        URL to which the request should point
      * @param array  $parameters Request parameters
      *
-     * @return \GuzzleHttp\Message\ResponseInterface
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function post($url, array $parameters = []);
 
@@ -35,7 +35,7 @@ interface HttpClientInterface
      * @param string $url        URL to which the request should point
      * @param array  $parameters Request parameters
      *
-     * @return \GuzzleHttp\Message\ResponseInterface
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function delete($url, array $parameters = []);
 
@@ -46,20 +46,9 @@ interface HttpClientInterface
      * @param array  $parameters Request parameters
      * @param string $httpMethod HTTP method to use
      *
-     * @return \GuzzleHttp\Message\ResponseInterface
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function performRequest($url, $parameters, $httpMethod = 'GET');
-
-    /**
-     * Create the request object.
-     *
-     * @param string $url        URL to which the request should point
-     * @param array  $parameters Request parameters
-     * @param string $httpMethod HTTP method to use
-     *
-     * @return \GuzzleHttp\Message\RequestInterface
-     */
-    public function createRequest($url, $parameters, $httpMethod = 'GET');
 
     /**
      * Parses the Imgur server response.

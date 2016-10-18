@@ -3,9 +3,9 @@
 namespace Imgur\tests\Api;
 
 use GuzzleHttp\Client as GuzzleClient;
-use GuzzleHttp\Message\Response;
-use GuzzleHttp\Stream\Stream;
-use GuzzleHttp\Subscriber\Mock;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Response;
 use Imgur\Api\Conversation;
 use Imgur\Client;
 use Imgur\HttpClient\HttpClient;
@@ -23,7 +23,7 @@ class ConversationTest extends ApiTestCase
      */
     public function testBaseReal()
     {
-        $guzzleClient = new GuzzleClient(['base_url' => 'https://api.imgur.com/3/']);
+        $guzzleClient = new GuzzleClient(['base_uri' => 'https://api.imgur.com/3/']);
         $httpClient = new HttpClient([], $guzzleClient);
         $client = new Client(null, $httpClient);
         $conversation = new Conversation($client);
@@ -33,9 +33,8 @@ class ConversationTest extends ApiTestCase
 
     public function testBaseWithResponse()
     {
-        $guzzleClient = new GuzzleClient();
-        $mock = new Mock([
-            new Response(200, ['Content-Type' => 'application/json'], Stream::factory(json_encode([
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json'], json_encode([
                 'data' => [
                     [
                         'id' => 11247233,
@@ -48,9 +47,10 @@ class ConversationTest extends ApiTestCase
                 ],
                 'success' => true,
                 'status' => 200,
-            ]))),
+            ])),
         ]);
-        $guzzleClient->getEmitter()->attach($mock);
+        $handler = HandlerStack::create($mock);
+        $guzzleClient = new GuzzleClient(['handler' => $handler]);
 
         $httpClient = new HttpClient([], $guzzleClient);
         $client = new Client(null, $httpClient);
