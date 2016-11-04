@@ -5,6 +5,8 @@ namespace Imgur\Pager;
 /**
  * Basic Pager.
  *
+ * @see https://api.imgur.com/#paging_results
+ *
  * @author Adrian Ghiuta <adrian.ghiuta@gmail.com>
  */
 class BasicPager implements PagerInterface
@@ -14,13 +16,8 @@ class BasicPager implements PagerInterface
 
     public function __construct($page = 1, $resultsPerPage = 10)
     {
-        if (!empty($page)) {
-            $this->setPage($page);
-        }
-
-        if (!empty($resultsPerPage)) {
-            $this->setResultsPerPage($resultsPerPage);
-        }
+        $this->setPage($page ?: 1);
+        $this->setResultsPerPage($resultsPerPage ?: 10);
 
         return $this;
     }
