@@ -144,12 +144,37 @@ $client->api('image')->upload($imageData);
 
 ### Pagination
 
-And about the **pagination**, for any API call that supports pagination and is not explicitly available via the method parameters, it can be achieved by using the `BasicPager` object and passing it as the second parameter in the `api()` call.
+For any API call that supports pagination and is not explicitly available via the method parameters, it can be achieved by using the `BasicPager` object and passing it as the second parameter in the `api()` call.
 
 ```php
-$pager = new \Imgur\Pager\BasicPager(0, 1);
+$pager = new \Imgur\Pager\BasicPager(1, 10);
 $images = $client->api('account', $pager)->images();
 ```
+
+Here is a real life example if you want to retrieve all your available images of an account:
+
+```php
+$page = 1;
+$pager = new \Imgur\Pager\BasicPager();
+$res = $client->api('account', $pager)->images();
+
+while (!empty($res)) {
+    // var_dump(count($res));
+
+    $pager->setPage($page++);
+
+    $res = $client->api('account', $pager)->images();
+}
+```
+
+This pager is really basic:
+
+ - You won't have information about how many pages are available
+ - If you request a non-existant page, you'll get an empty array
+
+NOTE: `/gallery` endpoints do not support the `perPage` query string, and `/album/{id}/images` is not paged.
+
+Please, read the [Imgur doc about it](https://api.imgur.com/#paging_results).
 
 ### Image id or Album id ?
 
