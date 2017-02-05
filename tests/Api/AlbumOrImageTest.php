@@ -55,7 +55,7 @@ class AlbumOrImageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\ErrorException
+     * @expectedException \Imgur\Exception\ErrorException
      * @expectedExceptionMessage Unable to find an album OR an image with the id
      */
     public function testWithBadId()
@@ -92,7 +92,7 @@ class AlbumOrImageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\ErrorException
+     * @expectedException \Imgur\Exception\ErrorException
      * @expectedExceptionMessage oops
      */
     public function testWithImageIdButBadResponse()
@@ -120,7 +120,7 @@ class AlbumOrImageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\ErrorException
+     * @expectedException \Imgur\Exception\ErrorException
      * @expectedExceptionMessage oops
      */
     public function testWithAlbumIdButBadResponse()

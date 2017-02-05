@@ -18,7 +18,7 @@ class ImageTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\ErrorException
+     * @expectedException \Imgur\Exception\ErrorException
      * @expectedExceptionMessage Authentication required
      */
     public function testBaseReal()
@@ -150,7 +150,7 @@ class ImageTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedException \Imgur\Exception\InvalidArgumentException
      * @expectedExceptionMessage is wrong. Possible values are
      */
     public function testUploadWithBadType()
@@ -159,7 +159,7 @@ class ImageTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\MissingArgumentException
+     * @expectedException \Imgur\Exception\MissingArgumentException
      * @expectedExceptionMessage parameters is missing
      */
     public function testUploadWithUrlParamMissing()
