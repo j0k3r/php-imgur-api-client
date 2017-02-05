@@ -3,6 +3,7 @@
 namespace Imgur\Api;
 
 use Imgur\Exception\ErrorException;
+use Imgur\Exception\ExceptionInterface;
 
 /**
  * This is a special endpoint.
@@ -22,16 +23,16 @@ class AlbumOrImage extends AbstractApi
     {
         try {
             return $this->get('image/' . $imageIdOrAlbumId);
-        } catch (ErrorException $e) {
-            if (false === strpos($e->getMessage(), 'Unable to find an image with the id')) {
+        } catch (ExceptionInterface $e) {
+            if ($e->getCode() !== 404) {
                 throw $e;
             }
         }
 
         try {
             return $this->get('album/' . $imageIdOrAlbumId);
-        } catch (ErrorException $e) {
-            if (false === strpos($e->getMessage(), 'Unable to find an album with the id')) {
+        } catch (ExceptionInterface $e) {
+            if ($e->getCode() !== 404) {
                 throw $e;
             }
         }

@@ -33,7 +33,10 @@ class ErrorListener
         }
 
         if (is_array($responseData) && isset($responseData['data']) && isset($responseData['data']['error'])) {
-            throw new ErrorException('Request to: ' . $responseData['data']['request'] . ' failed with: "' . $responseData['data']['error'] . '"');
+            throw new ErrorException(
+                'Request to: ' . $responseData['data']['request'] . ' failed with: "' . $responseData['data']['error'] . '"',
+                $response->getStatusCode()
+            );
         }
 
         throw new RuntimeException(is_array($responseData) && isset($responseData['message']) ? $responseData['message'] : $responseData, $response->getStatusCode());
