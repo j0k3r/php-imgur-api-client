@@ -91,7 +91,7 @@ class ErrorListenerTest extends \PHPUnit_Framework_TestCase
         $response = $this->getMockBuilder('GuzzleHttp\Message\ResponseInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $response->expects($this->once())
+        $response->expects($this->exactly(2))
             ->method('getStatusCode')
             ->will($this->returnValue(429));
         $response->expects($this->once())
