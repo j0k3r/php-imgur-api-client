@@ -18,7 +18,7 @@ class ConversationTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\ErrorException
+     * @expectedException \Imgur\Exception\ErrorException
      * @expectedExceptionMessage Authentication required
      */
     public function testBaseReal()
@@ -124,7 +124,7 @@ class ConversationTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\MissingArgumentException
+     * @expectedException \Imgur\Exception\MissingArgumentException
      * @expectedExceptionMessage parameters is missing
      */
     public function testMessageCreateParamMissing()

@@ -18,7 +18,7 @@ class CustomGalleryTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\ErrorException
+     * @expectedException \Imgur\Exception\ErrorException
      * @expectedExceptionMessage Authentication required
      */
     public function testBaseReal()
@@ -115,7 +115,7 @@ class CustomGalleryTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedException \Imgur\Exception\InvalidArgumentException
      * @expectedExceptionMessage is wrong. Possible values are
      */
     public function testCustomGalleryWrongSortValue()
@@ -124,7 +124,7 @@ class CustomGalleryTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedException \Imgur\Exception\InvalidArgumentException
      * @expectedExceptionMessage is wrong. Possible values are
      */
     public function testCustomGalleryWrongWindowValue()
@@ -152,7 +152,7 @@ class CustomGalleryTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedException \Imgur\Exception\InvalidArgumentException
      * @expectedExceptionMessage is wrong. Possible values are
      */
     public function testFilteredWrongSortValue()
@@ -161,7 +161,7 @@ class CustomGalleryTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedException \Imgur\Exception\InvalidArgumentException
      * @expectedExceptionMessage is wrong. Possible values are
      */
     public function testFilteredWrongWindowValue()

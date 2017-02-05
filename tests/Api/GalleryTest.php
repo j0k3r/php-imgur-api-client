@@ -18,7 +18,7 @@ class GalleryTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\ErrorException
+     * @expectedException \Imgur\Exception\ErrorException
      * @expectedExceptionMessage Authentication required
      */
     public function testBaseReal()
@@ -132,7 +132,7 @@ class GalleryTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedException \Imgur\Exception\InvalidArgumentException
      * @expectedExceptionMessage is wrong. Possible values are
      */
     public function testGalleryWrongSortValue()
@@ -141,7 +141,7 @@ class GalleryTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedException \Imgur\Exception\InvalidArgumentException
      * @expectedExceptionMessage is wrong. Possible values are
      */
     public function testGalleryWrongSectionValue()
@@ -150,7 +150,7 @@ class GalleryTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedException \Imgur\Exception\InvalidArgumentException
      * @expectedExceptionMessage is wrong. Possible values are
      */
     public function testGalleryWrongWindowValue()
@@ -180,7 +180,7 @@ class GalleryTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedException \Imgur\Exception\InvalidArgumentException
      * @expectedExceptionMessage is wrong. Possible values are
      */
     public function testMemesSubgalleryWrongSortValue()
@@ -189,7 +189,7 @@ class GalleryTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedException \Imgur\Exception\InvalidArgumentException
      * @expectedExceptionMessage is wrong. Possible values are
      */
     public function testMemesSubgalleryWrongWindowValue()
@@ -238,7 +238,7 @@ class GalleryTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedException \Imgur\Exception\InvalidArgumentException
      * @expectedExceptionMessage is wrong. Possible values are
      */
     public function testSubredditGalleriesWrongSortValue()
@@ -247,7 +247,7 @@ class GalleryTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedException \Imgur\Exception\InvalidArgumentException
      * @expectedExceptionMessage is wrong. Possible values are
      */
     public function testSubredditGalleriesWrongWindowValue()
@@ -296,7 +296,7 @@ class GalleryTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedException \Imgur\Exception\InvalidArgumentException
      * @expectedExceptionMessage is wrong. Possible values are
      */
     public function testGalleryTagWrongSortValue()
@@ -305,7 +305,7 @@ class GalleryTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedException \Imgur\Exception\InvalidArgumentException
      * @expectedExceptionMessage is wrong. Possible values are
      */
     public function testGalleryTagWrongWindowValue()
@@ -369,7 +369,7 @@ class GalleryTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedException \Imgur\Exception\InvalidArgumentException
      * @expectedExceptionMessage is wrong. Possible values are
      */
     public function testGalleryVoteTagWrongVoteValue()
@@ -399,7 +399,7 @@ class GalleryTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedException \Imgur\Exception\InvalidArgumentException
      * @expectedExceptionMessage is wrong. Possible values are
      */
     public function testSearchWrongValues()
@@ -446,7 +446,7 @@ class GalleryTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\MissingArgumentException
+     * @expectedException \Imgur\Exception\MissingArgumentException
      * @expectedExceptionMessage parameters is missing
      */
     public function testSubmitToGalleryParamMissing()
@@ -563,7 +563,7 @@ class GalleryTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedException \Imgur\Exception\InvalidArgumentException
      * @expectedExceptionMessage is wrong. Possible values are
      */
     public function testVoteWrongVoteValue()
@@ -593,7 +593,7 @@ class GalleryTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedException \Imgur\Exception\InvalidArgumentException
      * @expectedExceptionMessage is wrong. Possible values are
      */
     public function testCommentsWrongValues()
@@ -638,7 +638,7 @@ class GalleryTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\MissingArgumentException
+     * @expectedException \Imgur\Exception\MissingArgumentException
      * @expectedExceptionMessage parameters is missing
      */
     public function testCreateCommentParamMissing()
@@ -664,7 +664,7 @@ class GalleryTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\MissingArgumentException
+     * @expectedException \Imgur\Exception\MissingArgumentException
      * @expectedExceptionMessage parameters is missing
      */
     public function testCreateReplyParamMissing()
