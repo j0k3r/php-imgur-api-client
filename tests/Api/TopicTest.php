@@ -18,7 +18,7 @@ class TopicTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\ErrorException
+     * @expectedException \Imgur\Exception\ErrorException
      * @expectedExceptionMessage Authentication required
      */
     public function testBaseReal()
@@ -169,7 +169,7 @@ class TopicTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedException \Imgur\Exception\InvalidArgumentException
      * @expectedExceptionMessage is wrong. Possible values are
      */
     public function testGalleryTopicWrongSortValue()
@@ -178,7 +178,7 @@ class TopicTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedException \Imgur\Exception\InvalidArgumentException
      * @expectedExceptionMessage is wrong. Possible values are
      */
     public function testGalleryTopicWrongWindowValue()

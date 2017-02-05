@@ -18,7 +18,7 @@ class AccountTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\ErrorException
+     * @expectedException \Imgur\Exception\ErrorException
      * @expectedExceptionMessage Authentication required
      */
     public function testBaseReal()
@@ -122,7 +122,7 @@ class AccountTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedException \Imgur\Exception\InvalidArgumentException
      * @expectedExceptionMessage is wrong. Possible values are
      */
     public function testGalleryFavoritesWrongValues()
@@ -415,7 +415,7 @@ class AccountTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedException \Imgur\Exception\InvalidArgumentException
      * @expectedExceptionMessage is wrong. Possible values are
      */
     public function testCommentsWrongValues()
@@ -466,7 +466,7 @@ class AccountTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedException \Imgur\Exception\InvalidArgumentException
      * @expectedExceptionMessage is wrong. Possible values are
      */
     public function testCommentIdsWrongValues()

@@ -18,7 +18,7 @@ class CommentTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\ErrorException
+     * @expectedException \Imgur\Exception\ErrorException
      * @expectedExceptionMessage Authentication required
      */
     public function testBaseReal()
@@ -121,7 +121,7 @@ class CommentTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\MissingArgumentException
+     * @expectedException \Imgur\Exception\MissingArgumentException
      * @expectedExceptionMessage parameters is missing
      */
     public function testCreateParamMissing()
@@ -183,7 +183,7 @@ class CommentTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\MissingArgumentException
+     * @expectedException \Imgur\Exception\MissingArgumentException
      * @expectedExceptionMessage parameters is missing
      */
     public function testCreateReplyParamMissing()
@@ -209,7 +209,7 @@ class CommentTest extends ApiTestCase
     }
 
     /**
-     * @expectedException Imgur\Exception\InvalidArgumentException
+     * @expectedException \Imgur\Exception\InvalidArgumentException
      * @expectedExceptionMessage is wrong. Possible values are
      */
     public function testVoteWrongVoteValue()
