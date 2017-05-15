@@ -1,8 +1,8 @@
 # PHP Imgur API Client
 
 [![Build Status](https://travis-ci.org/j0k3r/php-imgur-api-client.svg?branch=2.x)](https://travis-ci.org/j0k3r/php-imgur-api-client)
-[![Code Coverage](https://scrutinizer-ci.com/g/j0k3r/php-imgur-api-client/badges/coverage.png?b=2.x)](https://scrutinizer-ci.com/g/j0k3r/php-imgur-api-client/?branch=2.x)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/j0k3r/php-imgur-api-client/badges/quality-score.png?b=2.x)](https://scrutinizer-ci.com/g/j0k3r/php-imgur-api-client/?branch=2.x)
+[![Code Coverage](https://scrutinizer-ci.com/g/j0k3r/php-imgur-api-client/badges/coverage.png?branch=2.x)](https://scrutinizer-ci.com/g/j0k3r/php-imgur-api-client/?branch=2.x)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/j0k3r/php-imgur-api-client/badges/quality-score.png?branch=2.x)](https://scrutinizer-ci.com/g/j0k3r/php-imgur-api-client/?branch=2.x)
 
 Object Oriented PHP wrapper for the Imgur API.
 
