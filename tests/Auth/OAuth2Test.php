@@ -9,8 +9,9 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Imgur\Auth\OAuth2;
 use Imgur\HttpClient\HttpClient;
+use PHPUnit\Framework\TestCase;
 
-class OAuth2Test extends \PHPUnit_Framework_TestCase
+class OAuth2Test extends TestCase
 {
     public function testGetAuthenticationUrl()
     {

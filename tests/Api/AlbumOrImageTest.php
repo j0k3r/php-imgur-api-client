@@ -10,8 +10,9 @@ use GuzzleHttp\Psr7\Response;
 use Imgur\Api\AlbumOrImage;
 use Imgur\Client;
 use Imgur\HttpClient\HttpClient;
+use PHPUnit\Framework\TestCase;
 
-class AlbumOrImageTest extends \PHPUnit_Framework_TestCase
+class AlbumOrImageTest extends TestCase
 {
     public function testWithImageId()
     {

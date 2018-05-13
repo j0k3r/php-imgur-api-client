@@ -7,8 +7,9 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Imgur\Middleware\ErrorMiddleware;
+use PHPUnit\Framework\TestCase;
 
-class ErrorMiddlewareTest extends \PHPUnit_Framework_TestCase
+class ErrorMiddlewareTest extends TestCase
 {
     public function testNothinHappenOnOKResponse()
     {
