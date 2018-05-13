@@ -5,8 +5,9 @@ namespace Imgur\tests\Api;
 use Imgur\Api\AbstractApi;
 use Imgur\Client;
 use Imgur\Pager\BasicPager;
+use PHPUnit\Framework\TestCase;
 
-class AbstractApiTest extends \PHPUnit_Framework_TestCase
+class AbstractApiTest extends TestCase
 {
     public function testGet()
     {

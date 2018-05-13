@@ -10,8 +10,9 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Imgur\Middleware\AuthMiddleware;
 use Psr\Http\Message\RequestInterface;
+use PHPUnit\Framework\TestCase;
 
-class AuthMiddlewareTest extends \PHPUnit_Framework_TestCase
+class AuthMiddlewareTest extends TestCase
 {
     public function testDefineClientIdOnBadToken()
     {

@@ -3,8 +3,9 @@
 namespace Imgur\tests\Api;
 
 use Imgur\Client;
+use PHPUnit\Framework\TestCase;
 
-abstract class ApiTestCase extends \PHPUnit_Framework_TestCase
+abstract class ApiTestCase extends TestCase
 {
     abstract protected function getApiClass();
 

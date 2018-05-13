@@ -3,8 +3,9 @@
 namespace Imgur\tests;
 
 use Imgur\Client;
+use PHPUnit\Framework\TestCase;
 
-class ClientTest extends \PHPUnit_Framework_TestCase
+class ClientTest extends TestCase
 {
     private function getHttpClientMock(array $methods = [])
     {

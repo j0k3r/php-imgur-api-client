@@ -8,8 +8,9 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Imgur\HttpClient\HttpClient;
+use PHPUnit\Framework\TestCase;
 
-class HttpClientTest extends \PHPUnit_Framework_TestCase
+class HttpClientTest extends TestCase
 {
     public function testOptionsToConstructor()
     {
