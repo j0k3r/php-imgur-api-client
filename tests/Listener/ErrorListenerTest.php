@@ -5,7 +5,7 @@ namespace Imgur\Tests\HttpClient;
 use Guzzle\Http\Message\Request;
 use Imgur\Listener\ErrorListener;
 
-class ErrorListenerTest extends \PHPUnit_Framework_TestCase
+class ErrorListenerTest extends \PHPUnit\Framework\TestCase
 {
     public function testNothinHappenOnOKResponse()
     {

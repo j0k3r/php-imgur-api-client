@@ -7,7 +7,7 @@ use Imgur\Exception\MissingArgumentException;
 /**
  * CRUD for Conversations.
  *
- * @link https://api.imgur.com/endpoints/conversation
+ * @see https://api.imgur.com/endpoints/conversation
  *
  * @author Adrian Ghiuta <adrian.ghiuta@gmail.com>
  */
@@ -16,7 +16,7 @@ class Conversation extends AbstractApi
     /**
      * Get list of all conversations for the logged in user.
      *
-     * @link https://api.imgur.com/endpoints/conversation#conversation-list
+     * @see https://api.imgur.com/endpoints/conversation#conversation-list
      *
      * @return array Array of Conversation (@see https://api.imgur.com/models/conversation)
      */
@@ -30,7 +30,7 @@ class Conversation extends AbstractApi
      *
      * @param string $conversationId
      *
-     * @link https://api.imgur.com/endpoints/conversation#conversation
+     * @see https://api.imgur.com/endpoints/conversation#conversation
      *
      * @return array Conversation (@see https://api.imgur.com/models/conversation)
      */
@@ -45,7 +45,7 @@ class Conversation extends AbstractApi
      *
      * @param array $data
      *
-     * @link https://api.imgur.com/endpoints/conversation#message-create
+     * @see https://api.imgur.com/endpoints/conversation#message-create
      *
      * @return bool
      */
@@ -63,7 +63,7 @@ class Conversation extends AbstractApi
      *
      * @param string $conversationId
      *
-     * @link https://api.imgur.com/endpoints/conversation#message-delete
+     * @see https://api.imgur.com/endpoints/conversation#message-delete
      *
      * @return bool
      */
@@ -77,7 +77,7 @@ class Conversation extends AbstractApi
      *
      * @param string $username
      *
-     * @link https://api.imgur.com/endpoints/conversation#message-report
+     * @see https://api.imgur.com/endpoints/conversation#message-report
      *
      * @return bool
      */
@@ -91,7 +91,7 @@ class Conversation extends AbstractApi
      *
      * @param string $username
      *
-     * @link https://api.imgur.com/endpoints/conversation#message-block
+     * @see https://api.imgur.com/endpoints/conversation#message-block
      *
      * @return bool
      */

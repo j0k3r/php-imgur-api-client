@@ -12,11 +12,6 @@ use Imgur\HttpClient\HttpClient;
 
 class GalleryTest extends ApiTestCase
 {
-    protected function getApiClass()
-    {
-        return 'Imgur\Api\Gallery';
-    }
-
     /**
      * @expectedException \Imgur\Exception\ErrorException
      * @expectedExceptionMessage Authentication required
@@ -708,5 +703,10 @@ class GalleryTest extends ApiTestCase
             ->will($this->returnValue($expectedValue));
 
         $this->assertSame($expectedValue, $api->commentCount('VOMXz'));
+    }
+
+    protected function getApiClass()
+    {
+        return 'Imgur\Api\Gallery';
     }
 }

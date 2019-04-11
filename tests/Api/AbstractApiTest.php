@@ -6,7 +6,7 @@ use Imgur\Api\AbstractApi;
 use Imgur\Client;
 use Imgur\Pager\BasicPager;
 
-class AbstractApiTest extends \PHPUnit_Framework_TestCase
+class AbstractApiTest extends \PHPUnit\Framework\TestCase
 {
     public function testGet()
     {

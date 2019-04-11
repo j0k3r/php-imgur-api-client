@@ -116,7 +116,7 @@ class HttpClient implements HttpClientInterface
             $options['query'] = $parameters['query'];
         }
 
-        if ($httpMethod === 'POST' || $httpMethod === 'PUT' || $httpMethod === 'DELETE') {
+        if ('POST' === $httpMethod || 'PUT' === $httpMethod || 'DELETE' === $httpMethod) {
             $options['body'] = $parameters;
         }
 

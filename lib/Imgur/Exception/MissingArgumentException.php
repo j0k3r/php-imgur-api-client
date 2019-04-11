@@ -6,7 +6,7 @@ class MissingArgumentException extends ErrorException
 {
     public function __construct($required, $code = 0, $previous = null)
     {
-        if (is_string($required)) {
+        if (\is_string($required)) {
             $required = [$required];
         }
 

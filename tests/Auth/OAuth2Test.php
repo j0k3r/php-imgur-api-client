@@ -9,7 +9,7 @@ use GuzzleHttp\Subscriber\Mock;
 use Imgur\Auth\OAuth2;
 use Imgur\HttpClient\HttpClient;
 
-class OAuth2Test extends \PHPUnit_Framework_TestCase
+class OAuth2Test extends \PHPUnit\Framework\TestCase
 {
     public function testGetAuthenticationUrl()
     {
@@ -165,5 +165,7 @@ class OAuth2Test extends \PHPUnit_Framework_TestCase
         $auth->requestAccessToken('code', null);
 
         $httpClient->get('http://google.com');
+
+        $this->assertTrue($auth->checkAccessTokenExpired());
     }
 }

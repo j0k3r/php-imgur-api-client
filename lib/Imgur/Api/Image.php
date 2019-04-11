@@ -8,7 +8,7 @@ use Imgur\Exception\MissingArgumentException;
 /**
  * CRUD for Images.
  *
- * @link https://api.imgur.com/endpoints/image
+ * @see https://api.imgur.com/endpoints/image
  *
  * @author Adrian Ghiuta <adrian.ghiuta@gmail.com>
  */
@@ -19,7 +19,7 @@ class Image extends AbstractApi
      *
      * @param string $imageId
      *
-     * @link https://api.imgur.com/endpoints/image#image
+     * @see https://api.imgur.com/endpoints/image#image
      *
      * @return array (@see https://api.imgur.com/models/image)
      */
@@ -33,7 +33,7 @@ class Image extends AbstractApi
      *
      * @param array $data
      *
-     * @link https://api.imgur.com/endpoints/image#image-upload
+     * @see https://api.imgur.com/endpoints/image#image-upload
      *
      * @return bool
      */
@@ -44,7 +44,7 @@ class Image extends AbstractApi
         }
 
         $typeValues = ['file', 'base64', 'url'];
-        if (isset($data['type']) && !in_array(strtolower($data['type']), $typeValues, true)) {
+        if (isset($data['type']) && !\in_array(strtolower($data['type']), $typeValues, true)) {
             throw new InvalidArgumentException('Type parameter "' . $data['type'] . '" is wrong. Possible values are: ' . implode(', ', $typeValues));
         }
 
@@ -61,7 +61,7 @@ class Image extends AbstractApi
      *
      * @param string $imageIdOrDeleteHash
      *
-     * @link https://api.imgur.com/endpoints/image#image-delete
+     * @see https://api.imgur.com/endpoints/image#image-delete
      *
      * @return bool
      */
@@ -78,7 +78,7 @@ class Image extends AbstractApi
      * @param string $imageIdOrDeleteHash
      * @param array  $data
      *
-     * @link https://api.imgur.com/endpoints/image#image-update
+     * @see https://api.imgur.com/endpoints/image#image-update
      *
      * @return bool
      */
@@ -92,7 +92,7 @@ class Image extends AbstractApi
      *
      * @param string $imageIdOrDeleteHash
      *
-     * @link https://api.imgur.com/endpoints/image#image-favorite
+     * @see https://api.imgur.com/endpoints/image#image-favorite
      *
      * @return bool
      */

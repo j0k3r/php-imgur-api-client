@@ -8,7 +8,7 @@ use GuzzleHttp\Stream\Stream;
 use GuzzleHttp\Subscriber\Mock;
 use Imgur\HttpClient\HttpClient;
 
-class HttpClientTest extends \PHPUnit_Framework_TestCase
+class HttpClientTest extends \PHPUnit\Framework\TestCase
 {
     public function testOptionsToConstructor()
     {

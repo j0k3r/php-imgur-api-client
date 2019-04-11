@@ -5,7 +5,7 @@ namespace Imgur\Api;
 /**
  * CRUD for CustomGallery.
  *
- * @link https://api.imgur.com/endpoints/custom_gallery
+ * @see https://api.imgur.com/endpoints/custom_gallery
  */
 class CustomGallery extends AbstractApi
 {
@@ -16,7 +16,7 @@ class CustomGallery extends AbstractApi
      * @param int    $page
      * @param string $window (day | week | month | year | all)
      *
-     * @link https://api.imgur.com/endpoints/custom_gallery#custom-gallery
+     * @see https://api.imgur.com/endpoints/custom_gallery#custom-gallery
      *
      * @return array Custom Gallery (@see https://api.imgur.com/models/custom_gallery)
      */
@@ -35,7 +35,7 @@ class CustomGallery extends AbstractApi
      * @param int    $page
      * @param string $window (day | week | month | year | all)
      *
-     * @link https://api.imgur.com/endpoints/custom_gallery#filtered-out-gallery
+     * @see https://api.imgur.com/endpoints/custom_gallery#filtered-out-gallery
      *
      * @return array Custom Gallery (@see https://api.imgur.com/models/custom_gallery)
      */
@@ -52,7 +52,7 @@ class CustomGallery extends AbstractApi
      *
      * @param string $imageId The ID for the gallery item
      *
-     * @link https://api.imgur.com/endpoints/custom_gallery#custom-gallery-image
+     * @see https://api.imgur.com/endpoints/custom_gallery#custom-gallery-image
      *
      * @return array Gallery Image (@see https://api.imgur.com/models/gallery_image) OR Gallery Album (@see https://api.imgur.com/models/gallery_album)
      */
@@ -66,7 +66,7 @@ class CustomGallery extends AbstractApi
      *
      * @param array $tags
      *
-     * @link https://api.imgur.com/endpoints/custom_gallery#custom-gallery-add
+     * @see https://api.imgur.com/endpoints/custom_gallery#custom-gallery-add
      *
      * @return bool
      */
@@ -80,7 +80,7 @@ class CustomGallery extends AbstractApi
      *
      * @param array $tags
      *
-     * @link https://api.imgur.com/endpoints/custom_gallery#custom-gallery-remove
+     * @see https://api.imgur.com/endpoints/custom_gallery#custom-gallery-remove
      *
      * @return bool
      */
@@ -94,7 +94,7 @@ class CustomGallery extends AbstractApi
      *
      * @param string $tag
      *
-     * @link https://api.imgur.com/endpoints/custom_gallery#filtered-out-block
+     * @see https://api.imgur.com/endpoints/custom_gallery#filtered-out-block
      *
      * @return bool
      */
@@ -108,7 +108,7 @@ class CustomGallery extends AbstractApi
      *
      * @param string $tag
      *
-     * @link https://api.imgur.com/endpoints/custom_gallery#filtered-out-unblock
+     * @see https://api.imgur.com/endpoints/custom_gallery#filtered-out-unblock
      *
      * @return bool
      */
