@@ -5,7 +5,7 @@ namespace Imgur\Tests\HttpClient;
 use Guzzle\Http\Message\Request;
 use Imgur\Listener\ErrorListener;
 
-class ErrorListenerTest extends \PHPUnit_Framework_TestCase
+class ErrorListenerTest extends \PHPUnit\Framework\TestCase
 {
     public function testNothinHappenOnOKResponse()
     {
@@ -97,6 +97,42 @@ class ErrorListenerTest extends \PHPUnit_Framework_TestCase
         $response->expects($this->once())
             ->method('getBody')
             ->will($this->returnValue(json_encode(['data' => ['request' => '/here', 'error' => 'oops']])));
+        $response->expects($this->at(1))
+            ->method('getHeader')
+            ->with('X-RateLimit-UserRemaining')
+            ->will($this->returnValue(9));
+        $response->expects($this->at(2))
+            ->method('getHeader')
+            ->with('X-RateLimit-UserLimit')
+            ->will($this->returnValue(10));
+        $response->expects($this->at(3))
+            ->method('getHeader')
+            ->with('X-RateLimit-ClientRemaining')
+            ->will($this->returnValue(9));
+        $response->expects($this->at(4))
+            ->method('getHeader')
+            ->with('X-RateLimit-ClientLimit')
+            ->will($this->returnValue(10));
+
+        $listener = new ErrorListener();
+        $listener->error($this->getEventMock($response));
+    }
+
+    /**
+     * @expectedException \Imgur\Exception\ErrorException
+     * @expectedExceptionMessage Request failed with: "Imgur is temporarily over capacity. Please try again later."
+     */
+    public function testErrorOverCapacity()
+    {
+        $response = $this->getMockBuilder('GuzzleHttp\Message\ResponseInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $response->expects($this->exactly(2))
+            ->method('getStatusCode')
+            ->will($this->returnValue(429));
+        $response->expects($this->once())
+            ->method('getBody')
+            ->will($this->returnValue(json_encode(['status' => 500, 'success' => false, 'data' => ['error' => 'Imgur is temporarily over capacity. Please try again later.']])));
         $response->expects($this->at(1))
             ->method('getHeader')
             ->with('X-RateLimit-UserRemaining')

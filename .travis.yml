@@ -1,21 +1,20 @@
 language: php
 
 php:
-    - 5.5
     - 5.6
     - 7.0
     - 7.1
+    - 7.2
+    - 7.3
     - nightly
-    - hhvm
 
 # run build against nightly but allow them to fail
 matrix:
     fast_finish: true
     include:
-        - php: 7.0
+        - php: 7.2
           env: CS_FIXER=run
     allow_failures:
-        - php: hhvm
         - php: nightly
 
 # faster builds on new travis setup not using sudo
@@ -34,7 +33,7 @@ before_script:
     - composer install --prefer-dist --no-interaction
 
 script:
-    - phpunit --coverage-clover=coverage.clover
+    - ./vendor/bin/simple-phpunit -v --coverage-clover=coverage.clover
     - if [ "$CS_FIXER" = "run" ]; then php vendor/bin/php-cs-fixer fix --verbose --dry-run ; fi;
 
 after_script:

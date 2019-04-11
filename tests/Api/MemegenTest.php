@@ -12,11 +12,6 @@ use Imgur\HttpClient\HttpClient;
 
 class MemegenTest extends ApiTestCase
 {
-    protected function getApiClass()
-    {
-        return 'Imgur\Api\Memegen';
-    }
-
     /**
      * @expectedException \Imgur\Exception\ErrorException
      * @expectedExceptionMessage Authentication required
@@ -111,5 +106,10 @@ class MemegenTest extends ApiTestCase
             ->will($this->returnValue($expectedValue));
 
         $this->assertSame($expectedValue, $api->defaultMemes());
+    }
+
+    protected function getApiClass()
+    {
+        return 'Imgur\Api\Memegen';
     }
 }

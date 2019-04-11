@@ -19,7 +19,7 @@ class AuthListener
     {
         $request = $event->getRequest();
 
-        if (is_array($this->token) && !empty($this->token['access_token'])) {
+        if (\is_array($this->token) && !empty($this->token['access_token'])) {
             $request->setHeader(
                 'Authorization',
                 'Bearer ' . $this->token['access_token']

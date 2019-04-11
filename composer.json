@@ -34,12 +34,13 @@
         }
     },
     "require": {
-        "php": ">=5.5.0",
+        "php": ">=5.6.0",
         "ext-curl": "*",
         "guzzlehttp/guzzle": "^5.3.1"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "~1.9"
+        "friendsofphp/php-cs-fixer": "~2.11",
+        "symfony/phpunit-bridge": "^4.0"
     },
     "extra": {
         "branch-alias": {

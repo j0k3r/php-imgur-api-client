@@ -99,20 +99,6 @@ abstract class AbstractApi
     }
 
     /**
-     * Global method to validate an argument.
-     *
-     * @param string $type           The required parameter (used for the error message)
-     * @param string $input          Input value
-     * @param array  $possibleValues Possible values for this argument
-     */
-    private function validateArgument($type, $input, $possibleValues)
-    {
-        if (!in_array($input, $possibleValues, true)) {
-            throw new InvalidArgumentException($type . ' parameter "' . $input . '" is wrong. Possible values are: ' . implode(', ', $possibleValues));
-        }
-    }
-
-    /**
      * Validate "sort" parameter and throw an exception if it's a bad value.
      *
      * @param string $sort           Input value
@@ -143,5 +129,19 @@ abstract class AbstractApi
     protected function validateVoteArgument($vote, $possibleValues)
     {
         $this->validateArgument('Vote', $vote, $possibleValues);
+    }
+
+    /**
+     * Global method to validate an argument.
+     *
+     * @param string $type           The required parameter (used for the error message)
+     * @param string $input          Input value
+     * @param array  $possibleValues Possible values for this argument
+     */
+    private function validateArgument($type, $input, $possibleValues)
+    {
+        if (!\in_array($input, $possibleValues, true)) {
+            throw new InvalidArgumentException($type . ' parameter "' . $input . '" is wrong. Possible values are: ' . implode(', ', $possibleValues));
+        }
     }
 }

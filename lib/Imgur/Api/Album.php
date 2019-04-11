@@ -5,7 +5,7 @@ namespace Imgur\Api;
 /**
  * CRUD for Albums.
  *
- * @link https://api.imgur.com/endpoints/album
+ * @see https://api.imgur.com/endpoints/album
  *
  * @author Adrian Ghiuta <adrian.ghiuta@gmail.com>
  */
@@ -16,7 +16,7 @@ class Album extends AbstractApi
      *
      * @param string $albumId
      *
-     * @link https://api.imgur.com/endpoints/album#album
+     * @see https://api.imgur.com/endpoints/album#album
      *
      * @return array Album (@see https://api.imgur.com/models/album)
      */
@@ -30,7 +30,7 @@ class Album extends AbstractApi
      *
      * @param string $albumId
      *
-     * @link https://api.imgur.com/endpoints/album#album-images
+     * @see https://api.imgur.com/endpoints/album#album-images
      *
      * @return array Array of Image (@see https://api.imgur.com/models/image)
      */
@@ -45,7 +45,7 @@ class Album extends AbstractApi
      * @param string $albumId
      * @param string $imageId
      *
-     * @link https://api.imgur.com/endpoints/album#album-image
+     * @see https://api.imgur.com/endpoints/album#album-image
      *
      * @return array Image (@see https://api.imgur.com/models/image)
      */
@@ -62,7 +62,7 @@ class Album extends AbstractApi
      *
      * @param array $data
      *
-     * @link https://api.imgur.com/endpoints/album#album-upload
+     * @see https://api.imgur.com/endpoints/album#album-upload
      *
      * @return bool
      */
@@ -78,7 +78,7 @@ class Album extends AbstractApi
      * @param string $deletehashOrAlbumId
      * @param array  $data
      *
-     * @link https://api.imgur.com/endpoints/album#album-update
+     * @see https://api.imgur.com/endpoints/album#album-update
      *
      * @return bool
      */
@@ -94,7 +94,7 @@ class Album extends AbstractApi
      *
      * @param string $deletehashOrAlbumId
      *
-     * @link https://api.imgur.com/endpoints/album#album-delete
+     * @see https://api.imgur.com/endpoints/album#album-delete
      *
      * @return bool
      */
@@ -108,7 +108,7 @@ class Album extends AbstractApi
      *
      * @param string $albumId
      *
-     * @link https://api.imgur.com/endpoints/album#album-favorite
+     * @see https://api.imgur.com/endpoints/album#album-favorite
      *
      * @return bool
      */
@@ -124,7 +124,7 @@ class Album extends AbstractApi
      * @param string $albumId
      * @param array  $imageIds
      *
-     * @link https://api.imgur.com/endpoints/album#album-set-to
+     * @see https://api.imgur.com/endpoints/album#album-set-to
      *
      * @return bool
      */
@@ -140,7 +140,7 @@ class Album extends AbstractApi
      * @param string $albumId
      * @param array  $imageIds
      *
-     * @link https://api.imgur.com/endpoints/album#album-add-to
+     * @see https://api.imgur.com/endpoints/album#album-add-to
      *
      * @return bool
      */
@@ -156,7 +156,7 @@ class Album extends AbstractApi
      * @param string $deletehashOrAlbumId
      * @param array  $imageIds
      *
-     * @link https://api.imgur.com/endpoints/album#album-remove-from
+     * @see https://api.imgur.com/endpoints/album#album-remove-from
      *
      * @return bool
      */

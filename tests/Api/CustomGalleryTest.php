@@ -12,11 +12,6 @@ use Imgur\HttpClient\HttpClient;
 
 class CustomGalleryTest extends ApiTestCase
 {
-    protected function getApiClass()
-    {
-        return 'Imgur\Api\CustomGallery';
-    }
-
     /**
      * @expectedException \Imgur\Exception\ErrorException
      * @expectedExceptionMessage Authentication required
@@ -254,5 +249,10 @@ class CustomGalleryTest extends ApiTestCase
             ->will($this->returnValue($expectedValue));
 
         $this->assertSame($expectedValue, $api->unBlockTag('funny'));
+    }
+
+    protected function getApiClass()
+    {
+        return 'Imgur\Api\CustomGallery';
     }
 }

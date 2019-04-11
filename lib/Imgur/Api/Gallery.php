@@ -8,7 +8,7 @@ use Imgur\Exception\MissingArgumentException;
 /**
  * CRUD for Gallery.
  *
- * @link https://api.imgur.com/endpoints/gallery
+ * @see https://api.imgur.com/endpoints/gallery
  *
  * @author Adrian Ghiuta <adrian.ghiuta@gmail.com>
  */
@@ -23,7 +23,7 @@ class Gallery extends AbstractApi
      * @param string $window    (day | week | month | year | all)
      * @param bool   $showViral
      *
-     * @link https://api.imgur.com/endpoints/gallery#gallery
+     * @see https://api.imgur.com/endpoints/gallery#gallery
      *
      * @return array Gallery Image (@see https://api.imgur.com/models/gallery_image) OR Gallery Album (@see https://api.imgur.com/models/gallery_album)
      */
@@ -33,7 +33,7 @@ class Gallery extends AbstractApi
         $this->validateWindowArgument($window, ['day', 'week', 'month', 'year', 'all']);
 
         $sectionValues = ['hot', 'top', 'user'];
-        if (!in_array($section, $sectionValues, true)) {
+        if (!\in_array($section, $sectionValues, true)) {
             throw new InvalidArgumentException('Section parameter "' . $section . '" is wrong. Possible values are: ' . implode(', ', $sectionValues));
         }
 
@@ -49,7 +49,7 @@ class Gallery extends AbstractApi
      * @param int    $page
      * @param string $window (day | week | month | year | all)
      *
-     * @link https://api.imgur.com/endpoints/gallery#meme-subgallery
+     * @see https://api.imgur.com/endpoints/gallery#meme-subgallery
      *
      * @return array Gallery Image (@see https://api.imgur.com/models/gallery_image) OR Gallery Album (@see https://api.imgur.com/models/gallery_album)
      */
@@ -67,7 +67,7 @@ class Gallery extends AbstractApi
      *
      * @param string $imageId
      *
-     * @link https://api.imgur.com/endpoints/gallery#meme-subgallery-image
+     * @see https://api.imgur.com/endpoints/gallery#meme-subgallery-image
      *
      * @return array Gallery Image (@see https://api.imgur.com/models/gallery_image)
      */
@@ -84,7 +84,7 @@ class Gallery extends AbstractApi
      * @param int    $page
      * @param string $window    (day | week | month | year | all)
      *
-     * @link https://api.imgur.com/endpoints/gallery#subreddit
+     * @see https://api.imgur.com/endpoints/gallery#subreddit
      *
      * @return array Gallery Image (@see https://api.imgur.com/models/gallery_image)
      */
@@ -102,7 +102,7 @@ class Gallery extends AbstractApi
      * @param string $subreddit (e.g pics - A valid sub-reddit name)
      * @param string $imageId
      *
-     * @link https://api.imgur.com/endpoints/gallery#subreddit-image
+     * @see https://api.imgur.com/endpoints/gallery#subreddit-image
      *
      * @return array Gallery Image (@see https://api.imgur.com/models/gallery_image)
      */
@@ -119,7 +119,7 @@ class Gallery extends AbstractApi
      * @param int    $page
      * @param string $window (day | week | month | year | all)
      *
-     * @link https://api.imgur.com/endpoints/gallery#gallery-tag
+     * @see https://api.imgur.com/endpoints/gallery#gallery-tag
      *
      * @return array Tag (@see https://api.imgur.com/models/tag)
      */
@@ -137,7 +137,7 @@ class Gallery extends AbstractApi
      * @param string $name    The name of the tag
      * @param string $imageId The ID for the image
      *
-     * @link https://api.imgur.com/endpoints/gallery#gallery-tag-image
+     * @see https://api.imgur.com/endpoints/gallery#gallery-tag-image
      *
      * @return array Gallery Image (@see https://api.imgur.com/models/gallery_image)
      */
@@ -151,7 +151,7 @@ class Gallery extends AbstractApi
      *
      * @param string $imageOrAlbumId ID of the gallery item
      *
-     * @link https://api.imgur.com/endpoints/gallery#gallery-item-tags
+     * @see https://api.imgur.com/endpoints/gallery#gallery-item-tags
      *
      * @return array of Tag Votes (@see https://api.imgur.com/models/tag_vote)
      */
@@ -167,7 +167,7 @@ class Gallery extends AbstractApi
      * @param string $name Name of the tag (implicitly created, if doesn't exist)
      * @param string $vote 'up' or 'down'
      *
-     * @link https://api.imgur.com/endpoints/gallery#gallery-tag-vote
+     * @see https://api.imgur.com/endpoints/gallery#gallery-tag-vote
      *
      * @return bool
      */
@@ -187,7 +187,7 @@ class Gallery extends AbstractApi
      * @param string $sort  (time | viral | top)
      * @param int    $page
      *
-     * @link https://api.imgur.com/endpoints/gallery#gallery-search
+     * @see https://api.imgur.com/endpoints/gallery#gallery-search
      *
      * @return array Gallery Image (@see https://api.imgur.com/models/gallery_image) OR Gallery Album (@see https://api.imgur.com/models/gallery_album)
      */
@@ -203,7 +203,7 @@ class Gallery extends AbstractApi
      *
      * @param int $page
      *
-     * @link https://api.imgur.com/endpoints/gallery#gallery-random
+     * @see https://api.imgur.com/endpoints/gallery#gallery-random
      *
      * @return array Gallery Image (@see https://api.imgur.com/models/gallery_image) OR Gallery Album (@see https://api.imgur.com/models/gallery_album)
      */
@@ -218,7 +218,7 @@ class Gallery extends AbstractApi
      * @param string $imageOrAlbumId
      * @param array  $data
      *
-     * @link https://api.imgur.com/endpoints/gallery#to-gallery
+     * @see https://api.imgur.com/endpoints/gallery#to-gallery
      *
      * @return bool
      */
@@ -236,7 +236,7 @@ class Gallery extends AbstractApi
      *
      * @param string $imageOrAlbumId
      *
-     * @link https://api.imgur.com/endpoints/gallery#from-gallery
+     * @see https://api.imgur.com/endpoints/gallery#from-gallery
      *
      * @return bool
      */
@@ -250,7 +250,7 @@ class Gallery extends AbstractApi
      *
      * @param string $albumId
      *
-     * @link https://api.imgur.com/endpoints/gallery#album
+     * @see https://api.imgur.com/endpoints/gallery#album
      *
      * @return array Gallery Album (@see https://api.imgur.com/models/gallery_album)
      */
@@ -264,7 +264,7 @@ class Gallery extends AbstractApi
      *
      * @param string $imageId
      *
-     * @link https://api.imgur.com/endpoints/gallery#image
+     * @see https://api.imgur.com/endpoints/gallery#image
      *
      * @return array Gallery Image (@see https://api.imgur.com/models/gallery_image)
      */
@@ -278,7 +278,7 @@ class Gallery extends AbstractApi
      *
      * @param string $imageOrAlbumId
      *
-     * @link https://api.imgur.com/endpoints/gallery#gallery-reporting
+     * @see https://api.imgur.com/endpoints/gallery#gallery-reporting
      *
      * @return bool
      */
@@ -292,7 +292,7 @@ class Gallery extends AbstractApi
      *
      * @param string $imageOrAlbumId
      *
-     * @link https://api.imgur.com/endpoints/gallery#gallery-votes
+     * @see https://api.imgur.com/endpoints/gallery#gallery-votes
      *
      * @return array Vote (@see https://api.imgur.com/models/vote)
      */
@@ -307,7 +307,7 @@ class Gallery extends AbstractApi
      * @param string $imageOrAlbumId
      * @param string $vote           (up | down | veto)
      *
-     * @link https://api.imgur.com/endpoints/gallery#gallery-voting
+     * @see https://api.imgur.com/endpoints/gallery#gallery-voting
      *
      * @return bool
      */
@@ -324,7 +324,7 @@ class Gallery extends AbstractApi
      * @param string $imageOrAlbumId
      * @param string $sort           (best | top | new)
      *
-     * @link https://api.imgur.com/endpoints/gallery#gallery-comments
+     * @see https://api.imgur.com/endpoints/gallery#gallery-comments
      *
      * @return array Array of Comment (@see https://api.imgur.com/endpoints/gallery#gallery-comments)
      */
@@ -341,7 +341,7 @@ class Gallery extends AbstractApi
      * @param string $imageOrAlbumId
      * @param string $commentId
      *
-     * @link https://api.imgur.com/endpoints/gallery#gallery-comment
+     * @see https://api.imgur.com/endpoints/gallery#gallery-comment
      *
      * @return array Comment (@see https://api.imgur.com/endpoints/gallery#gallery-comments)
      */
@@ -356,7 +356,7 @@ class Gallery extends AbstractApi
      * @param string $imageOrAlbumId
      * @param array  $data
      *
-     * @link https://api.imgur.com/endpoints/gallery#gallery-comment-creation
+     * @see https://api.imgur.com/endpoints/gallery#gallery-comment-creation
      *
      * @return bool
      */
@@ -376,7 +376,7 @@ class Gallery extends AbstractApi
      * @param string $commentId
      * @param array  $data
      *
-     * @link https://api.imgur.com/endpoints/gallery#gallery-comment-reply
+     * @see https://api.imgur.com/endpoints/gallery#gallery-comment-reply
      *
      * @return bool
      */
@@ -394,7 +394,7 @@ class Gallery extends AbstractApi
      *
      * @param string $imageOrAlbumId
      *
-     * @link https://api.imgur.com/endpoints/gallery#gallery-comment-ids
+     * @see https://api.imgur.com/endpoints/gallery#gallery-comment-ids
      *
      * @return array<int>
      */
@@ -408,7 +408,7 @@ class Gallery extends AbstractApi
      *
      * @param string $imageOrAlbumId
      *
-     * @link https://api.imgur.com/endpoints/gallery#gallery-comment-count
+     * @see https://api.imgur.com/endpoints/gallery#gallery-comment-count
      *
      * @return int
      */

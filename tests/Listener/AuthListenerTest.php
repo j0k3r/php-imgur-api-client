@@ -3,10 +3,9 @@
 namespace Imgur\Tests\HttpClient;
 
 use GuzzleHttp\Message\Request;
-use Imgur\Client;
 use Imgur\Listener\AuthListener;
 
-class AuthListenerTest extends \PHPUnit_Framework_TestCase
+class AuthListenerTest extends \PHPUnit\Framework\TestCase
 {
     public function testDefineClientIdOnBadToken()
     {

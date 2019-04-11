@@ -10,7 +10,7 @@ use Imgur\Api\AlbumOrImage;
 use Imgur\Client;
 use Imgur\HttpClient\HttpClient;
 
-class AlbumOrImageTest extends \PHPUnit_Framework_TestCase
+class AlbumOrImageTest extends \PHPUnit\Framework\TestCase
 {
     public function testWithImageId()
     {
