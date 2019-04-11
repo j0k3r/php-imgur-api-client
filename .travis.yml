@@ -15,7 +15,6 @@ matrix:
         - php: 7.2
           env: CS_FIXER=run
     allow_failures:
-        - php: 7.3
         - php: nightly
 
 # faster builds on new travis setup not using sudo
