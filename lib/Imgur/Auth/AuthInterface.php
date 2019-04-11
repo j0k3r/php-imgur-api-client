@@ -20,11 +20,14 @@ interface AuthInterface
     public function getAuthenticationUrl($responseType = 'code', $state = null);
 
     public function getAccessToken();
+
     public function requestAccessToken($code, $responseType);
+
     public function setAccessToken($accessToken);
 
     public function sign();
 
     public function refreshToken();
+
     public function checkAccessTokenExpired();
 }

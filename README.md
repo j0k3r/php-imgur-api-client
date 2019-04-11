@@ -16,7 +16,7 @@ Uses [Imgur API v3](https://api.imgur.com/).
 * Branch [2.x](https://github.com/j0k3r/php-imgur-api-client/tree/2.x) use Guzzle 5
 * Branch [3.x](https://github.com/j0k3r/php-imgur-api-client/tree/3.x) use Guzzle 6
 
-All actives branches required PHP >= 5.5
+All actives branches required PHP >= 5.6
 
 ## Composer
 
@@ -54,7 +54,7 @@ if (isset($_SESSION['token'])) {
     $client->setAccessToken($_SESSION['token']);
 
     if ($client->checkAccessTokenExpired()) {
-          $client->refreshToken();
+        $client->refreshToken();
     }
 } elseif (isset($_GET['code'])) {
     $client->requestAccessToken($_GET['code']);

@@ -12,11 +12,6 @@ use Imgur\HttpClient\HttpClient;
 
 class NotificationTest extends ApiTestCase
 {
-    protected function getApiClass()
-    {
-        return 'Imgur\Api\Notification';
-    }
-
     /**
      * @expectedException \Imgur\Exception\ErrorException
      * @expectedExceptionMessage Authentication required
@@ -142,5 +137,10 @@ class NotificationTest extends ApiTestCase
             ->will($this->returnValue($expectedValue));
 
         $this->assertSame($expectedValue, $api->notificationViewed('76878181'));
+    }
+
+    protected function getApiClass()
+    {
+        return 'Imgur\Api\Notification';
     }
 }

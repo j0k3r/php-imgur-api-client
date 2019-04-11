@@ -5,7 +5,6 @@ namespace Imgur\tests\Api;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Imgur\Api\AlbumOrImage;
 use Imgur\Client;

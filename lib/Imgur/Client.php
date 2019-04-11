@@ -39,7 +39,7 @@ class Client
     /**
      * Instantiate a new Imgur client.
      *
-     * @param null|HttpClientInterface $httpClient Imgur http client
+     * @param HttpClientInterface|null $httpClient Imgur http client
      */
     public function __construct(AuthInterface $authenticationClient = null, HttpClientInterface $httpClient = null)
     {
@@ -98,7 +98,7 @@ class Client
      */
     public function getOption($name)
     {
-        if (!array_key_exists($name, $this->options)) {
+        if (!\array_key_exists($name, $this->options)) {
             throw new InvalidArgumentException(sprintf('Undefined option called: "%s"', $name));
         }
 
@@ -113,7 +113,7 @@ class Client
      */
     public function setOption($name, $value)
     {
-        if (!array_key_exists($name, $this->options)) {
+        if (!\array_key_exists($name, $this->options)) {
             throw new InvalidArgumentException(sprintf('Undefined option called: "%s"', $name));
         }
 

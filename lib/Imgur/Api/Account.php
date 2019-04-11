@@ -5,7 +5,7 @@ namespace Imgur\Api;
 /**
  * CRUD for Accounts.
  *
- * @link https://api.imgur.com/endpoints/account
+ * @see https://api.imgur.com/endpoints/account
  *
  * @author Adrian Ghiuta <adrian.ghiuta@gmail.com>
  */
@@ -16,7 +16,7 @@ class Account extends AbstractApi
      *
      * @param string $username
      *
-     * @link https://api.imgur.com/endpoints/account#account
+     * @see https://api.imgur.com/endpoints/account#account
      *
      * @return array Account (@see https://api.imgur.com/models/account)
      */
@@ -45,7 +45,7 @@ class Account extends AbstractApi
      * @param int    $page
      * @param string $sort     'oldest', or 'newest'. Defaults to 'newest'
      *
-     * @link https://api.imgur.com/endpoints/account#account-gallery-favorites
+     * @see https://api.imgur.com/endpoints/account#account-gallery-favorites
      *
      * @return array Gallery Image (@see https://api.imgur.com/models/gallery_image) OR Gallery Album (@see https://api.imgur.com/models/gallery_album)
      */
@@ -61,7 +61,7 @@ class Account extends AbstractApi
      *
      * @param string $username
      *
-     * @link https://api.imgur.com/endpoints/account#account-favorites
+     * @see https://api.imgur.com/endpoints/account#account-favorites
      *
      * @return array Gallery Image (@see https://api.imgur.com/models/gallery_image) OR Gallery Album (@see https://api.imgur.com/models/gallery_album)
      */
@@ -76,7 +76,7 @@ class Account extends AbstractApi
      * @param string $username
      * @param int    $page
      *
-     * @link https://api.imgur.com/endpoints/account#account-submissions
+     * @see https://api.imgur.com/endpoints/account#account-submissions
      *
      * @return array Gallery Image (@see https://api.imgur.com/models/gallery_image) OR Gallery Album (@see https://api.imgur.com/models/gallery_album)
      */
@@ -90,7 +90,7 @@ class Account extends AbstractApi
      *
      * @param string $username
      *
-     * @link https://api.imgur.com/endpoints/account#account-settings
+     * @see https://api.imgur.com/endpoints/account#account-settings
      *
      * @return array Account Settings (@see https://api.imgur.com/models/account_settings)
      */
@@ -104,7 +104,7 @@ class Account extends AbstractApi
      *
      * @param array $parameters
      *
-     * @link https://api.imgur.com/endpoints/account#update-settings
+     * @see https://api.imgur.com/endpoints/account#update-settings
      *
      * @return bool
      */
@@ -131,7 +131,7 @@ class Account extends AbstractApi
      *
      * @param string $username
      *
-     * @link https://api.imgur.com/endpoints/account#account-profile
+     * @see https://api.imgur.com/endpoints/account#account-profile
      *
      * @return array Gallery Profile (@see https://api.imgur.com/models/gallery_profile)
      */
@@ -145,7 +145,7 @@ class Account extends AbstractApi
      *
      * @param string $username
      *
-     * @link https://api.imgur.com/endpoints/account#verify-email
+     * @see https://api.imgur.com/endpoints/account#verify-email
      *
      * @return bool
      */
@@ -159,7 +159,7 @@ class Account extends AbstractApi
      *
      * @param string $username
      *
-     * @link https://api.imgur.com/endpoints/account#send-verify-email
+     * @see https://api.imgur.com/endpoints/account#send-verify-email
      *
      * @return bool
      */
@@ -174,7 +174,7 @@ class Account extends AbstractApi
      * @param string $username
      * @param int    $page
      *
-     * @link https://api.imgur.com/endpoints/account#albums
+     * @see https://api.imgur.com/endpoints/account#albums
      *
      * @return array Array of Album (@see https://api.imgur.com/models/album)
      */
@@ -190,7 +190,7 @@ class Account extends AbstractApi
      * @param string $username
      * @param string $albumId
      *
-     * @link https://api.imgur.com/endpoints/account#album
+     * @see https://api.imgur.com/endpoints/account#album
      *
      * @return array Album (@see https://api.imgur.com/models/album)
      */
@@ -205,7 +205,7 @@ class Account extends AbstractApi
      * @param string $username
      * @param int    $page
      *
-     * @link https://api.imgur.com/endpoints/account#album-ids
+     * @see https://api.imgur.com/endpoints/account#album-ids
      *
      * @return array<int>
      */
@@ -219,7 +219,7 @@ class Account extends AbstractApi
      *
      * @param string $username
      *
-     * @link https://api.imgur.com/endpoints/account#album-count
+     * @see https://api.imgur.com/endpoints/account#album-count
      *
      * @return int
      */
@@ -234,7 +234,7 @@ class Account extends AbstractApi
      * @param string $username
      * @param string $albumId
      *
-     * @link https://api.imgur.com/endpoints/account#album-delete
+     * @see https://api.imgur.com/endpoints/account#album-delete
      *
      * @return bool
      */
@@ -250,7 +250,7 @@ class Account extends AbstractApi
      * @param int    $page
      * @param string $sort     'best', 'worst', 'oldest', or 'newest'. Defaults to 'newest'
      *
-     * @link https://api.imgur.com/endpoints/account#comments
+     * @see https://api.imgur.com/endpoints/account#comments
      *
      * @return array Array of Comment (@see https://api.imgur.com/models/comment)
      */
@@ -268,7 +268,7 @@ class Account extends AbstractApi
      * @param string $commentId
      * @param string $username
      *
-     * @link https://api.imgur.com/endpoints/account#comment
+     * @see https://api.imgur.com/endpoints/account#comment
      *
      * @return array Comment (@see https://api.imgur.com/models/comment)
      */
@@ -284,7 +284,7 @@ class Account extends AbstractApi
      * @param int    $page
      * @param string $sort     'best', 'worst', 'oldest', or 'newest'. Defaults to 'newest'
      *
-     * @link https://api.imgur.com/endpoints/account#comment-ids
+     * @see https://api.imgur.com/endpoints/account#comment-ids
      *
      * @return array<int>
      */
@@ -300,7 +300,7 @@ class Account extends AbstractApi
      *
      * @param string $username
      *
-     * @link https://api.imgur.com/endpoints/account#comment-count
+     * @see https://api.imgur.com/endpoints/account#comment-count
      *
      * @return int
      */
@@ -315,7 +315,7 @@ class Account extends AbstractApi
      * @param string $commentId
      * @param string $username
      *
-     * @link https://api.imgur.com/endpoints/account#comment-delete
+     * @see https://api.imgur.com/endpoints/account#comment-delete
      *
      * @return bool
      */
@@ -331,7 +331,7 @@ class Account extends AbstractApi
      * @param string $username
      * @param int    $page
      *
-     * @link https://api.imgur.com/endpoints/account#images
+     * @see https://api.imgur.com/endpoints/account#images
      *
      * @return array Array of Image (@see https://api.imgur.com/models/image)
      */
@@ -347,7 +347,7 @@ class Account extends AbstractApi
      * @param string $imageId
      * @param string $username
      *
-     * @link https://api.imgur.com/endpoints/account#image
+     * @see https://api.imgur.com/endpoints/account#image
      *
      * @return array Image (@see https://api.imgur.com/models/image)
      */
@@ -362,7 +362,7 @@ class Account extends AbstractApi
      * @param string $username
      * @param int    $page
      *
-     * @link https://api.imgur.com/endpoints/account#image-ids
+     * @see https://api.imgur.com/endpoints/account#image-ids
      *
      * @return array<int>
      */
@@ -376,7 +376,7 @@ class Account extends AbstractApi
      *
      * @param string $username
      *
-     * @link https://api.imgur.com/endpoints/account#image-count
+     * @see https://api.imgur.com/endpoints/account#image-count
      *
      * @return int
      */
@@ -391,7 +391,7 @@ class Account extends AbstractApi
      * @param string $deleteHash
      * @param string $username
      *
-     * @link https://api.imgur.com/endpoints/account#image-delete
+     * @see https://api.imgur.com/endpoints/account#image-delete
      *
      * @return bool
      */
@@ -406,7 +406,7 @@ class Account extends AbstractApi
      * @param string $username
      * @param bool   $onlyNew
      *
-     * @link https://api.imgur.com/endpoints/account#replies
+     * @see https://api.imgur.com/endpoints/account#replies
      *
      * @return array Array of Notification (@see https://api.imgur.com/models/notification)
      */

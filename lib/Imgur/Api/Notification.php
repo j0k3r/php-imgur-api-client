@@ -5,7 +5,7 @@ namespace Imgur\Api;
 /**
  * CRUD for Notifications.
  *
- * @link https://api.imgur.com/endpoints/notification
+ * @see https://api.imgur.com/endpoints/notification
  *
  * @author Adrian Ghiuta <adrian.ghiuta@gmail.com>
  */
@@ -16,7 +16,7 @@ class Notification extends AbstractApi
      *
      * @param string $new false for all notifications, true for only non-viewed notification
      *
-     * @link https://api.imgur.com/endpoints/notification#notifications
+     * @see https://api.imgur.com/endpoints/notification#notifications
      *
      * @return array With keys "replies" & "messages"
      */
@@ -32,7 +32,7 @@ class Notification extends AbstractApi
      *
      * @param string $notificationId
      *
-     * @link https://api.imgur.com/endpoints/notification#notification
+     * @see https://api.imgur.com/endpoints/notification#notification
      *
      * @return array (@see https://api.imgur.com/models/notification)
      */
@@ -46,7 +46,7 @@ class Notification extends AbstractApi
      *
      * @param string $notificationId
      *
-     * @link https://api.imgur.com/endpoints/notification#notification-viewed
+     * @see https://api.imgur.com/endpoints/notification#notification-viewed
      *
      * @return bool
      */

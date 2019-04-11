@@ -167,5 +167,7 @@ class OAuth2Test extends TestCase
         $auth->requestAccessToken('code', null);
 
         $httpClient->get('http://google.com');
+
+        $this->assertTrue($auth->checkAccessTokenExpired());
     }
 }

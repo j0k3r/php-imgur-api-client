@@ -24,7 +24,7 @@ class AlbumOrImage extends AbstractApi
         try {
             return $this->get('image/' . $imageIdOrAlbumId);
         } catch (ExceptionInterface $e) {
-            if ($e->getCode() !== 404) {
+            if (404 !== $e->getCode()) {
                 throw $e;
             }
         }
@@ -32,7 +32,7 @@ class AlbumOrImage extends AbstractApi
         try {
             return $this->get('album/' . $imageIdOrAlbumId);
         } catch (ExceptionInterface $e) {
-            if ($e->getCode() !== 404) {
+            if (404 !== $e->getCode()) {
                 throw $e;
             }
         }
