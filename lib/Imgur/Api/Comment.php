@@ -7,7 +7,7 @@ use Imgur\Exception\MissingArgumentException;
 /**
  * CRUD for Comment.
  *
- * @link https://api.imgur.com/endpoints/comment
+ * @see https://api.imgur.com/endpoints/comment
  *
  * @author Adrian Ghiuta <adrian.ghiuta@gmail.com>
  */
@@ -18,7 +18,7 @@ class Comment extends AbstractApi
      *
      * @param string $commentId
      *
-     * @link https://api.imgur.com/endpoints/comment#comment
+     * @see https://api.imgur.com/endpoints/comment#comment
      *
      * @return array Comment (@see https://api.imgur.com/endpoints/gallery#gallery-comments)
      */
@@ -32,7 +32,7 @@ class Comment extends AbstractApi
      *
      * @param array $data
      *
-     * @link https://api.imgur.com/endpoints/comment#comment-create
+     * @see https://api.imgur.com/endpoints/comment#comment-create
      *
      * @return bool
      */
@@ -50,7 +50,7 @@ class Comment extends AbstractApi
      *
      * @param string $commentId
      *
-     * @link https://api.imgur.com/endpoints/comment#comment-delete
+     * @see https://api.imgur.com/endpoints/comment#comment-delete
      *
      * @return bool
      */
@@ -64,7 +64,7 @@ class Comment extends AbstractApi
      *
      * @param string $commentId
      *
-     * @link https://api.imgur.com/endpoints/comment#comment-replies
+     * @see https://api.imgur.com/endpoints/comment#comment-replies
      *
      * @return array Comment (@see https://api.imgur.com/endpoints/gallery#gallery-comments)
      */
@@ -79,7 +79,7 @@ class Comment extends AbstractApi
      * @param string $commentId
      * @param array  $data
      *
-     * @link https://api.imgur.com/endpoints/comment#comment-reply-create
+     * @see https://api.imgur.com/endpoints/comment#comment-reply-create
      *
      * @return bool
      */
@@ -98,7 +98,7 @@ class Comment extends AbstractApi
      * @param string $commentId
      * @param string $vote
      *
-     * @link https://api.imgur.com/endpoints/comment#comment-vote
+     * @see https://api.imgur.com/endpoints/comment#comment-vote
      *
      * @return bool
      */
@@ -114,7 +114,7 @@ class Comment extends AbstractApi
      *
      * @param string $commentId
      *
-     * @link https://api.imgur.com/endpoints/comment#comment-report
+     * @see https://api.imgur.com/endpoints/comment#comment-report
      *
      * @return bool
      */

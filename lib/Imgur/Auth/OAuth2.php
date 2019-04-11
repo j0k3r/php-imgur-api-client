@@ -12,6 +12,9 @@ use Imgur\HttpClient\HttpClientInterface;
  */
 class OAuth2 implements AuthInterface
 {
+    const AUTHORIZATION_ENDPOINT = 'https://api.imgur.com/oauth2/authorize';
+    const ACCESS_TOKEN_ENDPOINT = 'https://api.imgur.com/oauth2/token';
+
     /**
      * Indicates the client that is making the request.
      *
@@ -56,9 +59,6 @@ class OAuth2 implements AuthInterface
      */
     private $token;
 
-    const AUTHORIZATION_ENDPOINT = 'https://api.imgur.com/oauth2/authorize';
-    const ACCESS_TOKEN_ENDPOINT = 'https://api.imgur.com/oauth2/token';
-
     /**
      * Instantiates the OAuth2 class, but does not trigger the authentication process.
      *
@@ -77,7 +77,7 @@ class OAuth2 implements AuthInterface
      * Generates the authentication URL to which a user should be pointed at in order to start the OAuth2 process.
      *
      * @param string      $responseType
-     * @param null|string $state
+     * @param string|null $state
      *
      * @return string
      */
@@ -109,7 +109,6 @@ class OAuth2 implements AuthInterface
                 $grantType = 'pin';
                 $type = 'pin';
                 break;
-
             case 'code':
             default:
                 $grantType = 'authorization_code';
@@ -189,7 +188,7 @@ class OAuth2 implements AuthInterface
      */
     public function setAccessToken($token)
     {
-        if (!is_array($token)) {
+        if (!\is_array($token)) {
             throw new AuthException('Token is not a valid json string.');
         }
 

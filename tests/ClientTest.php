@@ -7,32 +7,6 @@ use PHPUnit\Framework\TestCase;
 
 class ClientTest extends TestCase
 {
-    private function getHttpClientMock(array $methods = [])
-    {
-        $methods = array_merge(
-            ['get', 'post', 'delete', 'request', 'performRequest', 'createRequest', 'parseResponse'],
-            $methods
-        );
-
-        return $this->getMockBuilder('Imgur\HttpClient\HttpClient')
-            ->disableOriginalConstructor()
-            ->setMethods($methods)
-            ->getMock();
-    }
-
-    private function getAuthenticationClientMock(array $methods = [])
-    {
-        $methods = array_merge(
-            ['getAuthenticationUrl', 'getAccessToken', 'requestAccessToken', 'setAccessToken', 'sign', 'refreshToken'],
-            $methods
-        );
-
-        return $this->getMockBuilder('Imgur\Auth\OAuth2')
-            ->disableOriginalConstructor()
-            ->setMethods($methods)
-            ->getMock();
-    }
-
     public function testNoParameters()
     {
         $client = new Client();
@@ -191,5 +165,31 @@ class ClientTest extends TestCase
 
         $client = new Client($authenticationClient, $httpClient);
         $client->setAccessToken('token');
+    }
+
+    private function getHttpClientMock(array $methods = [])
+    {
+        $methods = array_merge(
+            ['get', 'post', 'delete', 'request', 'performRequest', 'createRequest', 'parseResponse'],
+            $methods
+        );
+
+        return $this->getMockBuilder('Imgur\HttpClient\HttpClient')
+            ->disableOriginalConstructor()
+            ->setMethods($methods)
+            ->getMock();
+    }
+
+    private function getAuthenticationClientMock(array $methods = [])
+    {
+        $methods = array_merge(
+            ['getAuthenticationUrl', 'getAccessToken', 'requestAccessToken', 'setAccessToken', 'sign', 'refreshToken'],
+            $methods
+        );
+
+        return $this->getMockBuilder('Imgur\Auth\OAuth2')
+            ->disableOriginalConstructor()
+            ->setMethods($methods)
+            ->getMock();
     }
 }

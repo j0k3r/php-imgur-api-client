@@ -12,11 +12,6 @@ use Imgur\HttpClient\HttpClient;
 
 class ConversationTest extends ApiTestCase
 {
-    protected function getApiClass()
-    {
-        return 'Imgur\Api\Conversation';
-    }
-
     /**
      * @expectedException \Imgur\Exception\ErrorException
      * @expectedExceptionMessage Authentication required
@@ -181,5 +176,10 @@ class ConversationTest extends ApiTestCase
             ->will($this->returnValue($expectedValue));
 
         $this->assertSame($expectedValue, $api->blockSender('imgur'));
+    }
+
+    protected function getApiClass()
+    {
+        return 'Imgur\Api\Conversation';
     }
 }

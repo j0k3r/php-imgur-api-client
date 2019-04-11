@@ -9,8 +9,8 @@ use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Imgur\Middleware\AuthMiddleware;
-use Psr\Http\Message\RequestInterface;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\RequestInterface;
 
 class AuthMiddlewareTest extends TestCase
 {
@@ -21,7 +21,7 @@ class AuthMiddlewareTest extends TestCase
 
         $mock = new MockHandler([
             function (RequestInterface $request, array $options) {
-                $this->assertEquals('Client-ID clientid', $request->getHeaderLine('Authorization'));
+                $this->assertSame('Client-ID clientid', $request->getHeaderLine('Authorization'));
 
                 return new Response(200);
             },
@@ -46,7 +46,7 @@ class AuthMiddlewareTest extends TestCase
 
         $mock = new MockHandler([
             function (RequestInterface $request, array $options) {
-                $this->assertEquals('Bearer T0K3N', $request->getHeaderLine('Authorization'));
+                $this->assertSame('Bearer T0K3N', $request->getHeaderLine('Authorization'));
 
                 return new Response(200);
             },

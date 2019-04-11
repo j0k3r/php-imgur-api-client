@@ -12,11 +12,6 @@ use Imgur\HttpClient\HttpClient;
 
 class AlbumTest extends ApiTestCase
 {
-    protected function getApiClass()
-    {
-        return 'Imgur\Api\Album';
-    }
-
     /**
      * @expectedException \Imgur\Exception\ErrorException
      * @expectedExceptionMessage Authentication required
@@ -297,5 +292,10 @@ class AlbumTest extends ApiTestCase
             ->will($this->returnValue($expectedValue));
 
         $this->assertSame($expectedValue, $api->removeImages('VOMXz', ['POvvB', 'P1vvB']));
+    }
+
+    protected function getApiClass()
+    {
+        return 'Imgur\Api\Album';
     }
 }

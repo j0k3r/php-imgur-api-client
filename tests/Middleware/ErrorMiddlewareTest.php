@@ -24,7 +24,7 @@ class ErrorMiddlewareTest extends TestCase
         $promise = $handler($request, []);
         $response = $promise->wait();
 
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertSame(200, $response->getStatusCode());
     }
 
     /**
@@ -61,6 +61,28 @@ class ErrorMiddlewareTest extends TestCase
                 'X-RateLimit-ClientLimit' => 10,
                 'X-RateLimit-UserReset' => 1441401387, // 4/9/2015  23:16:27
             ]),
+        ]);
+        $stack = new HandlerStack($mock);
+        $stack->push(ErrorMiddleware::error());
+
+        $handler = $stack->resolve();
+        $request = new Request('GET', 'http://example.com?a=b');
+        $handler($request, [])->wait();
+    }
+
+    /**
+     * @expectedException \Imgur\Exception\ErrorException
+     * @expectedExceptionMessage Request failed with: "Imgur is temporarily over capacity. Please try again later."
+     */
+    public function testErrorOverCapacity()
+    {
+        $mock = new MockHandler([
+            new Response(429, [
+                'X-RateLimit-UserRemaining' => 9,
+                'X-RateLimit-UserLimit' => 10,
+                'X-RateLimit-ClientRemaining' => 9,
+                'X-RateLimit-ClientLimit' => 10,
+            ], json_encode(['status' => 500, 'success' => false, 'data' => ['error' => 'Imgur is temporarily over capacity. Please try again later.']])),
         ]);
         $stack = new HandlerStack($mock);
         $stack->push(ErrorMiddleware::error());
