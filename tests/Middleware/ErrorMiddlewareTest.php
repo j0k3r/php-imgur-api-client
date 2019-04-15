@@ -94,6 +94,28 @@ class ErrorMiddlewareTest extends TestCase
 
     /**
      * @expectedException \Imgur\Exception\ErrorException
+     * @expectedExceptionMessage Request to: /3/image.json failed with: "You are uploading too fast. Please wait 59 more minutes."
+     */
+    public function testErrorUploadingTooFast()
+    {
+        $mock = new MockHandler([
+            new Response(429, [
+                'X-RateLimit-UserRemaining' => 9,
+                'X-RateLimit-UserLimit' => 10,
+                'X-RateLimit-ClientRemaining' => 9,
+                'X-RateLimit-ClientLimit' => 10,
+            ], json_encode(['status' => 400, 'success' => false, 'data' => ['error' => ['code' => 429, 'message' => 'You are uploading too fast. Please wait 59 more minutes.', 'type' => 'ImgurException', 'exception' => []], 'request' => '/3/image.json', 'method' => 'POST']])),
+        ]);
+        $stack = new HandlerStack($mock);
+        $stack->push(ErrorMiddleware::error());
+
+        $handler = $stack->resolve();
+        $request = new Request('GET', 'http://example.com?a=b');
+        $handler($request, [])->wait();
+    }
+
+    /**
+     * @expectedException \Imgur\Exception\ErrorException
      * @expectedExceptionMessage Request to: /here failed with: "oops"
      */
     public function testErrorWithJson()
