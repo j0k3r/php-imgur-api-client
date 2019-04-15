@@ -191,6 +191,42 @@ class ErrorListenerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @expectedException \Imgur\Exception\ErrorException
+     * @expectedExceptionMessage Request to: /3/image.json failed with: "Error code: 666"
+     */
+    public function testErrorNoMessageInError()
+    {
+        $response = $this->getMockBuilder('GuzzleHttp\Message\ResponseInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $response->expects($this->exactly(2))
+            ->method('getStatusCode')
+            ->will($this->returnValue(429));
+        $response->expects($this->once())
+            ->method('getBody')
+            ->will($this->returnValue(json_encode(['status' => 400, 'success' => false, 'data' => ['error' => ['code' => 666, 'type' => 'ImgurException', 'exception' => []], 'request' => '/3/image.json', 'method' => 'POST']])));
+        $response->expects($this->at(1))
+            ->method('getHeader')
+            ->with('X-RateLimit-UserRemaining')
+            ->will($this->returnValue(9));
+        $response->expects($this->at(2))
+            ->method('getHeader')
+            ->with('X-RateLimit-UserLimit')
+            ->will($this->returnValue(10));
+        $response->expects($this->at(3))
+            ->method('getHeader')
+            ->with('X-RateLimit-ClientRemaining')
+            ->will($this->returnValue(9));
+        $response->expects($this->at(4))
+            ->method('getHeader')
+            ->with('X-RateLimit-ClientLimit')
+            ->will($this->returnValue(10));
+
+        $listener = new ErrorListener();
+        $listener->error($this->getEventMock($response));
+    }
+
+    /**
      * @expectedException \Imgur\Exception\RuntimeException
      * @expectedExceptionMessage hihi
      */

@@ -35,8 +35,14 @@ class ErrorListener
         if (\is_array($responseData) && isset($responseData['data']) && isset($responseData['data']['error'])) {
             $errorMessage = $responseData['data']['error'];
             // when uploading too fast, error is an array
-            if (\is_array($responseData['data']['error']) && isset($responseData['data']['error']['message'])) {
-                $errorMessage = $responseData['data']['error']['message'];
+            if (\is_array($responseData['data']['error'])) {
+                $errorMessage = '';
+
+                if (isset($responseData['data']['error']['message'])) {
+                    $errorMessage = $responseData['data']['error']['message'];
+                } elseif (isset($responseData['data']['error']['code'])) {
+                    $errorMessage = 'Error code: ' . $responseData['data']['error']['code'];
+                }
             }
 
             $message = 'Request failed with: "' . $errorMessage . '"';
