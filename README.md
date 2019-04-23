@@ -72,7 +72,7 @@ $memes = $client->api('memegen')->defaultMemes();
 
 ### Basic information
 
-This client follow the same tree as the [Imgur API](https://api.imgur.com/endpoints).
+This client follow the same tree as the [Imgur API](https://apidocs.imgur.com).
 
 Here is the list of available _endpoints_: `account`, `album`, `comment`, `custom gallery`, `gallery`, `image`, `conversation`, `notification`, `memegen` & `topic`.
 
