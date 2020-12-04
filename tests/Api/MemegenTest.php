@@ -103,7 +103,7 @@ class MemegenTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('memegen/defaults')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->defaultMemes());
     }

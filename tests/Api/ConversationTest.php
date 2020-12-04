@@ -77,7 +77,7 @@ class ConversationTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('conversations')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->conversations());
     }
@@ -96,7 +96,7 @@ class ConversationTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('conversations/11247233')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->conversation('11247233'));
     }
@@ -113,7 +113,7 @@ class ConversationTest extends ApiTestCase
         $api->expects($this->once())
             ->method('post')
             ->with('conversations/imgur')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->messageCreate(['recipient' => 'imgur', 'body' => 'YO !']));
     }
@@ -139,7 +139,7 @@ class ConversationTest extends ApiTestCase
         $api->expects($this->once())
             ->method('delete')
             ->with('conversations/11247233')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->conversationDelete('11247233'));
     }
@@ -156,7 +156,7 @@ class ConversationTest extends ApiTestCase
         $api->expects($this->once())
             ->method('post')
             ->with('conversations/report/imgur')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->reportSender('imgur'));
     }
@@ -173,7 +173,7 @@ class ConversationTest extends ApiTestCase
         $api->expects($this->once())
             ->method('post')
             ->with('conversations/block/imgur')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->blockSender('imgur'));
     }

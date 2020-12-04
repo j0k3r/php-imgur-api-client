@@ -93,7 +93,7 @@ class CommentTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('comment/726305564')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->comment('726305564'));
     }
@@ -110,7 +110,7 @@ class CommentTest extends ApiTestCase
         $api->expects($this->once())
             ->method('post')
             ->with('comment')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->create(['image_id' => 'ZOY11VC', 'comment' => 'I agree']));
     }
@@ -136,7 +136,7 @@ class CommentTest extends ApiTestCase
         $api->expects($this->once())
             ->method('delete')
             ->with('comment/726305564')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->deleteComment('726305564'));
     }
@@ -155,7 +155,7 @@ class CommentTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('comment/726305564/replied')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->replies('726305564'));
     }
@@ -172,7 +172,7 @@ class CommentTest extends ApiTestCase
         $api->expects($this->once())
             ->method('post')
             ->with('comment/726305565')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->createReply('726305565', ['image_id' => 'ZOY11VC', 'comment' => 'I agree']));
     }
@@ -198,7 +198,7 @@ class CommentTest extends ApiTestCase
         $api->expects($this->once())
             ->method('post')
             ->with('comment/726305564/vote/up')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->vote('726305564', 'up'));
     }
@@ -224,7 +224,7 @@ class CommentTest extends ApiTestCase
         $api->expects($this->once())
             ->method('post')
             ->with('comment/726305564/report')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->report('726305564'));
     }

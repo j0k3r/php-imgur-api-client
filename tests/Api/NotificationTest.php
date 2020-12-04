@@ -98,7 +98,7 @@ class NotificationTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('notification', ['new' => 'true'])
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->notifications());
     }
@@ -117,7 +117,7 @@ class NotificationTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('notification/76878181')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->notification('76878181'));
     }
@@ -134,7 +134,7 @@ class NotificationTest extends ApiTestCase
         $api->expects($this->once())
             ->method('post')
             ->with('notification/76878181')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->notificationViewed('76878181'));
     }

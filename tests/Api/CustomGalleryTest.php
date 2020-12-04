@@ -104,7 +104,7 @@ class CustomGalleryTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('g/custom/viral/week/0')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->customGallery());
     }
@@ -141,7 +141,7 @@ class CustomGalleryTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('g/filtered/viral/week/0')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->filtered());
     }
@@ -178,7 +178,7 @@ class CustomGalleryTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('g/custom/ccWiaRJ')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->image('ccWiaRJ'));
     }
@@ -195,7 +195,7 @@ class CustomGalleryTest extends ApiTestCase
         $api->expects($this->once())
             ->method('put')
             ->with('g/add_tags', ['tags' => 'cats,funny'])
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->addTags(['cats', 'funny']));
     }
@@ -212,7 +212,7 @@ class CustomGalleryTest extends ApiTestCase
         $api->expects($this->once())
             ->method('delete')
             ->with('g/remove_tags', ['tags' => 'cats,funny'])
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->removeTags(['cats', 'funny']));
     }
@@ -229,7 +229,7 @@ class CustomGalleryTest extends ApiTestCase
         $api->expects($this->once())
             ->method('post')
             ->with('g/block_tag', ['tag' => 'funny'])
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->blockTag('funny'));
     }
@@ -246,7 +246,7 @@ class CustomGalleryTest extends ApiTestCase
         $api->expects($this->once())
             ->method('post')
             ->with('g/unblock_tag', ['tag' => 'funny'])
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->unBlockTag('funny'));
     }

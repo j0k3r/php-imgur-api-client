@@ -62,9 +62,8 @@ class OAuth2 implements AuthInterface
     /**
      * Instantiates the OAuth2 class, but does not trigger the authentication process.
      *
-     * @param HttpClientInterface $httpClient
-     * @param string              $clientId
-     * @param string              $clientSecret
+     * @param string $clientId
+     * @param string $clientSecret
      */
     public function __construct(HttpClientInterface $httpClient, $clientId, $clientSecret)
     {

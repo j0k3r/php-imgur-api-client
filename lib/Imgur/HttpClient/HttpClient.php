@@ -36,7 +36,6 @@ class HttpClient implements HttpClientInterface
     protected $stack;
 
     /**
-     * @param array           $options
      * @param ClientInterface $client
      */
     public function __construct(array $options = [], ClientInterface $client = null)
@@ -108,7 +107,20 @@ class HttpClient implements HttpClientInterface
         }
 
         if ('POST' === $httpMethod || 'PUT' === $httpMethod || 'DELETE' === $httpMethod) {
-            $options['form_params'] = $parameters;
+            if ('POST' === $httpMethod && isset($parameters['type']) && 'file' === $parameters['type']) {
+                $options['multipart'] = [
+                    [
+                        'name' => 'type',
+                        'contents' => $parameters['type'],
+                    ],
+                    [
+                        'name' => 'image',
+                        'contents' => $parameters['image'],
+                    ],
+                ];
+            } else {
+                $options['form_params'] = $parameters;
+            }
         }
 
         // will throw an Imgur\Exception\ExceptionInterface if sth goes wrong

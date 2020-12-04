@@ -33,7 +33,7 @@ before_script:
     - composer install --prefer-dist --no-interaction -o
 
 script:
-    - ./vendor/bin/simple-phpunit -v --coverage-clover=coverage.clover
+    - XDEBUG_MODE=coverage ./vendor/bin/simple-phpunit -v --coverage-clover=coverage.clover
     - if [ "$CS_FIXER" = "run" ]; then php vendor/bin/php-cs-fixer fix --verbose --dry-run ; fi;
 
 after_script:

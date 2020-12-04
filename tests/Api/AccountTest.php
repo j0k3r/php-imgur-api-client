@@ -73,7 +73,7 @@ class AccountTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('account/me')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->base());
     }
@@ -90,7 +90,7 @@ class AccountTest extends ApiTestCase
         $api->expects($this->once())
             ->method('delete')
             ->with('account/imgur')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->deleteAccount('imgur'));
     }
@@ -111,7 +111,7 @@ class AccountTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/gallery_favorites/0/newest')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->galleryFavorites());
     }
@@ -141,7 +141,7 @@ class AccountTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/favorites')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->favorites());
     }
@@ -162,7 +162,7 @@ class AccountTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/submissions/0')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->submissions());
     }
@@ -183,7 +183,7 @@ class AccountTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/settings')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->settings());
     }
@@ -200,7 +200,7 @@ class AccountTest extends ApiTestCase
         $api->expects($this->once())
             ->method('post')
             ->with('account/me/settings')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->changeAccountSettings([
             'show_mature' => true,
@@ -223,7 +223,7 @@ class AccountTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/stats')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->accountStats());
     }
@@ -244,7 +244,7 @@ class AccountTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/gallery_profile')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->accountGalleryProfile());
     }
@@ -265,7 +265,7 @@ class AccountTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/verifyemail')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->verifyUsersEmail());
     }
@@ -282,7 +282,7 @@ class AccountTest extends ApiTestCase
         $api->expects($this->once())
             ->method('post')
             ->with('account/me/verifyemail')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->sendVerificationEmail());
     }
@@ -303,7 +303,7 @@ class AccountTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/albums/0')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->albums());
     }
@@ -324,7 +324,7 @@ class AccountTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/album/Arn5NUt')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->album('Arn5NUt'));
     }
@@ -345,7 +345,7 @@ class AccountTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/albums/ids/0')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->albumIds());
     }
@@ -366,7 +366,7 @@ class AccountTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/albums/count')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->albumCount());
     }
@@ -383,7 +383,7 @@ class AccountTest extends ApiTestCase
         $api->expects($this->once())
             ->method('delete')
             ->with('account/me/album/Arn5NUt')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->albumDelete('Arn5NUt'));
     }
@@ -404,7 +404,7 @@ class AccountTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/comments/newest/0')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->comments());
     }
@@ -434,7 +434,7 @@ class AccountTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/comment/726305564')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->comment('726305564'));
     }
@@ -455,7 +455,7 @@ class AccountTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/comments/ids/newest/0')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->commentIds());
     }
@@ -485,7 +485,7 @@ class AccountTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/comments/count')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->commentCount());
     }
@@ -502,7 +502,7 @@ class AccountTest extends ApiTestCase
         $api->expects($this->once())
             ->method('delete')
             ->with('account/me/comment/726305564')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->commentDelete('726305564'));
     }
@@ -523,7 +523,7 @@ class AccountTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/images/0')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->images());
     }
@@ -544,7 +544,7 @@ class AccountTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/image/iCMrM1P')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->image('iCMrM1P'));
     }
@@ -565,7 +565,7 @@ class AccountTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/images/ids/0')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->imageIds());
     }
@@ -586,7 +586,7 @@ class AccountTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/images/count')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->imageCount());
     }
@@ -603,7 +603,7 @@ class AccountTest extends ApiTestCase
         $api->expects($this->once())
             ->method('delete')
             ->with('account/me/image/iCMrM1P')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->imageDelete('iCMrM1P'));
     }
@@ -624,7 +624,7 @@ class AccountTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/notifications/replies', ['new' => 'false'])
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->replies());
     }
