@@ -1,8 +1,8 @@
 # PHP Imgur API Client
 
-[![Build Status](https://travis-ci.org/j0k3r/php-imgur-api-client.svg?branch=3.x)](https://travis-ci.org/j0k3r/php-imgur-api-client)
-[![Code Coverage](https://scrutinizer-ci.com/g/j0k3r/php-imgur-api-client/badges/coverage.png?branch=3.x)](https://scrutinizer-ci.com/g/j0k3r/php-imgur-api-client/?branch=3.x)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/j0k3r/php-imgur-api-client/badges/quality-score.png?branch=3.x)](https://scrutinizer-ci.com/g/j0k3r/php-imgur-api-client/?branch=3.x)
+![CI](https://github.com/j0k3r/php-imgur-api-client/workflows/CI/badge.svg)
+[![Code Coverage](https://scrutinizer-ci.com/g/j0k3r/php-imgur-api-client/badges/coverage.png?branch=master)](https://scrutinizer-ci.com/g/j0k3r/php-imgur-api-client/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/j0k3r/php-imgur-api-client/badges/quality-score.png?branch=master)](https://scrutinizer-ci.com/g/j0k3r/php-imgur-api-client/?branch=master)
 [![Total Downloads](https://poser.pugx.org/j0k3r/php-imgur-api-client/downloads)](https://packagist.org/packages/j0k3r/php-imgur-api-client)
 [![License](https://poser.pugx.org/j0k3r/php-imgur-api-client/license)](https://packagist.org/packages/j0k3r/php-imgur-api-client)
 
@@ -13,8 +13,8 @@ Uses [Imgur API v3](https://api.imgur.com/).
 ## Information
 
 * Branch [1.x](https://github.com/j0k3r/php-imgur-api-client/tree/1.x) use Guzzle 3 (but is not maintained)
-* Branch [2.x](https://github.com/j0k3r/php-imgur-api-client/tree/2.x) use Guzzle 5
-* Branch [3.x](https://github.com/j0k3r/php-imgur-api-client/tree/3.x) use Guzzle 6
+* Branch [2.x](https://github.com/j0k3r/php-imgur-api-client/tree/2.x) use Guzzle 5 (but is not maintained)
+* Branch [master](https://github.com/j0k3r/php-imgur-api-client/tree/master) use Guzzle 6
 
 All actives branches required PHP >= 5.6
 
