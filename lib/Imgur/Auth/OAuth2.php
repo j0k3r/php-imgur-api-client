@@ -99,7 +99,7 @@ class OAuth2 implements AuthInterface
      * @param string $code
      * @param string $requestType
      *
-     * @return string
+     * @return array
      */
     public function requestAccessToken($code, $requestType)
     {
@@ -157,7 +157,7 @@ class OAuth2 implements AuthInterface
             $response = $this->httpClient->post(
                 self::ACCESS_TOKEN_ENDPOINT,
                 [
-                    'refresh_token' => $token['refresh_token'],
+                    'refresh_token' => \is_array($token) ? $token['refresh_token'] : null,
                     'client_id' => $this->clientId,
                     'client_secret' => $this->clientSecret,
                     'grant_type' => 'refresh_token',
@@ -207,7 +207,7 @@ class OAuth2 implements AuthInterface
     /**
      * Getter for the current access token.
      *
-     * @return array
+     * @return array|null
      */
     public function getAccessToken()
     {
