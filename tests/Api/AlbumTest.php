@@ -128,7 +128,7 @@ class AlbumTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('album/VOMXz')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->album('VOMXz'));
     }
@@ -147,7 +147,7 @@ class AlbumTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('album/VOMXz/images')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->albumImages('VOMXz'));
     }
@@ -166,7 +166,7 @@ class AlbumTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('album/VOMXz/image/POvvB')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->albumImage('VOMXz', 'POvvB'));
     }
@@ -183,7 +183,7 @@ class AlbumTest extends ApiTestCase
         $api->expects($this->once())
             ->method('post')
             ->with('album')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->create('VOMXz'));
     }
@@ -200,7 +200,7 @@ class AlbumTest extends ApiTestCase
         $api->expects($this->once())
             ->method('post')
             ->with('album/VOMXz')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->update('VOMXz', [
             'title' => 'New title',
@@ -221,7 +221,7 @@ class AlbumTest extends ApiTestCase
         $api->expects($this->once())
             ->method('delete')
             ->with('album/VOMXz')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->deleteAlbum('VOMXz'));
     }
@@ -238,7 +238,7 @@ class AlbumTest extends ApiTestCase
         $api->expects($this->once())
             ->method('post')
             ->with('album/VOMXz/favorite')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->favoriteAlbum('VOMXz'));
     }
@@ -255,7 +255,7 @@ class AlbumTest extends ApiTestCase
         $api->expects($this->once())
             ->method('post')
             ->with('album/VOMXz')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->setAlbumImages('VOMXz', ['POvvB', 'P1vvB']));
     }
@@ -272,7 +272,7 @@ class AlbumTest extends ApiTestCase
         $api->expects($this->once())
             ->method('post')
             ->with('album/VOMXz/add')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->addImages('VOMXz', ['POvvB', 'P1vvB']));
     }
@@ -289,7 +289,7 @@ class AlbumTest extends ApiTestCase
         $api->expects($this->once())
             ->method('delete')
             ->with('album/VOMXz/remove_images')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->removeImages('VOMXz', ['POvvB', 'P1vvB']));
     }

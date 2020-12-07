@@ -49,7 +49,7 @@ class Image extends AbstractApi
         }
 
         if ('file' === $data['type']) {
-            $data['image'] = '@' . $data['image'];
+            $data['image'] = fopen($data['image'], 'r');
         }
 
         return $this->post('image', $data);

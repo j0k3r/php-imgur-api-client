@@ -121,7 +121,7 @@ class GalleryTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('gallery/hot/viral/day/0', ['showViral' => 'true'])
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->gallery());
     }
@@ -169,7 +169,7 @@ class GalleryTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('g/memes/viral/day/0')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->memesSubgallery());
     }
@@ -206,7 +206,7 @@ class GalleryTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('g/memes/MPx6ZXr')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->memeSubgalleryImage('MPx6ZXr'));
     }
@@ -227,7 +227,7 @@ class GalleryTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('gallery/r/pics/time/day/0')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->subredditGalleries('pics'));
     }
@@ -266,7 +266,7 @@ class GalleryTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('gallery/r/pics/yB1PpjL')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->subredditImage('pics', 'yB1PpjL'));
     }
@@ -285,7 +285,7 @@ class GalleryTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('gallery/t/funny/viral/week/0')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->galleryTag('funny'));
     }
@@ -322,7 +322,7 @@ class GalleryTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('gallery/t/funny/yB1PpjL')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->galleryTagImage('funny', 'yB1PpjL'));
     }
@@ -341,7 +341,7 @@ class GalleryTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('gallery/y1Od4/tags')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->galleryItemTags('y1Od4'));
     }
@@ -358,7 +358,7 @@ class GalleryTest extends ApiTestCase
         $api->expects($this->once())
             ->method('post')
             ->with('gallery/y1Od4/vote/tag/funny/up')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->galleryVoteTag('y1Od4', 'funny', 'up'));
     }
@@ -388,7 +388,7 @@ class GalleryTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('gallery/search/time/0', ['q' => '20minutes'])
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->search('20minutes'));
     }
@@ -418,7 +418,7 @@ class GalleryTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('gallery/random/random/0')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->randomGalleryImages());
     }
@@ -435,7 +435,7 @@ class GalleryTest extends ApiTestCase
         $api->expects($this->once())
             ->method('post')
             ->with('gallery/y1Od4')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->submitToGallery('y1Od4', ['title' => 'yo']));
     }
@@ -461,7 +461,7 @@ class GalleryTest extends ApiTestCase
         $api->expects($this->once())
             ->method('delete')
             ->with('gallery/ccWiaRJ')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->removeFromGallery('ccWiaRJ'));
     }
@@ -480,7 +480,7 @@ class GalleryTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('gallery/album/VOMXz')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->album('VOMXz'));
     }
@@ -499,7 +499,7 @@ class GalleryTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('gallery/image/ccWiaRJ')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->image('ccWiaRJ'));
     }
@@ -516,7 +516,7 @@ class GalleryTest extends ApiTestCase
         $api->expects($this->once())
             ->method('post')
             ->with('gallery/VOMXz/report')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->report('VOMXz'));
     }
@@ -535,7 +535,7 @@ class GalleryTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('gallery/VOMXz/votes')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->votes('VOMXz'));
     }
@@ -552,7 +552,7 @@ class GalleryTest extends ApiTestCase
         $api->expects($this->once())
             ->method('post')
             ->with('gallery/VOMXz/vote/up')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->vote('VOMXz', 'up'));
     }
@@ -582,7 +582,7 @@ class GalleryTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('gallery/VOMXz/comments/best')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->comments('VOMXz'));
     }
@@ -610,7 +610,7 @@ class GalleryTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('gallery/VOMXz/comment/1234')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->comment('VOMXz', '1234'));
     }
@@ -627,7 +627,7 @@ class GalleryTest extends ApiTestCase
         $api->expects($this->once())
             ->method('post')
             ->with('gallery/VOMXz/comment')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->createComment('VOMXz', ['comment' => 'yo']));
     }
@@ -653,7 +653,7 @@ class GalleryTest extends ApiTestCase
         $api->expects($this->once())
             ->method('post')
             ->with('gallery/VOMXz/comment/123')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->createReply('VOMXz', '123', ['comment' => 'yo']));
     }
@@ -683,7 +683,7 @@ class GalleryTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('gallery/VOMXz/comments/ids')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->commentIds('VOMXz'));
     }
@@ -700,7 +700,7 @@ class GalleryTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('gallery/VOMXz/comments/count')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->commentCount('VOMXz'));
     }

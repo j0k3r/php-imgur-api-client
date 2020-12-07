@@ -105,7 +105,7 @@ class ImageTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('image/ZOY11VC')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->image('ZOY11VC'));
     }
@@ -122,7 +122,7 @@ class ImageTest extends ApiTestCase
         $api->expects($this->once())
             ->method('post')
             ->with('image')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->upload(['type' => 'url', 'image' => 'http://i.imgur.com/ZOY11VC.png']));
     }
@@ -139,9 +139,9 @@ class ImageTest extends ApiTestCase
         $api->expects($this->once())
             ->method('post')
             ->with('image')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
-        $this->assertSame($expectedValue, $api->upload(['type' => 'file', 'image' => './ZOY11VC.png']));
+        $this->assertSame($expectedValue, $api->upload(['type' => 'file', 'image' => __DIR__ . '/ZOY11VC.png']));
     }
 
     /**
@@ -174,7 +174,7 @@ class ImageTest extends ApiTestCase
         $api->expects($this->once())
             ->method('delete')
             ->with('image/ZOY11VC')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->deleteImage('ZOY11VC'));
     }
@@ -191,7 +191,7 @@ class ImageTest extends ApiTestCase
         $api->expects($this->once())
             ->method('post')
             ->with('image/ZOY11VC')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->update('ZOY11VC', ['title' => 'hihihi']));
     }
@@ -208,7 +208,7 @@ class ImageTest extends ApiTestCase
         $api->expects($this->once())
             ->method('post')
             ->with('image/ZOY11VC/favorite')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->favorite('ZOY11VC'));
     }

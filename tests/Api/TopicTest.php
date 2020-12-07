@@ -139,7 +139,7 @@ class TopicTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('topics/defaults')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->defaultTopics());
     }
@@ -158,7 +158,7 @@ class TopicTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('topics/155/viral/week/0')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->galleryTopic(155));
     }
@@ -195,7 +195,7 @@ class TopicTest extends ApiTestCase
         $api->expects($this->once())
             ->method('get')
             ->with('topics/155/Fbae9SG')
-            ->will($this->returnValue($expectedValue));
+            ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->galleryTopicItem(155, 'Fbae9SG'));
     }
