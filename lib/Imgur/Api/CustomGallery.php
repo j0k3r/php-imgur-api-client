@@ -66,7 +66,7 @@ class CustomGallery extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/custom_gallery#custom-gallery-add
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function addTags(array $tags)
     {
@@ -78,7 +78,7 @@ class CustomGallery extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/custom_gallery#custom-gallery-remove
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function removeTags(array $tags)
     {
@@ -92,7 +92,7 @@ class CustomGallery extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/custom_gallery#filtered-out-block
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function blockTag($tag)
     {
@@ -106,7 +106,7 @@ class CustomGallery extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/custom_gallery#filtered-out-unblock
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function unBlockTag($tag)
     {

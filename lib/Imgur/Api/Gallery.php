@@ -169,7 +169,7 @@ class Gallery extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/gallery#gallery-tag-vote
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function galleryVoteTag($id, $name, $vote)
     {
@@ -220,7 +220,7 @@ class Gallery extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/gallery#to-gallery
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function submitToGallery($imageOrAlbumId, $data)
     {
@@ -238,7 +238,7 @@ class Gallery extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/gallery#from-gallery
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function removeFromGallery($imageOrAlbumId)
     {
@@ -280,7 +280,7 @@ class Gallery extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/gallery#gallery-reporting
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function report($imageOrAlbumId)
     {
@@ -309,7 +309,7 @@ class Gallery extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/gallery#gallery-voting
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function vote($imageOrAlbumId, $vote)
     {
@@ -358,7 +358,7 @@ class Gallery extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/gallery#gallery-comment-creation
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function createComment($imageOrAlbumId, $data)
     {
@@ -378,7 +378,7 @@ class Gallery extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/gallery#gallery-comment-reply
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function createReply($imageOrAlbumId, $commentId, $data)
     {
@@ -396,7 +396,7 @@ class Gallery extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/gallery#gallery-comment-ids
      *
-     * @return array<int>
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function commentIds($imageOrAlbumId)
     {
@@ -410,7 +410,7 @@ class Gallery extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/gallery#gallery-comment-count
      *
-     * @return int
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function commentCount($imageOrAlbumId)
     {

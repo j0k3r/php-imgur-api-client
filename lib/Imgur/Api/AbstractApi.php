@@ -14,12 +14,12 @@ use Imgur\Pager\PagerInterface;
 abstract class AbstractApi
 {
     /**
-     * @var \Imgur\Client
+     * @var Client
      */
     protected $client;
 
     /**
-     * @var \Imgur\Pager\PagerInterface
+     * @var PagerInterface
      */
     protected $pager;
 
@@ -31,16 +31,12 @@ abstract class AbstractApi
 
     /**
      * Perform a GET request and return the parsed response.
-     *
-     * @param string $url
-     *
-     * @return array
      */
-    public function get($url, $parameters = [])
+    public function get(string $url, array $parameters = []): array
     {
         $httpClient = $this->client->getHttpClient();
 
-        if (!empty($this->pager)) {
+        if (null !== $this->pager) {
             $parameters['page'] = $this->pager->getPage();
             $parameters['perPage'] = $this->pager->getResultsPerPage();
         }
@@ -52,12 +48,8 @@ abstract class AbstractApi
 
     /**
      * Perform a POST request and return the parsed response.
-     *
-     * @param string $url
-     *
-     * @return array
      */
-    public function post($url, $parameters = [])
+    public function post(string $url, array $parameters = []): array
     {
         $httpClient = $this->client->getHttpClient();
 
@@ -68,12 +60,8 @@ abstract class AbstractApi
 
     /**
      * Perform a PUT request and return the parsed response.
-     *
-     * @param string $url
-     *
-     * @return array
      */
-    public function put($url, $parameters = [])
+    public function put(string $url, array $parameters = []): array
     {
         $httpClient = $this->client->getHttpClient();
 
@@ -84,12 +72,8 @@ abstract class AbstractApi
 
     /**
      * Perform a DELETE request and return the parsed response.
-     *
-     * @param string $url
-     *
-     * @return array
      */
-    public function delete($url, $parameters = [])
+    public function delete(string $url, array $parameters = []): array
     {
         $httpClient = $this->client->getHttpClient();
 
@@ -101,10 +85,9 @@ abstract class AbstractApi
     /**
      * Validate "sort" parameter and throw an exception if it's a bad value.
      *
-     * @param string $sort           Input value
-     * @param array  $possibleValues
+     * @param string $sort Input value
      */
-    protected function validateSortArgument($sort, $possibleValues)
+    protected function validateSortArgument(string $sort, array $possibleValues): void
     {
         $this->validateArgument('Sort', $sort, $possibleValues);
     }
@@ -112,10 +95,9 @@ abstract class AbstractApi
     /**
      * Validate "window" parameter and throw an exception if it's a bad value.
      *
-     * @param string $window         Input value
-     * @param array  $possibleValues
+     * @param string $window Input value
      */
-    protected function validateWindowArgument($window, $possibleValues)
+    protected function validateWindowArgument(string $window, array $possibleValues): void
     {
         $this->validateArgument('Window', $window, $possibleValues);
     }
@@ -123,10 +105,9 @@ abstract class AbstractApi
     /**
      * Validate "vote" parameter and throw an exception if it's a bad value.
      *
-     * @param string $vote           Input value
-     * @param array  $possibleValues
+     * @param string $vote Input value
      */
-    protected function validateVoteArgument($vote, $possibleValues)
+    protected function validateVoteArgument(string $vote, array $possibleValues): void
     {
         $this->validateArgument('Vote', $vote, $possibleValues);
     }
@@ -138,7 +119,7 @@ abstract class AbstractApi
      * @param string $input          Input value
      * @param array  $possibleValues Possible values for this argument
      */
-    private function validateArgument($type, $input, $possibleValues)
+    private function validateArgument(string $type, string $input, array $possibleValues): void
     {
         if (!\in_array($input, $possibleValues, true)) {
             throw new InvalidArgumentException($type . ' parameter "' . $input . '" is wrong. Possible values are: ' . implode(', ', $possibleValues));

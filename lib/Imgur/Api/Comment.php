@@ -34,7 +34,7 @@ class Comment extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/comment#comment-create
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function create($data)
     {
@@ -52,7 +52,7 @@ class Comment extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/comment#comment-delete
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function deleteComment($commentId)
     {
@@ -81,7 +81,7 @@ class Comment extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/comment#comment-reply-create
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function createReply($commentId, $data)
     {
@@ -100,7 +100,7 @@ class Comment extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/comment#comment-vote
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function vote($commentId, $vote)
     {
@@ -116,7 +116,7 @@ class Comment extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/comment#comment-report
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function report($commentId)
     {

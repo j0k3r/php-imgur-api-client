@@ -6,12 +6,13 @@ use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use Imgur\Exception\RateLimitException;
 use Imgur\HttpClient\HttpClient;
 use PHPUnit\Framework\TestCase;
 
 class HttpClientTest extends TestCase
 {
-    public function testOptionsToConstructor()
+    public function testOptionsToConstructor(): void
     {
         $httpClient = new TestHttpClient([
             'headers' => ['Cache-Control' => 'no-cache'],
@@ -21,45 +22,45 @@ class HttpClientTest extends TestCase
         $this->assertNull($httpClient->getOption('base_uri'));
     }
 
-    public function testDoGETRequest()
+    public function testDoGETRequest(): void
     {
         $path = '/some/path';
         $parameters = ['a' => 'b'];
 
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json'], json_encode(['data' => 'ok !'])),
+            new Response(200, ['Content-Type' => 'application/json'], (string) json_encode(['data' => ['ok !']])),
         ]);
         $handler = HandlerStack::create($mock);
         $client = new GuzzleClient(['handler' => $handler]);
 
-        $httpClient = new HttpClient([], $client);
+        $httpClient = new HttpClient([], $client, $handler);
         $response = $httpClient->get($path, $parameters);
 
         $result = $httpClient->parseResponse($response);
 
-        $this->assertSame('ok !', $result);
+        $this->assertSame(['ok !'], $result);
     }
 
-    public function testDoPOSTRequest()
+    public function testDoPOSTRequest(): void
     {
         $path = '/some/path';
         $parameters = ['a' => 'b'];
 
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json'], json_encode(['data' => 'ok !'])),
+            new Response(200, ['Content-Type' => 'application/json'], (string) json_encode(['data' => ['ok !']])),
         ]);
         $handler = HandlerStack::create($mock);
         $client = new GuzzleClient(['handler' => $handler]);
 
-        $httpClient = new HttpClient([], $client);
+        $httpClient = new HttpClient([], $client, $handler);
         $response = $httpClient->post($path, $parameters);
 
         $result = $httpClient->parseResponse($response);
 
-        $this->assertSame('ok !', $result);
+        $this->assertSame(['ok !'], $result);
     }
 
-    public function testDoPOSTRequestWithMultipart()
+    public function testDoPOSTRequestWithMultipart(): void
     {
         $path = '/some/path';
         $parameters = [
@@ -68,79 +69,79 @@ class HttpClientTest extends TestCase
         ];
 
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json'], json_encode(['data' => 'ok !'])),
+            new Response(200, ['Content-Type' => 'application/json'], (string) json_encode(['data' => ['ok !']])),
         ]);
         $handler = HandlerStack::create($mock);
         $client = new GuzzleClient(['handler' => $handler]);
 
-        $httpClient = new HttpClient([], $client);
+        $httpClient = new HttpClient([], $client, $handler);
         $response = $httpClient->post($path, $parameters);
 
         $result = $httpClient->parseResponse($response);
 
-        $this->assertSame('ok !', $result);
+        $this->assertSame(['ok !'], $result);
     }
 
-    public function testDoPUTRequest()
+    public function testDoPUTRequest(): void
     {
         $path = '/some/path';
         $parameters = ['a' => 'b'];
 
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json'], json_encode(['data' => 'ok !'])),
+            new Response(200, ['Content-Type' => 'application/json'], (string) json_encode(['data' => ['ok !']])),
         ]);
         $handler = HandlerStack::create($mock);
         $client = new GuzzleClient(['handler' => $handler]);
 
-        $httpClient = new HttpClient([], $client);
+        $httpClient = new HttpClient([], $client, $handler);
         $response = $httpClient->put($path, $parameters);
 
         $result = $httpClient->parseResponse($response);
 
-        $this->assertSame('ok !', $result);
+        $this->assertSame(['ok !'], $result);
     }
 
-    public function testDoDELETERequest()
+    public function testDoDELETERequest(): void
     {
         $path = '/some/path';
         $parameters = ['a' => 'b'];
 
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json'], json_encode(['data' => 'ok !'])),
+            new Response(200, ['Content-Type' => 'application/json'], (string) json_encode(['data' => ['ok !']])),
         ]);
         $handler = HandlerStack::create($mock);
         $client = new GuzzleClient(['handler' => $handler]);
 
-        $httpClient = new HttpClient([], $client);
+        $httpClient = new HttpClient([], $client, $handler);
         $response = $httpClient->delete($path, $parameters);
 
         $result = $httpClient->parseResponse($response);
 
-        $this->assertSame('ok !', $result);
+        $this->assertSame(['ok !'], $result);
     }
 
-    public function testDoCustomRequest()
+    public function testDoCustomRequest(): void
     {
         $path = '/some/path';
         $options = ['c' => 'd'];
 
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json'], json_encode(['data' => true])),
+            new Response(200, ['Content-Type' => 'application/json']),
         ]);
         $handler = HandlerStack::create($mock);
         $client = new GuzzleClient(['handler' => $handler]);
 
-        $httpClient = new HttpClient([], $client);
+        $httpClient = new HttpClient([], $client, $handler);
         $response = $httpClient->performRequest($path, $options, 'HEAD');
 
         $result = $httpClient->parseResponse($response);
 
-        $this->assertTrue($result);
+        $this->assertEmpty($result);
     }
 
-    public function testThrowExceptionWhenApiIsExceeded()
+    public function testThrowExceptionWhenApiIsExceeded(): void
     {
-        $this->expectException(\Imgur\Exception\RateLimitException::class);
+        $this->expectException(RateLimitException::class);
         $this->expectExceptionMessage('No user credits available. The limit is 10');
 
         $path = '/some/path';
@@ -148,42 +149,42 @@ class HttpClientTest extends TestCase
 
         $mock = new MockHandler([
             new Response(429, [
-                'X-RateLimit-UserLimit' => 10,
-                'X-RateLimit-UserRemaining' => 0,
+                'X-RateLimit-UserLimit' => '10',
+                'X-RateLimit-UserRemaining' => '0',
             ]),
         ]);
         $handler = HandlerStack::create($mock);
         $client = new GuzzleClient(['handler' => $handler]);
 
-        $httpClient = new TestHttpClient([], $client);
+        $httpClient = new TestHttpClient([], $client, $handler);
         $httpClient->get($path, $parameters);
     }
 
-    public function testThrowExceptionWhenClientApiIsExceeded()
+    public function testThrowExceptionWhenClientApiIsExceeded(): void
     {
-        $this->expectException(\Imgur\Exception\RateLimitException::class);
+        $this->expectException(RateLimitException::class);
         $this->expectExceptionMessage('No application credits available. The limit is 10 and will be reset at');
 
         $path = '/some/path';
         $parameters = ['a' => 'b'];
 
         $response = new Response(429, [
-            'X-RateLimit-UserLimit' => 10,
-            'X-RateLimit-UserRemaining' => 10,
-            'X-RateLimit-ClientLimit' => 10,
-            'X-RateLimit-ClientRemaining' => 0,
-            'X-RateLimit-UserReset' => 1474318026,
+            'X-RateLimit-UserLimit' => '10',
+            'X-RateLimit-UserRemaining' => '10',
+            'X-RateLimit-ClientLimit' => '10',
+            'X-RateLimit-ClientRemaining' => '0',
+            'X-RateLimit-UserReset' => '1474318026',
         ]);
 
         $mock = new MockHandler([$response]);
         $handler = HandlerStack::create($mock);
         $client = new GuzzleClient(['handler' => $handler]);
 
-        $httpClient = new TestHttpClient([], $client);
+        $httpClient = new TestHttpClient([], $client, $handler);
         $httpClient->get($path, $parameters);
     }
 
-    public function testThrowExceptionWhenBadRequestPlainError()
+    public function testThrowExceptionWhenBadRequestPlainError(): void
     {
         $this->expectException(\Imgur\Exception\RuntimeException::class);
         $this->expectExceptionMessage('oops');
@@ -192,21 +193,21 @@ class HttpClientTest extends TestCase
         $parameters = ['a' => 'b'];
 
         $response = new Response(429, [
-            'X-RateLimit-UserLimit' => 10,
-            'X-RateLimit-UserRemaining' => 10,
-            'X-RateLimit-ClientLimit' => 10,
-            'X-RateLimit-ClientRemaining' => 10,
+            'X-RateLimit-UserLimit' => '10',
+            'X-RateLimit-UserRemaining' => '10',
+            'X-RateLimit-ClientLimit' => '10',
+            'X-RateLimit-ClientRemaining' => '10',
         ], 'oops');
 
         $mock = new MockHandler([$response]);
         $handler = HandlerStack::create($mock);
         $client = new GuzzleClient(['handler' => $handler]);
 
-        $httpClient = new TestHttpClient([], $client);
+        $httpClient = new TestHttpClient([], $client, $handler);
         $httpClient->get($path, $parameters);
     }
 
-    public function testThrowExceptionWhenBadRequestJsonError()
+    public function testThrowExceptionWhenBadRequestJsonError(): void
     {
         $this->expectException(\Imgur\Exception\ErrorException::class);
         $this->expectExceptionMessage('Request to: /3/account failed with: "oops2"');
@@ -215,21 +216,21 @@ class HttpClientTest extends TestCase
         $parameters = ['a' => 'b'];
 
         $response = new Response(429, [
-            'X-RateLimit-UserLimit' => 10,
-            'X-RateLimit-UserRemaining' => 10,
-            'X-RateLimit-ClientLimit' => 10,
-            'X-RateLimit-ClientRemaining' => 10,
-        ], json_encode(['data' => ['request' => '/3/account', 'error' => 'oops2', 'method' => 'GET'], 'success' => false, 'status' => 403]));
+            'X-RateLimit-UserLimit' => '10',
+            'X-RateLimit-UserRemaining' => '10',
+            'X-RateLimit-ClientLimit' => '10',
+            'X-RateLimit-ClientRemaining' => '10',
+        ], (string) json_encode(['data' => ['request' => '/3/account', 'error' => 'oops2', 'method' => 'GET'], 'success' => false, 'status' => 403]));
 
         $mock = new MockHandler([$response]);
         $handler = HandlerStack::create($mock);
         $client = new GuzzleClient(['handler' => $handler]);
 
-        $httpClient = new TestHttpClient([], $client);
+        $httpClient = new TestHttpClient([], $client, $handler);
         $httpClient->get($path, $parameters);
     }
 
-    public function testThrowExceptionWhenBadRequestNoClientMock()
+    public function testThrowExceptionWhenBadRequestNoClientMock(): void
     {
         $this->expectException(\Imgur\Exception\RuntimeException::class);
         $this->expectExceptionMessage('oops');
@@ -238,21 +239,21 @@ class HttpClientTest extends TestCase
         $parameters = ['a' => 'b'];
 
         $response = new Response(429, [
-            'X-RateLimit-UserLimit' => 10,
-            'X-RateLimit-UserRemaining' => 10,
-            'X-RateLimit-ClientLimit' => 10,
-            'X-RateLimit-ClientRemaining' => 10,
+            'X-RateLimit-UserLimit' => '10',
+            'X-RateLimit-UserRemaining' => '10',
+            'X-RateLimit-ClientLimit' => '10',
+            'X-RateLimit-ClientRemaining' => '10',
         ], 'oops');
 
         $mock = new MockHandler([$response]);
         $handler = HandlerStack::create($mock);
         $client = new GuzzleClient(['handler' => $handler]);
 
-        $httpClient = new HttpClient([], $client);
+        $httpClient = new HttpClient([], $client, $handler);
         $httpClient->get($path, $parameters);
     }
 
-    // public function testThrowLogicException()
+    // public function testThrowLogicException(): void
     // {
     //     $this->expectException(\Imgur\Exception\ErrorException::class);
     //
@@ -288,7 +289,10 @@ class HttpClientTest extends TestCase
 
 class TestHttpClient extends HttpClient
 {
-    public function getOption($name, $default = null)
+    /**
+     * @return array|string|null
+     */
+    public function getOption(string $name, string $default = null)
     {
         return isset($this->options[$name]) ? $this->options[$name] : $default;
     }

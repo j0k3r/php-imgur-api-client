@@ -12,23 +12,22 @@ use Imgur\HttpClient\HttpClient;
 
 class NotificationTest extends ApiTestCase
 {
-    public function testBaseReal()
+    public function testBaseReal(): void
     {
         $this->expectException(\Imgur\Exception\ErrorException::class);
         $this->expectExceptionMessage('Authentication required');
 
-        $guzzleClient = new GuzzleClient(['base_uri' => 'https://api.imgur.com/3/']);
-        $httpClient = new HttpClient([], $guzzleClient);
+        $httpClient = new HttpClient();
         $client = new Client(null, $httpClient);
         $notification = new Notification($client);
 
         $notification->notifications();
     }
 
-    public function testBaseWithResponse()
+    public function testBaseWithResponse(): void
     {
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json'], json_encode([
+            new Response(200, ['Content-Type' => 'application/json'], (string) json_encode([
                 'data' => [
                     'replies' => [],
                     'messages' => [
@@ -60,7 +59,7 @@ class NotificationTest extends ApiTestCase
         $handler = HandlerStack::create($mock);
         $guzzleClient = new GuzzleClient(['handler' => $handler]);
 
-        $httpClient = new HttpClient([], $guzzleClient);
+        $httpClient = new HttpClient([], $guzzleClient, $handler);
         $client = new Client(null, $httpClient);
         $notification = new Notification($client);
 
@@ -82,7 +81,7 @@ class NotificationTest extends ApiTestCase
         $this->assertArrayHasKey('datetime', $result['messages'][0]['content']);
     }
 
-    public function testNotifications()
+    public function testNotifications(): void
     {
         $expectedValue = [
             'data' => [
@@ -93,7 +92,7 @@ class NotificationTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiNotificationMock();
         $api->expects($this->once())
             ->method('get')
             ->with('notification', ['new' => 'true'])
@@ -102,7 +101,27 @@ class NotificationTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->notifications());
     }
 
-    public function testNotification()
+    public function testNotificationsFalse(): void
+    {
+        $expectedValue = [
+            'data' => [
+                'replies' => [],
+                'messages' => [],
+            ],
+            'success' => true,
+            'status' => 200,
+        ];
+
+        $api = $this->getApiNotificationMock();
+        $api->expects($this->once())
+            ->method('get')
+            ->with('notification', ['new' => 'false'])
+            ->willReturn($expectedValue);
+
+        $this->assertSame($expectedValue, $api->notifications('false'));
+    }
+
+    public function testNotification(): void
     {
         $expectedValue = [
             'data' => [
@@ -112,7 +131,7 @@ class NotificationTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiNotificationMock();
         $api->expects($this->once())
             ->method('get')
             ->with('notification/76878181')
@@ -121,7 +140,7 @@ class NotificationTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->notification('76878181'));
     }
 
-    public function testNotificationViewed()
+    public function testNotificationViewed(): void
     {
         $expectedValue = [
             'data' => true,
@@ -129,17 +148,12 @@ class NotificationTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiNotificationMock();
         $api->expects($this->once())
             ->method('post')
             ->with('notification/76878181')
             ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->notificationViewed('76878181'));
-    }
-
-    protected function getApiClass()
-    {
-        return 'Imgur\Api\Notification';
     }
 }

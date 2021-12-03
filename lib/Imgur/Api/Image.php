@@ -35,7 +35,7 @@ class Image extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/image#image-upload
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function upload($data)
     {
@@ -63,7 +63,7 @@ class Image extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/image#image-delete
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function deleteImage($imageIdOrDeleteHash)
     {
@@ -80,7 +80,7 @@ class Image extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/image#image-update
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function update($imageIdOrDeleteHash, $data)
     {
@@ -94,7 +94,7 @@ class Image extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/image#image-favorite
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function favorite($imageIdOrDeleteHash)
     {

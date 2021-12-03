@@ -13,23 +13,22 @@ use Imgur\HttpClient\HttpClient;
 
 class CustomGalleryTest extends ApiTestCase
 {
-    public function testBaseReal()
+    public function testBaseReal(): void
     {
         $this->expectException(\Imgur\Exception\ErrorException::class);
         $this->expectExceptionMessage('Authentication required');
 
-        $guzzleClient = new GuzzleClient(['base_uri' => 'https://api.imgur.com/3/']);
-        $httpClient = new HttpClient([], $guzzleClient);
+        $httpClient = new HttpClient();
         $client = new Client(null, $httpClient);
         $customGallery = new CustomGallery($client);
 
         $customGallery->customGallery();
     }
 
-    public function testBaseWithResponse()
+    public function testBaseWithResponse(): void
     {
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json'], json_encode([
+            new Response(200, ['Content-Type' => 'application/json'], (string) json_encode([
                 'data' => [
                     'link' => 'http://imgur.com/custom',
                     'tags' => [
@@ -77,7 +76,7 @@ class CustomGalleryTest extends ApiTestCase
         $handler = HandlerStack::create($mock);
         $guzzleClient = new GuzzleClient(['handler' => $handler]);
 
-        $httpClient = new HttpClient([], $guzzleClient);
+        $httpClient = new HttpClient([], $guzzleClient, $handler);
         $client = new Client(null, $httpClient);
         $customGallery = new CustomGallery($client);
 
@@ -90,7 +89,7 @@ class CustomGalleryTest extends ApiTestCase
         $this->assertArrayHasKey('items', $result);
     }
 
-    public function testCustomGallery()
+    public function testCustomGallery(): void
     {
         $expectedValue = [
             'data' => [
@@ -100,7 +99,7 @@ class CustomGalleryTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiCustomGalleryMock();
         $api->expects($this->once())
             ->method('get')
             ->with('g/custom/viral/week/0')
@@ -109,23 +108,23 @@ class CustomGalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->customGallery());
     }
 
-    public function testCustomGalleryWrongSortValue()
+    public function testCustomGalleryWrongSortValue(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('is wrong. Possible values are');
 
-        $this->getApiMock()->customGallery('bad sort');
+        $this->getApiCustomGalleryMock()->customGallery('bad sort');
     }
 
-    public function testCustomGalleryWrongWindowValue()
+    public function testCustomGalleryWrongWindowValue(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('is wrong. Possible values are');
 
-        $this->getApiMock()->customGallery('viral', 0, 'bad window');
+        $this->getApiCustomGalleryMock()->customGallery('viral', 0, 'bad window');
     }
 
-    public function testFiltered()
+    public function testFiltered(): void
     {
         $expectedValue = [
             'data' => [
@@ -135,7 +134,7 @@ class CustomGalleryTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiCustomGalleryMock();
         $api->expects($this->once())
             ->method('get')
             ->with('g/filtered/viral/week/0')
@@ -144,23 +143,23 @@ class CustomGalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->filtered());
     }
 
-    public function testFilteredWrongSortValue()
+    public function testFilteredWrongSortValue(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('is wrong. Possible values are');
 
-        $this->getApiMock()->filtered('bad sort');
+        $this->getApiCustomGalleryMock()->filtered('bad sort');
     }
 
-    public function testFilteredWrongWindowValue()
+    public function testFilteredWrongWindowValue(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('is wrong. Possible values are');
 
-        $this->getApiMock()->filtered('viral', 0, 'bad window');
+        $this->getApiCustomGalleryMock()->filtered('viral', 0, 'bad window');
     }
 
-    public function testImage()
+    public function testImage(): void
     {
         $expectedValue = [
             'data' => [
@@ -170,7 +169,7 @@ class CustomGalleryTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiCustomGalleryMock();
         $api->expects($this->once())
             ->method('get')
             ->with('g/custom/ccWiaRJ')
@@ -179,7 +178,7 @@ class CustomGalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->image('ccWiaRJ'));
     }
 
-    public function testAddTags()
+    public function testAddTags(): void
     {
         $expectedValue = [
             'data' => true,
@@ -187,7 +186,7 @@ class CustomGalleryTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiCustomGalleryMock();
         $api->expects($this->once())
             ->method('put')
             ->with('g/add_tags', ['tags' => 'cats,funny'])
@@ -196,7 +195,7 @@ class CustomGalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->addTags(['cats', 'funny']));
     }
 
-    public function testRemoveTags()
+    public function testRemoveTags(): void
     {
         $expectedValue = [
             'data' => true,
@@ -204,7 +203,7 @@ class CustomGalleryTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiCustomGalleryMock();
         $api->expects($this->once())
             ->method('delete')
             ->with('g/remove_tags', ['tags' => 'cats,funny'])
@@ -213,7 +212,7 @@ class CustomGalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->removeTags(['cats', 'funny']));
     }
 
-    public function testBlockTag()
+    public function testBlockTag(): void
     {
         $expectedValue = [
             'data' => true,
@@ -221,7 +220,7 @@ class CustomGalleryTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiCustomGalleryMock();
         $api->expects($this->once())
             ->method('post')
             ->with('g/block_tag', ['tag' => 'funny'])
@@ -230,7 +229,7 @@ class CustomGalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->blockTag('funny'));
     }
 
-    public function testUnBlockTag()
+    public function testUnBlockTag(): void
     {
         $expectedValue = [
             'data' => true,
@@ -238,17 +237,12 @@ class CustomGalleryTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiCustomGalleryMock();
         $api->expects($this->once())
             ->method('post')
             ->with('g/unblock_tag', ['tag' => 'funny'])
             ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->unBlockTag('funny'));
-    }
-
-    protected function getApiClass()
-    {
-        return 'Imgur\Api\CustomGallery';
     }
 }

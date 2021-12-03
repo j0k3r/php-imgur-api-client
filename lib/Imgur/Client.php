@@ -2,6 +2,7 @@
 
 namespace Imgur;
 
+use Imgur\Api\AbstractApi;
 use Imgur\Auth\AuthInterface;
 use Imgur\Exception\InvalidArgumentException;
 use Imgur\HttpClient\HttpClient;
@@ -25,14 +26,14 @@ class Client
     /**
      * The class handling communication with Imgur servers.
      *
-     * @var \Imgur\HttpClient\HttpClientInterface
+     * @var HttpClientInterface
      */
     private $httpClient;
 
     /**
      * The class handling authentication.
      *
-     * @var \Imgur\Auth\AuthInterface
+     * @var AuthInterface
      */
     private $authenticationClient;
 
@@ -48,14 +49,11 @@ class Client
     }
 
     /**
-     * @param string                     $name
-     * @param Imgur\Pager\PagerInterface $pager
+     * @param PagerInterface $pager
      *
      * @throws InvalidArgumentException
-     *
-     * @return ApiInterface
      */
-    public function api($name, PagerInterface $pager = null)
+    public function api(string $name, PagerInterface $pager = null): AbstractApi
     {
         if (!$this->getAccessToken()) {
             $this->sign();
@@ -63,16 +61,16 @@ class Client
 
         $apiClass = 'Imgur\\Api\\' . ucfirst($name);
         if (class_exists($apiClass)) {
-            return new $apiClass($this, $pager);
+            /** @var AbstractApi */
+            $api = new $apiClass($this, $pager);
+
+            return $api;
         }
 
         throw new InvalidArgumentException('API Method not supported: "' . $name . '" (apiClass: "' . $apiClass . '")');
     }
 
-    /**
-     * @return HttpClientInterface
-     */
-    public function getHttpClient()
+    public function getHttpClient(): HttpClientInterface
     {
         if (null === $this->httpClient) {
             $this->setHttpClient(new HttpClient($this->options));
@@ -81,19 +79,17 @@ class Client
         return $this->httpClient;
     }
 
-    public function setHttpClient(HttpClientInterface $httpClient)
+    public function setHttpClient(HttpClientInterface $httpClient): void
     {
         $this->httpClient = $httpClient;
     }
 
     /**
-     * @param string $name
-     *
      * @throws InvalidArgumentException
      *
      * @return string
      */
-    public function getOption($name)
+    public function getOption(string $name): ?string
     {
         if (!\array_key_exists($name, $this->options)) {
             throw new InvalidArgumentException(sprintf('Undefined option called: "%s"', $name));
@@ -103,12 +99,11 @@ class Client
     }
 
     /**
-     * @param string $name
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @throws InvalidArgumentException
      */
-    public function setOption($name, $value)
+    public function setOption(string $name, $value): void
     {
         if (!\array_key_exists($name, $this->options)) {
             throw new InvalidArgumentException(sprintf('Undefined option called: "%s"', $name));
@@ -119,16 +114,14 @@ class Client
 
     /**
      * Retrieves the Auth object and also instantiates it if not already present.
-     *
-     * @return Auth\AuthInterface
      */
-    public function getAuthenticationClient()
+    public function getAuthenticationClient(): AuthInterface
     {
         if (null === $this->authenticationClient) {
             $this->authenticationClient = new Auth\OAuth2(
                 $this->getHttpClient(),
-                $this->getOption('client_id'),
-                $this->getOption('client_secret')
+                (string) $this->getOption('client_id'),
+                (string) $this->getOption('client_secret')
             );
         }
 
@@ -138,25 +131,17 @@ class Client
     /**
      * Proxy method for the authentication objects URL building method.
      *
-     * @param string $responseType
      * @param string $state
-     *
-     * @return string
      */
-    public function getAuthenticationUrl($responseType = 'code', $state = null)
+    public function getAuthenticationUrl(string $responseType = 'code', string $state = null): string
     {
         return $this->getAuthenticationClient()->getAuthenticationUrl($responseType, $state);
     }
 
     /**
      * Proxy method for exchanging a code for an access token/a pin for an access token.
-     *
-     * @param string $code
-     * @param string $responseType
-     *
-     * @return string
      */
-    public function requestAccessToken($code, $responseType = 'code')
+    public function requestAccessToken(string $code, string $responseType = 'code'): array
     {
         return $this->getAuthenticationClient()->requestAccessToken($code, $responseType);
     }
@@ -166,37 +151,31 @@ class Client
      *
      * @return array
      */
-    public function getAccessToken()
+    public function getAccessToken(): ?array
     {
         return $this->getAuthenticationClient()->getAccessToken();
     }
 
     /**
      * Proxy method for checking if the access token expired.
-     *
-     * @return array
      */
-    public function checkAccessTokenExpired()
+    public function checkAccessTokenExpired(): bool
     {
         return $this->getAuthenticationClient()->checkAccessTokenExpired();
     }
 
     /**
      * Proxy method for refreshing an access token.
-     *
-     * @return array
      */
-    public function refreshToken()
+    public function refreshToken(): array
     {
         return $this->getAuthenticationClient()->refreshToken();
     }
 
     /**
      * Proxy method for setting an access token.
-     *
-     * @param array $token
      */
-    public function setAccessToken($token)
+    public function setAccessToken(array $token): void
     {
         $this->getAuthenticationClient()->setAccessToken($token);
     }
@@ -204,7 +183,7 @@ class Client
     /**
      * Proxy method for signing a request.
      */
-    public function sign()
+    public function sign(): void
     {
         $this->getAuthenticationClient()->sign();
     }

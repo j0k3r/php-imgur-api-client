@@ -12,25 +12,24 @@ use Imgur\HttpClient\HttpClient;
 
 class TopicTest extends ApiTestCase
 {
-    public function testBaseReal()
+    public function testBaseReal(): void
     {
         $this->expectException(\Imgur\Exception\ErrorException::class);
         $this->expectExceptionMessage('Authentication required');
 
         $this->markTestSkipped('Topic endpoint does not always return 401 with no authentication ...');
 
-        $guzzleClient = new GuzzleClient(['base_uri' => 'https://api.imgur.com/3/']);
-        $httpClient = new HttpClient([], $guzzleClient);
+        $httpClient = new HttpClient();
         $client = new Client(null, $httpClient);
         $topic = new Topic($client);
 
         $topic->defaultTopics();
     }
 
-    public function testBaseWithResponse()
+    public function testBaseWithResponse(): void
     {
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json'], json_encode([
+            new Response(200, ['Content-Type' => 'application/json'], (string) json_encode([
                 'data' => [
                     [
                         'id' => 155,
@@ -107,7 +106,7 @@ class TopicTest extends ApiTestCase
         $handler = HandlerStack::create($mock);
         $guzzleClient = new GuzzleClient(['handler' => $handler]);
 
-        $httpClient = new HttpClient([], $guzzleClient);
+        $httpClient = new HttpClient([], $guzzleClient, $handler);
         $client = new Client(null, $httpClient);
         $topic = new Topic($client);
 
@@ -124,7 +123,7 @@ class TopicTest extends ApiTestCase
         $this->assertArrayHasKey('isHero', $result[0]);
     }
 
-    public function testTopic()
+    public function testTopic(): void
     {
         $expectedValue = [
             'data' => [
@@ -134,7 +133,7 @@ class TopicTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiTopicMock();
         $api->expects($this->once())
             ->method('get')
             ->with('topics/defaults')
@@ -143,7 +142,7 @@ class TopicTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->defaultTopics());
     }
 
-    public function testGalleryTopic()
+    public function testGalleryTopic(): void
     {
         $expectedValue = [
             'data' => [
@@ -153,32 +152,32 @@ class TopicTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiTopicMock();
         $api->expects($this->once())
             ->method('get')
             ->with('topics/155/viral/week/0')
             ->willReturn($expectedValue);
 
-        $this->assertSame($expectedValue, $api->galleryTopic(155));
+        $this->assertSame($expectedValue, $api->galleryTopic('155'));
     }
 
-    public function testGalleryTopicWrongSortValue()
+    public function testGalleryTopicWrongSortValue(): void
     {
         $this->expectException(\Imgur\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('is wrong. Possible values are');
 
-        $this->getApiMock()->galleryTopic(155, 'bad sort');
+        $this->getApiTopicMock()->galleryTopic('155', 'bad sort');
     }
 
-    public function testGalleryTopicWrongWindowValue()
+    public function testGalleryTopicWrongWindowValue(): void
     {
         $this->expectException(\Imgur\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('is wrong. Possible values are');
 
-        $this->getApiMock()->galleryTopic(155, 'viral', 0, 'bad window');
+        $this->getApiTopicMock()->galleryTopic('155', 'viral', 0, 'bad window');
     }
 
-    public function testGalleryTopicItem()
+    public function testGalleryTopicItem(): void
     {
         $expectedValue = [
             'data' => [
@@ -188,17 +187,12 @@ class TopicTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiTopicMock();
         $api->expects($this->once())
             ->method('get')
             ->with('topics/155/Fbae9SG')
             ->willReturn($expectedValue);
 
-        $this->assertSame($expectedValue, $api->galleryTopicItem(155, 'Fbae9SG'));
-    }
-
-    protected function getApiClass()
-    {
-        return 'Imgur\Api\Topic';
+        $this->assertSame($expectedValue, $api->galleryTopicItem('155', 'Fbae9SG'));
     }
 }

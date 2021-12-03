@@ -9,6 +9,7 @@ use GuzzleHttp\Middleware;
 use Imgur\Middleware\AuthMiddleware;
 use Imgur\Middleware\ErrorMiddleware;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Basic client for performing HTTP requests.
@@ -20,7 +21,7 @@ class HttpClient implements HttpClientInterface
     /**
      * The Guzzle instance.
      *
-     * @var \GuzzleHttp\ClientInterface
+     * @var ClientInterface
      */
     protected $client;
 
@@ -33,12 +34,10 @@ class HttpClient implements HttpClientInterface
         'base_url' => 'https://api.imgur.com/3/',
     ];
 
+    /** @var HandlerStack */
     protected $stack;
 
-    /**
-     * @param ClientInterface $client
-     */
-    public function __construct(array $options = [], ClientInterface $client = null)
+    public function __construct(array $options = [], ClientInterface $client = null, HandlerStack $stack = null)
     {
         $this->options = array_merge($options, $this->options);
 
@@ -47,10 +46,7 @@ class HttpClient implements HttpClientInterface
 
         // during test (at least) handler can be injected into the client
         // so we need to retrieve it to be able to inject our own middleware
-        $this->stack = HandlerStack::create();
-        if (null !== $client) {
-            $this->stack = $client->getConfig('handler');
-        }
+        $this->stack = (null !== $client && null !== $stack) ? $stack : HandlerStack::create();
 
         $this->stack->push(ErrorMiddleware::error());
 
@@ -63,7 +59,7 @@ class HttpClient implements HttpClientInterface
     /**
      * {@inheritdoc}
      */
-    public function get($url, array $parameters = [])
+    public function get($url, array $parameters = []): ResponseInterface
     {
         return $this->performRequest($url, $parameters, 'GET');
     }
@@ -71,7 +67,7 @@ class HttpClient implements HttpClientInterface
     /**
      * {@inheritdoc}
      */
-    public function delete($url, array $parameters = [])
+    public function delete($url, array $parameters = []): ResponseInterface
     {
         return $this->performRequest($url, $parameters, 'DELETE');
     }
@@ -79,7 +75,7 @@ class HttpClient implements HttpClientInterface
     /**
      * {@inheritdoc}
      */
-    public function post($url, array $parameters = [])
+    public function post($url, array $parameters = []): ResponseInterface
     {
         return $this->performRequest($url, $parameters, 'POST');
     }
@@ -87,7 +83,7 @@ class HttpClient implements HttpClientInterface
     /**
      * {@inheritdoc}
      */
-    public function put($url, array $parameters = [])
+    public function put($url, array $parameters = []): ResponseInterface
     {
         return $this->performRequest($url, $parameters, 'PUT');
     }
@@ -95,7 +91,7 @@ class HttpClient implements HttpClientInterface
     /**
      * {@inheritdoc}
      */
-    public function performRequest($url, $parameters, $httpMethod = 'GET')
+    public function performRequest($url, $parameters, $httpMethod = 'GET'): ResponseInterface
     {
         $options = [
             'headers' => isset($this->options['headers']) ? $this->options['headers'] : [],
@@ -124,11 +120,14 @@ class HttpClient implements HttpClientInterface
     /**
      * {@inheritdoc}
      */
-    public function parseResponse($response)
+    public function parseResponse(ResponseInterface $response): array
     {
-        $responseBody = ['data' => [], 'success' => false];
+        $responseBody = [
+            'data' => [],
+            'success' => false,
+        ];
 
-        if ($response) {
+        if ((string) $response->getBody()) {
             $responseBody = json_decode($response->getBody(), true);
         }
 
@@ -136,12 +135,9 @@ class HttpClient implements HttpClientInterface
     }
 
     /**
-     * Push authorization middleware.
-     *
-     * @param array  $token
-     * @param string $clientId
+     * {@inheritdoc}
      */
-    public function addAuthMiddleware($token, $clientId)
+    public function addAuthMiddleware($token, string $clientId): void
     {
         $this->stack->push(Middleware::mapRequest(function (RequestInterface $request) use ($token, $clientId) {
             return (new AuthMiddleware($token, $clientId))->addAuthHeader($request);

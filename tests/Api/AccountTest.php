@@ -13,23 +13,22 @@ use Imgur\HttpClient\HttpClient;
 
 class AccountTest extends ApiTestCase
 {
-    public function testBaseReal()
+    public function testBaseReal(): void
     {
         $this->expectException(\Imgur\Exception\ErrorException::class);
         $this->expectExceptionMessage('Authentication required');
 
-        $guzzleClient = new GuzzleClient(['base_uri' => 'https://api.imgur.com/3/']);
-        $httpClient = new HttpClient([], $guzzleClient);
+        $httpClient = new HttpClient();
         $client = new Client(null, $httpClient);
         $account = new Account($client);
 
         $account->base();
     }
 
-    public function testBaseWithResponse()
+    public function testBaseWithResponse(): void
     {
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json'], json_encode([
+            new Response(200, ['Content-Type' => 'application/json'], (string) json_encode([
                 'data' => [
                     'id' => 703058,
                     'url' => 'j0k3rx',
@@ -45,7 +44,7 @@ class AccountTest extends ApiTestCase
         $handler = HandlerStack::create($mock);
         $guzzleClient = new GuzzleClient(['handler' => $handler]);
 
-        $httpClient = new HttpClient([], $guzzleClient);
+        $httpClient = new HttpClient([], $guzzleClient, $handler);
         $client = new Client(null, $httpClient);
         $account = new Account($client);
 
@@ -59,7 +58,7 @@ class AccountTest extends ApiTestCase
         $this->assertArrayHasKey('pro_expiration', $result);
     }
 
-    public function testBase()
+    public function testBase(): void
     {
         $expectedValue = [
             'data' => [
@@ -69,7 +68,7 @@ class AccountTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAccountMock();
         $api->expects($this->once())
             ->method('get')
             ->with('account/me')
@@ -78,7 +77,7 @@ class AccountTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->base());
     }
 
-    public function testDeleteAccount()
+    public function testDeleteAccount(): void
     {
         $expectedValue = [
             'data' => true,
@@ -86,7 +85,7 @@ class AccountTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAccountMock();
         $api->expects($this->once())
             ->method('delete')
             ->with('account/imgur')
@@ -95,7 +94,7 @@ class AccountTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->deleteAccount('imgur'));
     }
 
-    public function testGalleryFavorites()
+    public function testGalleryFavorites(): void
     {
         $expectedValue = [
             'data' => [
@@ -107,7 +106,7 @@ class AccountTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAccountMock();
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/gallery_favorites/0/newest')
@@ -116,15 +115,15 @@ class AccountTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->galleryFavorites());
     }
 
-    public function testGalleryFavoritesWrongValues()
+    public function testGalleryFavoritesWrongValues(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('is wrong. Possible values are');
 
-        $this->getApiMock()->galleryFavorites('me', 0, 'bad sort');
+        $this->getApiAccountMock()->galleryFavorites('me', 0, 'bad sort');
     }
 
-    public function testFavorites()
+    public function testFavorites(): void
     {
         $expectedValue = [
             'data' => [
@@ -136,7 +135,7 @@ class AccountTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAccountMock();
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/favorites')
@@ -145,7 +144,7 @@ class AccountTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->favorites());
     }
 
-    public function testSubmissions()
+    public function testSubmissions(): void
     {
         $expectedValue = [
             'data' => [
@@ -157,7 +156,7 @@ class AccountTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAccountMock();
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/submissions/0')
@@ -166,7 +165,7 @@ class AccountTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->submissions());
     }
 
-    public function testSettings()
+    public function testSettings(): void
     {
         $expectedValue = [
             'data' => [
@@ -178,7 +177,7 @@ class AccountTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAccountMock();
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/settings')
@@ -187,7 +186,7 @@ class AccountTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->settings());
     }
 
-    public function testChangeAccountSettings()
+    public function testChangeAccountSettings(): void
     {
         $expectedValue = [
             'data' => true,
@@ -195,7 +194,7 @@ class AccountTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAccountMock();
         $api->expects($this->once())
             ->method('post')
             ->with('account/me/settings')
@@ -206,7 +205,7 @@ class AccountTest extends ApiTestCase
         ]));
     }
 
-    public function testAccountStats()
+    public function testAccountStats(): void
     {
         $expectedValue = [
             'data' => [
@@ -218,7 +217,7 @@ class AccountTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAccountMock();
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/stats')
@@ -227,7 +226,7 @@ class AccountTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->accountStats());
     }
 
-    public function testAccountGalleryProfile()
+    public function testAccountGalleryProfile(): void
     {
         $expectedValue = [
             'data' => [
@@ -239,7 +238,7 @@ class AccountTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAccountMock();
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/gallery_profile')
@@ -248,7 +247,7 @@ class AccountTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->accountGalleryProfile());
     }
 
-    public function testVerifyUsersEmail()
+    public function testVerifyUsersEmail(): void
     {
         $expectedValue = [
             'data' => [
@@ -260,7 +259,7 @@ class AccountTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAccountMock();
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/verifyemail')
@@ -269,7 +268,7 @@ class AccountTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->verifyUsersEmail());
     }
 
-    public function testSendVerificationEmail()
+    public function testSendVerificationEmail(): void
     {
         $expectedValue = [
             'data' => true,
@@ -277,7 +276,7 @@ class AccountTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAccountMock();
         $api->expects($this->once())
             ->method('post')
             ->with('account/me/verifyemail')
@@ -286,7 +285,7 @@ class AccountTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->sendVerificationEmail());
     }
 
-    public function testAlbums()
+    public function testAlbums(): void
     {
         $expectedValue = [
             'data' => [
@@ -298,7 +297,7 @@ class AccountTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAccountMock();
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/albums/0')
@@ -307,7 +306,7 @@ class AccountTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->albums());
     }
 
-    public function testAlbum()
+    public function testAlbum(): void
     {
         $expectedValue = [
             'data' => [
@@ -319,7 +318,7 @@ class AccountTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAccountMock();
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/album/Arn5NUt')
@@ -328,7 +327,7 @@ class AccountTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->album('Arn5NUt'));
     }
 
-    public function testAlbumIds()
+    public function testAlbumIds(): void
     {
         $expectedValue = [
             'data' => [
@@ -340,7 +339,7 @@ class AccountTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAccountMock();
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/albums/ids/0')
@@ -349,7 +348,7 @@ class AccountTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->albumIds());
     }
 
-    public function testAlbumCount()
+    public function testAlbumCount(): void
     {
         $expectedValue = [
             'data' => [
@@ -361,7 +360,7 @@ class AccountTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAccountMock();
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/albums/count')
@@ -370,7 +369,7 @@ class AccountTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->albumCount());
     }
 
-    public function testAlbumDelete()
+    public function testAlbumDelete(): void
     {
         $expectedValue = [
             'data' => true,
@@ -378,7 +377,7 @@ class AccountTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAccountMock();
         $api->expects($this->once())
             ->method('delete')
             ->with('account/me/album/Arn5NUt')
@@ -387,7 +386,7 @@ class AccountTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->albumDelete('Arn5NUt'));
     }
 
-    public function testComments()
+    public function testComments(): void
     {
         $expectedValue = [
             'data' => [
@@ -399,7 +398,7 @@ class AccountTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAccountMock();
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/comments/newest/0')
@@ -408,15 +407,15 @@ class AccountTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->comments());
     }
 
-    public function testCommentsWrongValues()
+    public function testCommentsWrongValues(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('is wrong. Possible values are');
 
-        $this->getApiMock()->comments('me', 0, 'bad sort');
+        $this->getApiAccountMock()->comments('me', 0, 'bad sort');
     }
 
-    public function testComment()
+    public function testComment(): void
     {
         $expectedValue = [
             'data' => [
@@ -428,7 +427,7 @@ class AccountTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAccountMock();
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/comment/726305564')
@@ -437,7 +436,7 @@ class AccountTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->comment('726305564'));
     }
 
-    public function testCommentIds()
+    public function testCommentIds(): void
     {
         $expectedValue = [
             'data' => [
@@ -449,7 +448,7 @@ class AccountTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAccountMock();
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/comments/ids/newest/0')
@@ -458,15 +457,15 @@ class AccountTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->commentIds());
     }
 
-    public function testCommentIdsWrongValues()
+    public function testCommentIdsWrongValues(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('is wrong. Possible values are');
 
-        $this->getApiMock()->commentIds('me', 0, 'bad sort');
+        $this->getApiAccountMock()->commentIds('me', 0, 'bad sort');
     }
 
-    public function testCommentCount()
+    public function testCommentCount(): void
     {
         $expectedValue = [
             'data' => [
@@ -478,7 +477,7 @@ class AccountTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAccountMock();
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/comments/count')
@@ -487,7 +486,7 @@ class AccountTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->commentCount());
     }
 
-    public function testCommentDelete()
+    public function testCommentDelete(): void
     {
         $expectedValue = [
             'data' => true,
@@ -495,7 +494,7 @@ class AccountTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAccountMock();
         $api->expects($this->once())
             ->method('delete')
             ->with('account/me/comment/726305564')
@@ -504,7 +503,7 @@ class AccountTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->commentDelete('726305564'));
     }
 
-    public function testImages()
+    public function testImages(): void
     {
         $expectedValue = [
             'data' => [
@@ -516,7 +515,7 @@ class AccountTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAccountMock();
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/images/0')
@@ -525,7 +524,7 @@ class AccountTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->images());
     }
 
-    public function testImage()
+    public function testImage(): void
     {
         $expectedValue = [
             'data' => [
@@ -537,7 +536,7 @@ class AccountTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAccountMock();
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/image/iCMrM1P')
@@ -546,7 +545,7 @@ class AccountTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->image('iCMrM1P'));
     }
 
-    public function testImageIds()
+    public function testImageIds(): void
     {
         $expectedValue = [
             'data' => [
@@ -558,7 +557,7 @@ class AccountTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAccountMock();
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/images/ids/0')
@@ -567,7 +566,7 @@ class AccountTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->imageIds());
     }
 
-    public function testImageCount()
+    public function testImageCount(): void
     {
         $expectedValue = [
             'data' => [
@@ -579,7 +578,7 @@ class AccountTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAccountMock();
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/images/count')
@@ -588,7 +587,7 @@ class AccountTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->imageCount());
     }
 
-    public function testImageDelete()
+    public function testImageDelete(): void
     {
         $expectedValue = [
             'data' => true,
@@ -596,7 +595,7 @@ class AccountTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAccountMock();
         $api->expects($this->once())
             ->method('delete')
             ->with('account/me/image/iCMrM1P')
@@ -605,7 +604,7 @@ class AccountTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->imageDelete('iCMrM1P'));
     }
 
-    public function testReplies()
+    public function testReplies(): void
     {
         $expectedValue = [
             'data' => [
@@ -617,17 +616,12 @@ class AccountTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAccountMock();
         $api->expects($this->once())
             ->method('get')
             ->with('account/me/notifications/replies', ['new' => 'false'])
             ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->replies());
-    }
-
-    protected function getApiClass()
-    {
-        return 'Imgur\Api\Account';
     }
 }

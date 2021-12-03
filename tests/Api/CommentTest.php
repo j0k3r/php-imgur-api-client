@@ -12,23 +12,22 @@ use Imgur\HttpClient\HttpClient;
 
 class CommentTest extends ApiTestCase
 {
-    public function testBaseReal()
+    public function testBaseReal(): void
     {
         $this->expectException(\Imgur\Exception\ErrorException::class);
         $this->expectExceptionMessage('Authentication required');
 
-        $guzzleClient = new GuzzleClient(['base_uri' => 'https://api.imgur.com/3/']);
-        $httpClient = new HttpClient([], $guzzleClient);
+        $httpClient = new HttpClient();
         $client = new Client(null, $httpClient);
         $comment = new Comment($client);
 
         $comment->comment('726305564');
     }
 
-    public function testBaseWithResponse()
+    public function testBaseWithResponse(): void
     {
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json'], json_encode([
+            new Response(200, ['Content-Type' => 'application/json'], (string) json_encode([
                 'data' => [
                     'id' => 726305564,
                     'image_id' => 'XVO7F',
@@ -54,7 +53,7 @@ class CommentTest extends ApiTestCase
         $handler = HandlerStack::create($mock);
         $guzzleClient = new GuzzleClient(['handler' => $handler]);
 
-        $httpClient = new HttpClient([], $guzzleClient);
+        $httpClient = new HttpClient([], $guzzleClient, $handler);
         $client = new Client(null, $httpClient);
         $comment = new Comment($client);
 
@@ -78,7 +77,7 @@ class CommentTest extends ApiTestCase
         $this->assertArrayHasKey('children', $result);
     }
 
-    public function testComment()
+    public function testComment(): void
     {
         $expectedValue = [
             'data' => [
@@ -88,7 +87,7 @@ class CommentTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiCommentMock();
         $api->expects($this->once())
             ->method('get')
             ->with('comment/726305564')
@@ -97,7 +96,7 @@ class CommentTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->comment('726305564'));
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $expectedValue = [
             'data' => true,
@@ -105,7 +104,7 @@ class CommentTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiCommentMock();
         $api->expects($this->once())
             ->method('post')
             ->with('comment')
@@ -114,15 +113,15 @@ class CommentTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->create(['image_id' => 'ZOY11VC', 'comment' => 'I agree']));
     }
 
-    public function testCreateParamMissing()
+    public function testCreateParamMissing(): void
     {
         $this->expectException(\Imgur\Exception\MissingArgumentException::class);
         $this->expectExceptionMessage('parameters is missing');
 
-        $this->getApiMock()->create('726305564');
+        $this->getApiCommentMock()->create(['726305564']);
     }
 
-    public function testDeleteComment()
+    public function testDeleteComment(): void
     {
         $expectedValue = [
             'data' => true,
@@ -130,7 +129,7 @@ class CommentTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiCommentMock();
         $api->expects($this->once())
             ->method('delete')
             ->with('comment/726305564')
@@ -139,7 +138,7 @@ class CommentTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->deleteComment('726305564'));
     }
 
-    public function testReplies()
+    public function testReplies(): void
     {
         $expectedValue = [
             'data' => [
@@ -149,7 +148,7 @@ class CommentTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiCommentMock();
         $api->expects($this->once())
             ->method('get')
             ->with('comment/726305564/replied')
@@ -158,7 +157,7 @@ class CommentTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->replies('726305564'));
     }
 
-    public function testCreateReply()
+    public function testCreateReply(): void
     {
         $expectedValue = [
             'data' => true,
@@ -166,7 +165,7 @@ class CommentTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiCommentMock();
         $api->expects($this->once())
             ->method('post')
             ->with('comment/726305565')
@@ -175,15 +174,15 @@ class CommentTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->createReply('726305565', ['image_id' => 'ZOY11VC', 'comment' => 'I agree']));
     }
 
-    public function testCreateReplyParamMissing()
+    public function testCreateReplyParamMissing(): void
     {
         $this->expectException(\Imgur\Exception\MissingArgumentException::class);
         $this->expectExceptionMessage('parameters is missing');
 
-        $this->getApiMock()->createReply('726305564', []);
+        $this->getApiCommentMock()->createReply('726305564', []);
     }
 
-    public function testVote()
+    public function testVote(): void
     {
         $expectedValue = [
             'data' => true,
@@ -191,7 +190,7 @@ class CommentTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiCommentMock();
         $api->expects($this->once())
             ->method('post')
             ->with('comment/726305564/vote/up')
@@ -200,15 +199,15 @@ class CommentTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->vote('726305564', 'up'));
     }
 
-    public function testVoteWrongVoteValue()
+    public function testVoteWrongVoteValue(): void
     {
         $this->expectException(\Imgur\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('is wrong. Possible values are');
 
-        $this->getApiMock()->vote('726305564', 'bad vote');
+        $this->getApiCommentMock()->vote('726305564', 'bad vote');
     }
 
-    public function testReport()
+    public function testReport(): void
     {
         $expectedValue = [
             'data' => true,
@@ -216,17 +215,12 @@ class CommentTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiCommentMock();
         $api->expects($this->once())
             ->method('post')
             ->with('comment/726305564/report')
             ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->report('726305564'));
-    }
-
-    protected function getApiClass()
-    {
-        return 'Imgur\Api\Comment';
     }
 }

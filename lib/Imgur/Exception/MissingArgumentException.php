@@ -4,12 +4,15 @@ namespace Imgur\Exception;
 
 class MissingArgumentException extends ErrorException
 {
-    public function __construct($required, $code = 0, $previous = null)
+    /**
+     * @param array|string $required
+     */
+    public function __construct($required, int $code = 0)
     {
         if (\is_string($required)) {
             $required = [$required];
         }
 
-        parent::__construct(sprintf('One or more of required ("%s") parameters is missing!', implode('", "', $required)), $code, $previous);
+        parent::__construct(sprintf('One or more of required ("%s") parameters is missing!', implode('", "', $required)), $code);
     }
 }

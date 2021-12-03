@@ -2,6 +2,7 @@
 
 namespace Imgur\Middleware;
 
+use GuzzleHttp\Promise\PromiseInterface;
 use Imgur\Exception\ErrorException;
 use Imgur\Exception\RateLimitException;
 use Imgur\Exception\RuntimeException;
@@ -10,6 +11,7 @@ use Psr\Http\Message\ResponseInterface;
 
 class ErrorMiddleware
 {
+    /** @var callable */
     private $nextHandler;
 
     /**
@@ -20,10 +22,7 @@ class ErrorMiddleware
         $this->nextHandler = $nextHandler;
     }
 
-    /**
-     * @return PromiseInterface
-     */
-    public function __invoke(RequestInterface $request, array $options)
+    public function __invoke(RequestInterface $request, array $options): PromiseInterface
     {
         $fn = $this->nextHandler;
 
@@ -38,7 +37,7 @@ class ErrorMiddleware
      *
      * @return \Closure Returns a function that accepts the next handler
      */
-    public static function error()
+    public static function error(): \Closure
     {
         return function (callable $handler) {
             return new self($handler);
@@ -48,7 +47,7 @@ class ErrorMiddleware
     /**
      * Check for an error.
      */
-    public function checkError(ResponseInterface $response)
+    public function checkError(ResponseInterface $response): ?ResponseInterface
     {
         if ($response->getStatusCode() < 400) {
             return $response;
@@ -92,7 +91,7 @@ class ErrorMiddleware
     /**
      * Check if user hit limit.
      */
-    private function checkUserRateLimit(ResponseInterface $response)
+    private function checkUserRateLimit(ResponseInterface $response): void
     {
         $userRemaining = $response->getHeaderLine('X-RateLimit-UserRemaining');
         $userLimit = $response->getHeaderLine('X-RateLimit-UserLimit');
@@ -105,14 +104,14 @@ class ErrorMiddleware
     /**
      * Check if client hit limit.
      */
-    private function checkClientRateLimit(ResponseInterface $response)
+    private function checkClientRateLimit(ResponseInterface $response): void
     {
         $clientRemaining = $response->getHeaderLine('X-RateLimit-ClientRemaining');
         $clientLimit = $response->getHeaderLine('X-RateLimit-ClientLimit');
 
         if ('' !== $clientRemaining && $clientRemaining < 1) {
             // X-RateLimit-UserReset: Timestamp (unix epoch) for when the credits will be reset.
-            $resetTime = date('Y-m-d H:i:s', $response->getHeaderLine('X-RateLimit-UserReset'));
+            $resetTime = date('Y-m-d H:i:s', (int) $response->getHeaderLine('X-RateLimit-UserReset'));
 
             throw new RateLimitException('No application credits available. The limit is ' . $clientLimit . ' and will be reset at ' . $resetTime);
         }
@@ -121,14 +120,14 @@ class ErrorMiddleware
     /**
      * Check if client hit post limit.
      */
-    private function checkPostRateLimit(ResponseInterface $response)
+    private function checkPostRateLimit(ResponseInterface $response): void
     {
         $postRemaining = $response->getHeaderLine('X-Post-Rate-Limit-Remaining');
         $postLimit = $response->getHeaderLine('X-Post-Rate-Limit-Limit');
 
         if ('' !== $postRemaining && $postRemaining < 1) {
             // X-Post-Rate-Limit-Reset: Time in seconds until your POST ratelimit is reset
-            $resetTime = date('Y-m-d H:i:s', $response->getHeaderLine('X-Post-Rate-Limit-Reset'));
+            $resetTime = date('Y-m-d H:i:s', (int) $response->getHeaderLine('X-Post-Rate-Limit-Reset'));
 
             throw new RateLimitException('No post credits available. The limit is ' . $postLimit . ' and will be reset at ' . $resetTime);
         }

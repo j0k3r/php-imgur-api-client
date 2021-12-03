@@ -9,31 +9,31 @@ use PHPUnit\Framework\TestCase;
 
 class AbstractApiTest extends TestCase
 {
-    public function testGet()
+    public function testGet(): void
     {
         $image = $this->getApiMock('get');
         $image->get('gallery/search/time/0', ['q' => '20minutes']);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $image = $this->getApiMock('delete');
         $image->delete('image/ZOY11VC');
     }
 
-    public function testPost()
+    public function testPost(): void
     {
         $image = $this->getApiMock('post');
         $image->post('album/VOMXz', ['title' => 'yo']);
     }
 
-    public function testPut()
+    public function testPut(): void
     {
         $image = $this->getApiMock('put');
         $image->put('album/VOMXz', ['title' => 'yo']);
     }
 
-    protected function getApiMock($method)
+    protected function getApiMock(string $method): TestAbstractApi
     {
         $httpClient = $this->getMockBuilder('Imgur\HttpClient\HttpClient')
             ->disableOriginalConstructor()

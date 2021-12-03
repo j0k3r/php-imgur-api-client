@@ -37,3 +37,9 @@ jobs:
 
       - name: "Run PHP CS Fixer"
         run: "vendor/bin/php-cs-fixer fix --verbose --dry-run"
+
+      - name: "Install PHPUnit for PHPStan"
+        run: "php vendor/bin/simple-phpunit install"
+
+      - name: "Run PHPStan"
+        run: "php vendor/bin/phpstan analyse --no-progress"
