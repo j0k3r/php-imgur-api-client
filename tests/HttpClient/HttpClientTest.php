@@ -59,6 +59,28 @@ class HttpClientTest extends TestCase
         $this->assertSame('ok !', $result);
     }
 
+    public function testDoPOSTRequestWithMultipart()
+    {
+        $path = '/some/path';
+        $parameters = [
+            'a' => 'b',
+            'type' => 'file',
+        ];
+
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json'], json_encode(['data' => 'ok !'])),
+        ]);
+        $handler = HandlerStack::create($mock);
+        $client = new GuzzleClient(['handler' => $handler]);
+
+        $httpClient = new HttpClient([], $client);
+        $response = $httpClient->post($path, $parameters);
+
+        $result = $httpClient->parseResponse($response);
+
+        $this->assertSame('ok !', $result);
+    }
+
     public function testDoPUTRequest()
     {
         $path = '/some/path';
