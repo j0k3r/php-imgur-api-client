@@ -25,6 +25,8 @@ jobs:
           - "7.2"
           - "7.3"
           - "7.4"
+          - "8.0"
+          - "8.1"
 
     steps:
       - name: "Checkout"
@@ -37,7 +39,7 @@ jobs:
         with:
           php-version: "${{ matrix.php }}"
           coverage: "none"
-          tools: composer:v1
+          tools: composer:v2
           extensions: curl
           ini-values: "date.timezone=Europe/Paris"
         env:
@@ -69,7 +71,7 @@ jobs:
         with:
           php-version: "${{ matrix.php }}"
           coverage: "pcov"
-          tools: composer:v1
+          tools: composer:v2
           extensions: curl
           ini-values: "date.timezone=Europe/Paris"
         env:
