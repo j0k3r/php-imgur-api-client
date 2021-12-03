@@ -12,8 +12,8 @@ use Imgur\HttpClient\HttpClientInterface;
  */
 class OAuth2 implements AuthInterface
 {
-    public const AUTHORIZATION_ENDPOINT = 'https://api.imgur.com/oauth2/authorize';
-    public const ACCESS_TOKEN_ENDPOINT = 'https://api.imgur.com/oauth2/token';
+    const AUTHORIZATION_ENDPOINT = 'https://api.imgur.com/oauth2/authorize';
+    const ACCESS_TOKEN_ENDPOINT = 'https://api.imgur.com/oauth2/token';
 
     /**
      * Indicates the client that is making the request.
