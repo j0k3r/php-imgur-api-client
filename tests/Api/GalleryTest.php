@@ -13,23 +13,22 @@ use Imgur\HttpClient\HttpClient;
 
 class GalleryTest extends ApiTestCase
 {
-    public function testBaseReal()
+    public function testBaseReal(): void
     {
         $this->expectException(\Imgur\Exception\ErrorException::class);
         $this->expectExceptionMessage('Authentication required');
 
-        $guzzleClient = new GuzzleClient(['base_uri' => 'https://api.imgur.com/3/']);
-        $httpClient = new HttpClient([], $guzzleClient);
+        $httpClient = new HttpClient();
         $client = new Client(null, $httpClient);
         $gallery = new Gallery($client);
 
         $gallery->gallery();
     }
 
-    public function testBaseWithResponse()
+    public function testBaseWithResponse(): void
     {
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json'], json_encode([
+            new Response(200, ['Content-Type' => 'application/json'], (string) json_encode([
                 'data' => [
                     [
                         'id' => 'y1Od4',
@@ -69,7 +68,7 @@ class GalleryTest extends ApiTestCase
         $handler = HandlerStack::create($mock);
         $guzzleClient = new GuzzleClient(['handler' => $handler]);
 
-        $httpClient = new HttpClient([], $guzzleClient);
+        $httpClient = new HttpClient([], $guzzleClient, $handler);
         $client = new Client(null, $httpClient);
         $gallery = new Gallery($client);
 
@@ -105,7 +104,7 @@ class GalleryTest extends ApiTestCase
         $this->assertArrayHasKey('is_ad', $result[0]);
     }
 
-    public function testGallery()
+    public function testGallery(): void
     {
         $expectedValue = [
             'data' => [
@@ -117,7 +116,7 @@ class GalleryTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiGalleryMock();
         $api->expects($this->once())
             ->method('get')
             ->with('gallery/hot/viral/day/0', ['showViral' => 'true'])
@@ -126,31 +125,31 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->gallery());
     }
 
-    public function testGalleryWrongSortValue()
+    public function testGalleryWrongSortValue(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('is wrong. Possible values are');
 
-        $this->getApiMock()->gallery('hot', 'bad sort');
+        $this->getApiGalleryMock()->gallery('hot', 'bad sort');
     }
 
-    public function testGalleryWrongSectionValue()
+    public function testGalleryWrongSectionValue(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('is wrong. Possible values are');
 
-        $this->getApiMock()->gallery('bad section');
+        $this->getApiGalleryMock()->gallery('bad section');
     }
 
-    public function testGalleryWrongWindowValue()
+    public function testGalleryWrongWindowValue(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('is wrong. Possible values are');
 
-        $this->getApiMock()->gallery('hot', 'viral', 0, 'bad window');
+        $this->getApiGalleryMock()->gallery('hot', 'viral', 0, 'bad window');
     }
 
-    public function testMemesSubgallery()
+    public function testMemesSubgallery(): void
     {
         $expectedValue = [
             'data' => [
@@ -162,7 +161,7 @@ class GalleryTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiGalleryMock();
         $api->expects($this->once())
             ->method('get')
             ->with('g/memes/viral/day/0')
@@ -171,23 +170,23 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->memesSubgallery());
     }
 
-    public function testMemesSubgalleryWrongSortValue()
+    public function testMemesSubgalleryWrongSortValue(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('is wrong. Possible values are');
 
-        $this->getApiMock()->memesSubgallery('bad sort');
+        $this->getApiGalleryMock()->memesSubgallery('bad sort');
     }
 
-    public function testMemesSubgalleryWrongWindowValue()
+    public function testMemesSubgalleryWrongWindowValue(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('is wrong. Possible values are');
 
-        $this->getApiMock()->memesSubgallery('viral', 0, 'bad window');
+        $this->getApiGalleryMock()->memesSubgallery('viral', 0, 'bad window');
     }
 
-    public function testMemeSubgalleryImage()
+    public function testMemeSubgalleryImage(): void
     {
         $expectedValue = [
             'data' => [
@@ -197,7 +196,7 @@ class GalleryTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiGalleryMock();
         $api->expects($this->once())
             ->method('get')
             ->with('g/memes/MPx6ZXr')
@@ -206,7 +205,7 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->memeSubgalleryImage('MPx6ZXr'));
     }
 
-    public function testSubredditGalleries()
+    public function testSubredditGalleries(): void
     {
         $expectedValue = [
             'data' => [
@@ -218,7 +217,7 @@ class GalleryTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiGalleryMock();
         $api->expects($this->once())
             ->method('get')
             ->with('gallery/r/pics/time/day/0')
@@ -227,23 +226,23 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->subredditGalleries('pics'));
     }
 
-    public function testSubredditGalleriesWrongSortValue()
+    public function testSubredditGalleriesWrongSortValue(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('is wrong. Possible values are');
 
-        $this->getApiMock()->subredditGalleries('pics', 'bad sort');
+        $this->getApiGalleryMock()->subredditGalleries('pics', 'bad sort');
     }
 
-    public function testSubredditGalleriesWrongWindowValue()
+    public function testSubredditGalleriesWrongWindowValue(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('is wrong. Possible values are');
 
-        $this->getApiMock()->subredditGalleries('pics', 'time', 0, 'bad window');
+        $this->getApiGalleryMock()->subredditGalleries('pics', 'time', 0, 'bad window');
     }
 
-    public function testSubredditImage()
+    public function testSubredditImage(): void
     {
         $expectedValue = [
             'data' => [
@@ -255,7 +254,7 @@ class GalleryTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiGalleryMock();
         $api->expects($this->once())
             ->method('get')
             ->with('gallery/r/pics/yB1PpjL')
@@ -264,7 +263,7 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->subredditImage('pics', 'yB1PpjL'));
     }
 
-    public function testGalleryTag()
+    public function testGalleryTag(): void
     {
         $expectedValue = [
             'data' => [
@@ -274,7 +273,7 @@ class GalleryTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiGalleryMock();
         $api->expects($this->once())
             ->method('get')
             ->with('gallery/t/funny/viral/week/0')
@@ -283,23 +282,23 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->galleryTag('funny'));
     }
 
-    public function testGalleryTagWrongSortValue()
+    public function testGalleryTagWrongSortValue(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('is wrong. Possible values are');
 
-        $this->getApiMock()->galleryTag('funny', 'bad sort');
+        $this->getApiGalleryMock()->galleryTag('funny', 'bad sort');
     }
 
-    public function testGalleryTagWrongWindowValue()
+    public function testGalleryTagWrongWindowValue(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('is wrong. Possible values are');
 
-        $this->getApiMock()->galleryTag('funny', 'time', 0, 'bad window');
+        $this->getApiGalleryMock()->galleryTag('funny', 'time', 0, 'bad window');
     }
 
-    public function testGalleryTagImage()
+    public function testGalleryTagImage(): void
     {
         $expectedValue = [
             'data' => [
@@ -309,7 +308,7 @@ class GalleryTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiGalleryMock();
         $api->expects($this->once())
             ->method('get')
             ->with('gallery/t/funny/yB1PpjL')
@@ -318,7 +317,7 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->galleryTagImage('funny', 'yB1PpjL'));
     }
 
-    public function testGalleryItemTags()
+    public function testGalleryItemTags(): void
     {
         $expectedValue = [
             'data' => [
@@ -328,7 +327,7 @@ class GalleryTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiGalleryMock();
         $api->expects($this->once())
             ->method('get')
             ->with('gallery/y1Od4/tags')
@@ -337,7 +336,7 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->galleryItemTags('y1Od4'));
     }
 
-    public function testGalleryVoteTag()
+    public function testGalleryVoteTag(): void
     {
         $expectedValue = [
             'data' => true,
@@ -345,7 +344,7 @@ class GalleryTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiGalleryMock();
         $api->expects($this->once())
             ->method('post')
             ->with('gallery/y1Od4/vote/tag/funny/up')
@@ -354,15 +353,15 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->galleryVoteTag('y1Od4', 'funny', 'up'));
     }
 
-    public function testGalleryVoteTagWrongVoteValue()
+    public function testGalleryVoteTagWrongVoteValue(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('is wrong. Possible values are');
 
-        $this->getApiMock()->galleryVoteTag('y1Od4', 'funny', 'bad vote');
+        $this->getApiGalleryMock()->galleryVoteTag('y1Od4', 'funny', 'bad vote');
     }
 
-    public function testSearch()
+    public function testSearch(): void
     {
         $expectedValue = [
             'data' => [
@@ -374,7 +373,7 @@ class GalleryTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiGalleryMock();
         $api->expects($this->once())
             ->method('get')
             ->with('gallery/search/time/0', ['q' => '20minutes'])
@@ -383,15 +382,15 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->search('20minutes'));
     }
 
-    public function testSearchWrongValues()
+    public function testSearchWrongValues(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('is wrong. Possible values are');
 
-        $this->getApiMock()->search('pics', 'bad sort');
+        $this->getApiGalleryMock()->search('pics', 'bad sort');
     }
 
-    public function testRandomGalleryImages()
+    public function testRandomGalleryImages(): void
     {
         $expectedValue = [
             'data' => [
@@ -403,7 +402,7 @@ class GalleryTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiGalleryMock();
         $api->expects($this->once())
             ->method('get')
             ->with('gallery/random/random/0')
@@ -412,7 +411,7 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->randomGalleryImages());
     }
 
-    public function testSubmitToGallery()
+    public function testSubmitToGallery(): void
     {
         $expectedValue = [
             'data' => true,
@@ -420,7 +419,7 @@ class GalleryTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiGalleryMock();
         $api->expects($this->once())
             ->method('post')
             ->with('gallery/y1Od4')
@@ -429,15 +428,15 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->submitToGallery('y1Od4', ['title' => 'yo']));
     }
 
-    public function testSubmitToGalleryParamMissing()
+    public function testSubmitToGalleryParamMissing(): void
     {
         $this->expectException(\Imgur\Exception\MissingArgumentException::class);
         $this->expectExceptionMessage('parameters is missing');
 
-        $this->getApiMock()->submitToGallery('y1Od4', []);
+        $this->getApiGalleryMock()->submitToGallery('y1Od4', []);
     }
 
-    public function testRemoveFromGallery()
+    public function testRemoveFromGallery(): void
     {
         $expectedValue = [
             'data' => true,
@@ -445,7 +444,7 @@ class GalleryTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiGalleryMock();
         $api->expects($this->once())
             ->method('delete')
             ->with('gallery/ccWiaRJ')
@@ -454,7 +453,7 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->removeFromGallery('ccWiaRJ'));
     }
 
-    public function testAlbum()
+    public function testAlbum(): void
     {
         $expectedValue = [
             'data' => [
@@ -464,7 +463,7 @@ class GalleryTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiGalleryMock();
         $api->expects($this->once())
             ->method('get')
             ->with('gallery/album/VOMXz')
@@ -473,7 +472,7 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->album('VOMXz'));
     }
 
-    public function testImage()
+    public function testImage(): void
     {
         $expectedValue = [
             'data' => [
@@ -483,7 +482,7 @@ class GalleryTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiGalleryMock();
         $api->expects($this->once())
             ->method('get')
             ->with('gallery/image/ccWiaRJ')
@@ -492,7 +491,7 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->image('ccWiaRJ'));
     }
 
-    public function testReport()
+    public function testReport(): void
     {
         $expectedValue = [
             'data' => true,
@@ -500,7 +499,7 @@ class GalleryTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiGalleryMock();
         $api->expects($this->once())
             ->method('post')
             ->with('gallery/VOMXz/report')
@@ -509,7 +508,7 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->report('VOMXz'));
     }
 
-    public function testVotes()
+    public function testVotes(): void
     {
         $expectedValue = [
             'data' => [
@@ -519,7 +518,7 @@ class GalleryTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiGalleryMock();
         $api->expects($this->once())
             ->method('get')
             ->with('gallery/VOMXz/votes')
@@ -528,7 +527,7 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->votes('VOMXz'));
     }
 
-    public function testVote()
+    public function testVote(): void
     {
         $expectedValue = [
             'data' => true,
@@ -536,7 +535,7 @@ class GalleryTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiGalleryMock();
         $api->expects($this->once())
             ->method('post')
             ->with('gallery/VOMXz/vote/up')
@@ -545,15 +544,15 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->vote('VOMXz', 'up'));
     }
 
-    public function testVoteWrongVoteValue()
+    public function testVoteWrongVoteValue(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('is wrong. Possible values are');
 
-        $this->getApiMock()->vote('VOMXz', 'bad vote');
+        $this->getApiGalleryMock()->vote('VOMXz', 'bad vote');
     }
 
-    public function testComments()
+    public function testComments(): void
     {
         $expectedValue = [
             'data' => [
@@ -565,7 +564,7 @@ class GalleryTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiGalleryMock();
         $api->expects($this->once())
             ->method('get')
             ->with('gallery/VOMXz/comments/best')
@@ -574,15 +573,15 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->comments('VOMXz'));
     }
 
-    public function testCommentsWrongValues()
+    public function testCommentsWrongValues(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('is wrong. Possible values are');
 
-        $this->getApiMock()->comments('VOMXz', 'bad sort');
+        $this->getApiGalleryMock()->comments('VOMXz', 'bad sort');
     }
 
-    public function testComment()
+    public function testComment(): void
     {
         $expectedValue = [
             'data' => [
@@ -592,7 +591,7 @@ class GalleryTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiGalleryMock();
         $api->expects($this->once())
             ->method('get')
             ->with('gallery/VOMXz/comment/1234')
@@ -601,7 +600,7 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->comment('VOMXz', '1234'));
     }
 
-    public function testCreateComment()
+    public function testCreateComment(): void
     {
         $expectedValue = [
             'data' => true,
@@ -609,7 +608,7 @@ class GalleryTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiGalleryMock();
         $api->expects($this->once())
             ->method('post')
             ->with('gallery/VOMXz/comment')
@@ -618,15 +617,15 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->createComment('VOMXz', ['comment' => 'yo']));
     }
 
-    public function testCreateCommentParamMissing()
+    public function testCreateCommentParamMissing(): void
     {
         $this->expectException(\Imgur\Exception\MissingArgumentException::class);
         $this->expectExceptionMessage('parameters is missing');
 
-        $this->getApiMock()->createComment('y1Od4', []);
+        $this->getApiGalleryMock()->createComment('y1Od4', []);
     }
 
-    public function testCreateReply()
+    public function testCreateReply(): void
     {
         $expectedValue = [
             'data' => true,
@@ -634,7 +633,7 @@ class GalleryTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiGalleryMock();
         $api->expects($this->once())
             ->method('post')
             ->with('gallery/VOMXz/comment/123')
@@ -643,15 +642,15 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->createReply('VOMXz', '123', ['comment' => 'yo']));
     }
 
-    public function testCreateReplyParamMissing()
+    public function testCreateReplyParamMissing(): void
     {
         $this->expectException(\Imgur\Exception\MissingArgumentException::class);
         $this->expectExceptionMessage('parameters is missing');
 
-        $this->getApiMock()->createReply('y1Od4', '123', []);
+        $this->getApiGalleryMock()->createReply('y1Od4', '123', []);
     }
 
-    public function testCommentIds()
+    public function testCommentIds(): void
     {
         $expectedValue = [
             'data' => [
@@ -663,7 +662,7 @@ class GalleryTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiGalleryMock();
         $api->expects($this->once())
             ->method('get')
             ->with('gallery/VOMXz/comments/ids')
@@ -672,7 +671,7 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->commentIds('VOMXz'));
     }
 
-    public function testCommentCount()
+    public function testCommentCount(): void
     {
         $expectedValue = [
             'data' => 21,
@@ -680,17 +679,12 @@ class GalleryTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiGalleryMock();
         $api->expects($this->once())
             ->method('get')
             ->with('gallery/VOMXz/comments/count')
             ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->commentCount('VOMXz'));
-    }
-
-    protected function getApiClass()
-    {
-        return 'Imgur\Api\Gallery';
     }
 }

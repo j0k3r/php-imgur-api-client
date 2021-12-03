@@ -20,10 +20,8 @@ class Notification extends AbstractApi
      *
      * @return array With keys "replies" & "messages"
      */
-    public function notifications($new = true)
+    public function notifications(string $new = 'true')
     {
-        $new = $new ? 'true' : 'false';
-
         return $this->get('notification', ['new' => $new]);
     }
 
@@ -48,7 +46,7 @@ class Notification extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/notification#notification-viewed
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function notificationViewed($notificationId)
     {

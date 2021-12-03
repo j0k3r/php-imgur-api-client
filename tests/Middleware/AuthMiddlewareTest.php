@@ -14,9 +14,9 @@ use Psr\Http\Message\RequestInterface;
 
 class AuthMiddlewareTest extends TestCase
 {
-    public function testDefineClientIdOnBadToken()
+    public function testDefineClientIdOnBadToken(): void
     {
-        $token = 'token';
+        $token = ['token'];
         $clientId = 'clientid';
 
         $mock = new MockHandler([
@@ -39,7 +39,7 @@ class AuthMiddlewareTest extends TestCase
         $this->assertInstanceOf(PromiseInterface::class, $promise);
     }
 
-    public function testDefineBeareOnGoodToken()
+    public function testDefineBeareOnGoodToken(): void
     {
         $token = ['access_token' => 'T0K3N'];
         $clientId = 'clientid';

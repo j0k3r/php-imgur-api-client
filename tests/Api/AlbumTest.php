@@ -12,23 +12,22 @@ use Imgur\HttpClient\HttpClient;
 
 class AlbumTest extends ApiTestCase
 {
-    public function testBaseReal()
+    public function testBaseReal(): void
     {
         $this->expectException(\Imgur\Exception\ErrorException::class);
         $this->expectExceptionMessage('Authentication required');
 
-        $guzzleClient = new GuzzleClient(['base_uri' => 'https://api.imgur.com/3/']);
-        $httpClient = new HttpClient([], $guzzleClient);
+        $httpClient = new HttpClient();
         $client = new Client(null, $httpClient);
         $album = new Album($client);
 
         $album->album('VOMXz');
     }
 
-    public function testBaseWithResponse()
+    public function testBaseWithResponse(): void
     {
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json'], json_encode([
+            new Response(200, ['Content-Type' => 'application/json'], (string) json_encode([
                 'data' => [
                     'id' => 'VOMXz',
                     'title' => 'sample',
@@ -84,7 +83,7 @@ class AlbumTest extends ApiTestCase
         $handler = HandlerStack::create($mock);
         $guzzleClient = new GuzzleClient(['handler' => $handler]);
 
-        $httpClient = new HttpClient([], $guzzleClient);
+        $httpClient = new HttpClient([], $guzzleClient, $handler);
         $client = new Client(null, $httpClient);
         $album = new Album($client);
 
@@ -113,7 +112,7 @@ class AlbumTest extends ApiTestCase
         $this->assertArrayHasKey('images', $result);
     }
 
-    public function testAlbum()
+    public function testAlbum(): void
     {
         $expectedValue = [
             'data' => [
@@ -123,7 +122,7 @@ class AlbumTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAlbumMock();
         $api->expects($this->once())
             ->method('get')
             ->with('album/VOMXz')
@@ -132,7 +131,7 @@ class AlbumTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->album('VOMXz'));
     }
 
-    public function testAlbumImages()
+    public function testAlbumImages(): void
     {
         $expectedValue = [
             'data' => [
@@ -142,7 +141,7 @@ class AlbumTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAlbumMock();
         $api->expects($this->once())
             ->method('get')
             ->with('album/VOMXz/images')
@@ -151,7 +150,7 @@ class AlbumTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->albumImages('VOMXz'));
     }
 
-    public function testAlbumImage()
+    public function testAlbumImage(): void
     {
         $expectedValue = [
             'data' => [
@@ -161,7 +160,7 @@ class AlbumTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAlbumMock();
         $api->expects($this->once())
             ->method('get')
             ->with('album/VOMXz/image/POvvB')
@@ -170,7 +169,7 @@ class AlbumTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->albumImage('VOMXz', 'POvvB'));
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $expectedValue = [
             'data' => true,
@@ -178,16 +177,16 @@ class AlbumTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAlbumMock();
         $api->expects($this->once())
             ->method('post')
             ->with('album')
             ->willReturn($expectedValue);
 
-        $this->assertSame($expectedValue, $api->create('VOMXz'));
+        $this->assertSame($expectedValue, $api->create(['VOMXz']));
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $expectedValue = [
             'data' => true,
@@ -195,7 +194,7 @@ class AlbumTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAlbumMock();
         $api->expects($this->once())
             ->method('post')
             ->with('album/VOMXz')
@@ -206,7 +205,7 @@ class AlbumTest extends ApiTestCase
         ]));
     }
 
-    public function testDeleteAlbum()
+    public function testDeleteAlbum(): void
     {
         $expectedValue = [
             'data' => [
@@ -216,7 +215,7 @@ class AlbumTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAlbumMock();
         $api->expects($this->once())
             ->method('delete')
             ->with('album/VOMXz')
@@ -225,7 +224,7 @@ class AlbumTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->deleteAlbum('VOMXz'));
     }
 
-    public function testFavoriteAlbum()
+    public function testFavoriteAlbum(): void
     {
         $expectedValue = [
             'data' => true,
@@ -233,7 +232,7 @@ class AlbumTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAlbumMock();
         $api->expects($this->once())
             ->method('post')
             ->with('album/VOMXz/favorite')
@@ -242,7 +241,7 @@ class AlbumTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->favoriteAlbum('VOMXz'));
     }
 
-    public function testSetAlbumImages()
+    public function testSetAlbumImages(): void
     {
         $expectedValue = [
             'data' => true,
@@ -250,7 +249,7 @@ class AlbumTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAlbumMock();
         $api->expects($this->once())
             ->method('post')
             ->with('album/VOMXz')
@@ -259,7 +258,7 @@ class AlbumTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->setAlbumImages('VOMXz', ['POvvB', 'P1vvB']));
     }
 
-    public function testAddImages()
+    public function testAddImages(): void
     {
         $expectedValue = [
             'data' => true,
@@ -267,7 +266,7 @@ class AlbumTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAlbumMock();
         $api->expects($this->once())
             ->method('post')
             ->with('album/VOMXz/add')
@@ -276,7 +275,7 @@ class AlbumTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->addImages('VOMXz', ['POvvB', 'P1vvB']));
     }
 
-    public function testRemoveImages()
+    public function testRemoveImages(): void
     {
         $expectedValue = [
             'data' => true,
@@ -284,17 +283,12 @@ class AlbumTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiAlbumMock();
         $api->expects($this->once())
             ->method('delete')
             ->with('album/VOMXz/remove_images')
             ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->removeImages('VOMXz', ['POvvB', 'P1vvB']));
-    }
-
-    protected function getApiClass()
-    {
-        return 'Imgur\Api\Album';
     }
 }

@@ -32,7 +32,7 @@ class OAuth2 implements AuthInterface
     /**
      * The class handling communication with Imgur servers.
      *
-     * @var \Imgur\HttpClient\HttpClientInterface
+     * @var HttpClientInterface
      */
     private $httpClient;
 
@@ -61,11 +61,8 @@ class OAuth2 implements AuthInterface
 
     /**
      * Instantiates the OAuth2 class, but does not trigger the authentication process.
-     *
-     * @param string $clientId
-     * @param string $clientSecret
      */
-    public function __construct(HttpClientInterface $httpClient, $clientId, $clientSecret)
+    public function __construct(HttpClientInterface $httpClient, string $clientId, string $clientSecret)
     {
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
@@ -74,13 +71,8 @@ class OAuth2 implements AuthInterface
 
     /**
      * Generates the authentication URL to which a user should be pointed at in order to start the OAuth2 process.
-     *
-     * @param string      $responseType
-     * @param string|null $state
-     *
-     * @return string
      */
-    public function getAuthenticationURL($responseType = 'code', $state = null)
+    public function getAuthenticationURL(string $responseType = 'code', string $state = null): string
     {
         $httpQueryParameters = [
             'client_id' => $this->clientId,
@@ -96,12 +88,9 @@ class OAuth2 implements AuthInterface
     /**
      * Exchanges a code/pin for an access token.
      *
-     * @param string $code
      * @param string $requestType
-     *
-     * @return array
      */
-    public function requestAccessToken($code, $requestType)
+    public function requestAccessToken(string $code, string $requestType = null): array
     {
         switch ($requestType) {
             case 'pin':
@@ -146,10 +135,8 @@ class OAuth2 implements AuthInterface
      * you will have to prompt the user for their login information again.
      *
      * @throws AuthException
-     *
-     * @return array
      */
-    public function refreshToken()
+    public function refreshToken(): array
     {
         $token = $this->getAccessToken();
 
@@ -182,10 +169,8 @@ class OAuth2 implements AuthInterface
      * @param array $token
      *
      * @throws AuthException
-     *
-     * @return array
      */
-    public function setAccessToken($token)
+    public function setAccessToken(array $token = null): void
     {
         if (!\is_array($token)) {
             throw new AuthException('Token is not a valid json string.');
@@ -206,33 +191,29 @@ class OAuth2 implements AuthInterface
 
     /**
      * Getter for the current access token.
-     *
-     * @return array|null
      */
-    public function getAccessToken()
+    public function getAccessToken(): ?array
     {
         return $this->token;
     }
 
     /**
      * Check if the current access token (if present), is still usable.
-     *
-     * @return bool
      */
-    public function checkAccessTokenExpired()
+    public function checkAccessTokenExpired(): bool
     {
         // don't have the data? Let's assume the token has expired
         if (!isset($this->token['created_at']) || !isset($this->token['expires_in'])) {
             return true;
         }
 
-        return ($this->token['created_at'] + $this->token['expires_in']) < time();
+        return ((int) ($this->token['created_at'] + $this->token['expires_in'])) < time();
     }
 
     /**
      * Add middleware for attaching header signature to each request.
      */
-    public function sign()
+    public function sign(): void
     {
         $this->httpClient->addAuthMiddleware(
             $this->getAccessToken(),

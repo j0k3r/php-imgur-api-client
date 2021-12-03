@@ -47,7 +47,7 @@ class Conversation extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/conversation#message-create
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function messageCreate($data)
     {
@@ -65,7 +65,7 @@ class Conversation extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/conversation#message-delete
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function conversationDelete($conversationId)
     {
@@ -79,7 +79,7 @@ class Conversation extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/conversation#message-report
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function reportSender($username)
     {
@@ -93,7 +93,7 @@ class Conversation extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/conversation#message-block
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function blockSender($username)
     {

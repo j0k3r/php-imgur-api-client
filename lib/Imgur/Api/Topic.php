@@ -45,7 +45,7 @@ class Topic extends AbstractApi
      * View a single item in a gallery topic.
      *
      * @param string $topicId The ID or URL-formatted name of the topic. If using a topic's name, replace its spaces with underscores (Mother's_Day)
-     * @param int    $itemId  The ID for the gallery item
+     * @param string $itemId  The ID for the gallery item
      *
      * @see https://api.imgur.com/endpoints/topic#gallery-topic-item
      *

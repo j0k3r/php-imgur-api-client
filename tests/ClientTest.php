@@ -2,74 +2,100 @@
 
 namespace Imgur\tests;
 
+use Imgur\Auth\OAuth2;
 use Imgur\Client;
 use Imgur\Exception\InvalidArgumentException;
+use Imgur\HttpClient\HttpClient;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ClientTest extends TestCase
 {
-    public function testNoParameters()
+    public function testNoParameters(): void
     {
         $client = new Client();
-        $this->assertInstanceOf('Imgur\HttpClient\HttpClient', $client->getHttpClient());
-        $this->assertInstanceOf('Imgur\Auth\OAuth2', $client->getAuthenticationClient());
+        $client->setOption('client_id', 'xx');
+        $client->setOption('client_secret', 'xx');
+
+        $this->assertInstanceOf(HttpClient::class, $client->getHttpClient());
+        $this->assertInstanceOf(OAuth2::class, $client->getAuthenticationClient());
     }
 
-    public function testAuthenticationParameter()
+    public function testAuthenticationParameter(): void
     {
-        $client = new Client($this->getAuthenticationClientMock());
-        $this->assertInstanceOf('Imgur\HttpClient\HttpClient', $client->getHttpClient());
-        $this->assertInstanceOf('Imgur\Auth\AuthInterface', $client->getAuthenticationClient());
+        $authenticationClient = $this->getAuthenticationClientMock();
+        $client = new Client($authenticationClient);
+        $client->setOption('client_id', 'xx');
+        $client->setOption('client_secret', 'xx');
+
+        $this->assertInstanceOf(HttpClient::class, $client->getHttpClient());
+        $this->assertInstanceOf(OAuth2::class, $client->getAuthenticationClient());
     }
 
-    public function testHttpParameter()
+    public function testHttpParameter(): void
     {
-        $client = new Client(null, $this->getHttpClientMock());
-        $this->assertInstanceOf('Imgur\HttpClient\HttpClientInterface', $client->getHttpClient());
-        $this->assertInstanceOf('Imgur\Auth\OAuth2', $client->getAuthenticationClient());
+        $httpClient = $this->getHttpClientMock();
+        $client = new Client(null, $httpClient);
+        $client->setOption('client_id', 'xx');
+        $client->setOption('client_secret', 'xx');
+
+        $this->assertInstanceOf(HttpClient::class, $client->getHttpClient());
+        $this->assertInstanceOf(OAuth2::class, $client->getAuthenticationClient());
     }
 
-    public function testBothParameter()
+    public function testBothParameter(): void
     {
-        $client = new Client($this->getAuthenticationClientMock(), $this->getHttpClientMock());
-        $this->assertInstanceOf('Imgur\HttpClient\HttpClientInterface', $client->getHttpClient());
-        $this->assertInstanceOf('Imgur\Auth\AuthInterface', $client->getAuthenticationClient());
+        $httpClient = $this->getHttpClientMock();
+        $authenticationClient = $this->getAuthenticationClientMock();
+        $client = new Client($authenticationClient, $httpClient);
+        $client->setOption('client_id', 'xx');
+        $client->setOption('client_secret', 'xx');
+
+        $this->assertInstanceOf(HttpClient::class, $client->getHttpClient());
+        $this->assertInstanceOf(OAuth2::class, $client->getAuthenticationClient());
     }
 
     /**
      * @dataProvider getApiClassesProvider
+     *
+     * @param class-string $class
      */
-    public function testGetApiInstance($apiName, $class)
+    public function testGetApiInstance(string $apiName, $class): void
     {
         $client = new Client();
+        $client->setOption('client_id', 'xx');
+        $client->setOption('client_secret', 'xx');
+
         $this->assertInstanceOf($class, $client->api($apiName));
     }
 
-    public function getApiClassesProvider()
+    public function getApiClassesProvider(): array
     {
         return [
-            ['account', 'Imgur\Api\Account'],
-            ['album', 'Imgur\Api\Album'],
-            ['comment', 'Imgur\Api\Comment'],
-            ['gallery', 'Imgur\Api\Gallery'],
-            ['image', 'Imgur\Api\Image'],
-            ['conversation', 'Imgur\Api\Conversation'],
-            ['notification', 'Imgur\Api\Notification'],
-            ['memegen', 'Imgur\Api\Memegen'],
-            ['customGallery', 'Imgur\Api\CustomGallery'],
-            ['topic', 'Imgur\Api\Topic'],
+            ['account', \Imgur\Api\Account::class],
+            ['album', \Imgur\Api\Album::class],
+            ['comment', \Imgur\Api\Comment::class],
+            ['gallery', \Imgur\Api\Gallery::class],
+            ['image', \Imgur\Api\Image::class],
+            ['conversation', \Imgur\Api\Conversation::class],
+            ['notification', \Imgur\Api\Notification::class],
+            ['memegen', \Imgur\Api\Memegen::class],
+            ['customGallery', \Imgur\Api\CustomGallery::class],
+            ['topic', \Imgur\Api\Topic::class],
         ];
     }
 
-    public function testNotGetApiInstance()
+    public function testNotGetApiInstance(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
         $client = new Client();
+        $client->setOption('client_id', 'xx');
+        $client->setOption('client_secret', 'xx');
         $client->api('do_not_exist');
     }
 
-    public function testGetOptionNotDefined()
+    public function testGetOptionNotDefined(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -77,7 +103,7 @@ class ClientTest extends TestCase
         $client->getOption('do_not_exist');
     }
 
-    public function testSetOptionNotDefined()
+    public function testSetOptionNotDefined(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -88,7 +114,7 @@ class ClientTest extends TestCase
     /**
      * @dataProvider getOptions
      */
-    public function testGetOption($option, $value)
+    public function testGetOption(string $option, string $value): void
     {
         $client = new Client();
         $client->setOption($option, $value);
@@ -96,7 +122,7 @@ class ClientTest extends TestCase
         $this->assertSame($value, $client->getOption($option));
     }
 
-    public function getOptions()
+    public function getOptions(): array
     {
         return [
             ['base_url', 'url'],
@@ -105,23 +131,24 @@ class ClientTest extends TestCase
         ];
     }
 
-    public function testGetAuthenticationUrl()
+    public function testGetAuthenticationUrl(): void
     {
-        $client = new Client();
-        $this->assertSame('https://api.imgur.com/oauth2/authorize?response_type=code', $client->getAuthenticationUrl());
-        $this->assertSame('https://api.imgur.com/oauth2/authorize?response_type=pin', $client->getAuthenticationUrl('pin'));
-        $this->assertSame('https://api.imgur.com/oauth2/authorize?response_type=code&state=draft', $client->getAuthenticationUrl('code', 'draft'));
+        // $client = new Client();
+        // $this->assertSame('https://api.imgur.com/oauth2/authorize?response_type=code', $client->getAuthenticationUrl());
+        // $this->assertSame('https://api.imgur.com/oauth2/authorize?response_type=pin', $client->getAuthenticationUrl('pin'));
+        // $this->assertSame('https://api.imgur.com/oauth2/authorize?response_type=code&state=draft', $client->getAuthenticationUrl('code', 'draft'));
 
         $client = new Client();
         $client->setOption('client_id', 123);
+        $client->setOption('client_secret', 'xx');
         $this->assertSame('https://api.imgur.com/oauth2/authorize?client_id=123&response_type=pin', $client->getAuthenticationUrl('pin'));
         $this->assertSame('https://api.imgur.com/oauth2/authorize?client_id=123&response_type=code', $client->getAuthenticationUrl());
         $this->assertSame('https://api.imgur.com/oauth2/authorize?client_id=123&response_type=code&state=draft', $client->getAuthenticationUrl('code', 'draft'));
     }
 
-    public function testCheckAccessTokenExpired()
+    public function testCheckAccessTokenExpired(): void
     {
-        $authenticationClient = $this->getAuthenticationClientMock(['checkAccessTokenExpired']);
+        $authenticationClient = $this->getAuthenticationClientMock();
         $authenticationClient->expects($this->once())
             ->method('checkAccessTokenExpired')
             ->with();
@@ -130,7 +157,7 @@ class ClientTest extends TestCase
         $client->checkAccessTokenExpired();
     }
 
-    public function testRequestAccessToken()
+    public function testRequestAccessToken(): void
     {
         $httpClient = $this->getHttpClientMock();
         $authenticationClient = $this->getAuthenticationClientMock();
@@ -142,7 +169,7 @@ class ClientTest extends TestCase
         $client->requestAccessToken('code');
     }
 
-    public function testRefreshToken()
+    public function testRefreshToken(): void
     {
         $httpClient = $this->getHttpClientMock();
         $authenticationClient = $this->getAuthenticationClientMock();
@@ -153,41 +180,37 @@ class ClientTest extends TestCase
         $client->refreshToken();
     }
 
-    public function testSetAccessToken()
+    public function testSetAccessToken(): void
     {
         $httpClient = $this->getHttpClientMock();
         $authenticationClient = $this->getAuthenticationClientMock();
         $authenticationClient->expects($this->once())
             ->method('setAccessToken')
-            ->with('token');
+            ->with(['token']);
 
         $client = new Client($authenticationClient, $httpClient);
-        $client->setAccessToken('token');
+        $client->setAccessToken(['token']);
     }
 
-    private function getHttpClientMock(array $methods = [])
+    /**
+     * @return HttpClient&MockObject
+     */
+    private function getHttpClientMock(array $methods = []): object
     {
-        $methods = array_merge(
-            ['get', 'post', 'delete', 'request', 'performRequest', 'createRequest', 'parseResponse'],
-            $methods
-        );
-
-        return $this->getMockBuilder('Imgur\HttpClient\HttpClient')
+        return $this->getMockBuilder(HttpClient::class)
             ->disableOriginalConstructor()
-            ->setMethods($methods)
+            ->onlyMethods(['get', 'post', 'delete', 'performRequest', 'parseResponse'])
+            ->addMethods(array_merge_recursive(['request', 'createRequest'], $methods))
             ->getMock();
     }
 
-    private function getAuthenticationClientMock(array $methods = [])
+    /**
+     * @return OAuth2&MockObject
+     */
+    private function getAuthenticationClientMock()
     {
-        $methods = array_merge(
-            ['getAuthenticationUrl', 'getAccessToken', 'requestAccessToken', 'setAccessToken', 'sign', 'refreshToken'],
-            $methods
-        );
-
         return $this->getMockBuilder('Imgur\Auth\OAuth2')
             ->disableOriginalConstructor()
-            ->setMethods($methods)
             ->getMock();
     }
 }

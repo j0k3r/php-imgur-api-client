@@ -31,7 +31,7 @@ class Account extends AbstractApi
      *
      * @param string $username
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function deleteAccount($username)
     {
@@ -106,7 +106,7 @@ class Account extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/account#update-settings
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function changeAccountSettings($parameters)
     {
@@ -147,7 +147,7 @@ class Account extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/account#verify-email
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function verifyUsersEmail($username = 'me')
     {
@@ -161,7 +161,7 @@ class Account extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/account#send-verify-email
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function sendVerificationEmail($username = 'me')
     {
@@ -207,7 +207,7 @@ class Account extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/account#album-ids
      *
-     * @return array<int>
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function albumIds($username = 'me', $page = 0)
     {
@@ -221,7 +221,7 @@ class Account extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/account#album-count
      *
-     * @return int
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function albumCount($username = 'me')
     {
@@ -236,7 +236,7 @@ class Account extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/account#album-delete
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function albumDelete($albumId, $username = 'me')
     {
@@ -286,7 +286,7 @@ class Account extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/account#comment-ids
      *
-     * @return array<int>
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function commentIds($username = 'me', $page = 0, $sort = 'newest')
     {
@@ -302,7 +302,7 @@ class Account extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/account#comment-count
      *
-     * @return int
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function commentCount($username = 'me')
     {
@@ -317,7 +317,7 @@ class Account extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/account#comment-delete
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function commentDelete($commentId, $username = 'me')
     {
@@ -364,7 +364,7 @@ class Account extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/account#image-ids
      *
-     * @return array<int>
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function imageIds($username = 'me', $page = 0)
     {
@@ -378,7 +378,7 @@ class Account extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/account#image-count
      *
-     * @return int
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function imageCount($username = 'me')
     {
@@ -393,7 +393,7 @@ class Account extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/account#image-delete
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function imageDelete($deleteHash, $username = 'me')
     {

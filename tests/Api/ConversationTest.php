@@ -12,23 +12,22 @@ use Imgur\HttpClient\HttpClient;
 
 class ConversationTest extends ApiTestCase
 {
-    public function testBaseReal()
+    public function testBaseReal(): void
     {
         $this->expectException(\Imgur\Exception\ErrorException::class);
         $this->expectExceptionMessage('Authentication required');
 
-        $guzzleClient = new GuzzleClient(['base_uri' => 'https://api.imgur.com/3/']);
-        $httpClient = new HttpClient([], $guzzleClient);
+        $httpClient = new HttpClient();
         $client = new Client(null, $httpClient);
         $conversation = new Conversation($client);
 
         $conversation->conversations();
     }
 
-    public function testBaseWithResponse()
+    public function testBaseWithResponse(): void
     {
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json'], json_encode([
+            new Response(200, ['Content-Type' => 'application/json'], (string) json_encode([
                 'data' => [
                     [
                         'id' => 11247233,
@@ -46,7 +45,7 @@ class ConversationTest extends ApiTestCase
         $handler = HandlerStack::create($mock);
         $guzzleClient = new GuzzleClient(['handler' => $handler]);
 
-        $httpClient = new HttpClient([], $guzzleClient);
+        $httpClient = new HttpClient([], $guzzleClient, $handler);
         $client = new Client(null, $httpClient);
         $conversation = new Conversation($client);
 
@@ -60,7 +59,7 @@ class ConversationTest extends ApiTestCase
         $this->assertArrayhasKey('datetime', $result[0]);
     }
 
-    public function testConversations()
+    public function testConversations(): void
     {
         $expectedValue = [
             'data' => [
@@ -72,7 +71,7 @@ class ConversationTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiConversationMock();
         $api->expects($this->once())
             ->method('get')
             ->with('conversations')
@@ -81,7 +80,7 @@ class ConversationTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->conversations());
     }
 
-    public function testConversation()
+    public function testConversation(): void
     {
         $expectedValue = [
             'data' => [
@@ -91,7 +90,7 @@ class ConversationTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiConversationMock();
         $api->expects($this->once())
             ->method('get')
             ->with('conversations/11247233')
@@ -100,7 +99,7 @@ class ConversationTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->conversation('11247233'));
     }
 
-    public function testMessageCreate()
+    public function testMessageCreate(): void
     {
         $expectedValue = [
             'data' => true,
@@ -108,7 +107,7 @@ class ConversationTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiConversationMock();
         $api->expects($this->once())
             ->method('post')
             ->with('conversations/imgur')
@@ -117,15 +116,15 @@ class ConversationTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->messageCreate(['recipient' => 'imgur', 'body' => 'YO !']));
     }
 
-    public function testMessageCreateParamMissing()
+    public function testMessageCreateParamMissing(): void
     {
         $this->expectException(\Imgur\Exception\MissingArgumentException::class);
         $this->expectExceptionMessage('parameters is missing');
 
-        $this->getApiMock()->messageCreate([]);
+        $this->getApiConversationMock()->messageCreate([]);
     }
 
-    public function testConversationDelete()
+    public function testConversationDelete(): void
     {
         $expectedValue = [
             'data' => true,
@@ -133,7 +132,7 @@ class ConversationTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiConversationMock();
         $api->expects($this->once())
             ->method('delete')
             ->with('conversations/11247233')
@@ -142,7 +141,7 @@ class ConversationTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->conversationDelete('11247233'));
     }
 
-    public function testReportSender()
+    public function testReportSender(): void
     {
         $expectedValue = [
             'data' => true,
@@ -150,7 +149,7 @@ class ConversationTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiConversationMock();
         $api->expects($this->once())
             ->method('post')
             ->with('conversations/report/imgur')
@@ -159,7 +158,7 @@ class ConversationTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->reportSender('imgur'));
     }
 
-    public function testBlockSender()
+    public function testBlockSender(): void
     {
         $expectedValue = [
             'data' => true,
@@ -167,17 +166,12 @@ class ConversationTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiConversationMock();
         $api->expects($this->once())
             ->method('post')
             ->with('conversations/block/imgur')
             ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->blockSender('imgur'));
-    }
-
-    protected function getApiClass()
-    {
-        return 'Imgur\Api\Conversation';
     }
 }

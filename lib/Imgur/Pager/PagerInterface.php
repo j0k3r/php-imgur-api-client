@@ -12,20 +12,20 @@ interface PagerInterface
     /**
      * Get the page number to be retrieved.
      */
-    public function getPage();
+    public function getPage(): int;
 
     /**
      * Set the page number to be retrieved.
      */
-    public function setPage($page);
+    public function setPage(int $page): self;
 
     /**
      * Get the number of results per page.
      */
-    public function getResultsPerPage();
+    public function getResultsPerPage(): int;
 
     /**
      * Set the number of results per page.
      */
-    public function setResultsPerPage($resultsPerPage);
+    public function setResultsPerPage(int $resultsPerPage): self;
 }

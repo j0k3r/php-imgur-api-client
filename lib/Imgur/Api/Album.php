@@ -64,7 +64,7 @@ class Album extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/album#album-upload
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function create($data)
     {
@@ -80,7 +80,7 @@ class Album extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/album#album-update
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function update($deletehashOrAlbumId, $data)
     {
@@ -96,7 +96,7 @@ class Album extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/album#album-delete
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function deleteAlbum($deletehashOrAlbumId)
     {
@@ -110,7 +110,7 @@ class Album extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/album#album-favorite
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function favoriteAlbum($albumId)
     {
@@ -125,7 +125,7 @@ class Album extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/album#album-set-to
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function setAlbumImages($albumId, array $imageIds)
     {
@@ -140,7 +140,7 @@ class Album extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/album#album-add-to
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function addImages($albumId, array $imageIds)
     {
@@ -155,7 +155,7 @@ class Album extends AbstractApi
      *
      * @see https://api.imgur.com/endpoints/album#album-remove-from
      *
-     * @return bool
+     * @return array (@see https://api.imgur.com/models/basic)
      */
     public function removeImages($deletehashOrAlbumId, array $imageIds)
     {

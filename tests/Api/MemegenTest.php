@@ -12,23 +12,22 @@ use Imgur\HttpClient\HttpClient;
 
 class MemegenTest extends ApiTestCase
 {
-    public function testBaseReal()
+    public function testBaseReal(): void
     {
         $this->expectException(\Imgur\Exception\ErrorException::class);
         $this->expectExceptionMessage('Authentication required');
 
-        $guzzleClient = new GuzzleClient(['base_uri' => 'https://api.imgur.com/3/']);
-        $httpClient = new HttpClient([], $guzzleClient);
+        $httpClient = new HttpClient();
         $client = new Client(null, $httpClient);
         $memegen = new Memegen($client);
 
         $memegen->defaultMemes();
     }
 
-    public function testBaseWithResponse()
+    public function testBaseWithResponse(): void
     {
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json'], json_encode([
+            new Response(200, ['Content-Type' => 'application/json'], (string) json_encode([
                 'data' => [
                     [
                         'id' => '2tNR7P7',
@@ -60,7 +59,7 @@ class MemegenTest extends ApiTestCase
         $handler = HandlerStack::create($mock);
         $guzzleClient = new GuzzleClient(['handler' => $handler]);
 
-        $httpClient = new HttpClient([], $guzzleClient);
+        $httpClient = new HttpClient([], $guzzleClient, $handler);
         $client = new Client(null, $httpClient);
         $memegen = new Memegen($client);
 
@@ -88,7 +87,7 @@ class MemegenTest extends ApiTestCase
         $this->assertArrayHasKey('link', $result[0]);
     }
 
-    public function testMemegen()
+    public function testMemegen(): void
     {
         $expectedValue = [
             'data' => [
@@ -98,17 +97,12 @@ class MemegenTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiMemegenMock();
         $api->expects($this->once())
             ->method('get')
             ->with('memegen/defaults')
             ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->defaultMemes());
-    }
-
-    protected function getApiClass()
-    {
-        return 'Imgur\Api\Memegen';
     }
 }

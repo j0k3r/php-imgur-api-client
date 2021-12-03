@@ -1,0 +1,16 @@
+parameters:
+    level: 7
+    paths:
+        - lib
+        - tests
+
+    bootstrapFiles:
+        - vendor/bin/.phpunit/phpunit-8.5-0/vendor/autoload.php
+
+    checkMissingIterableValueType: false
+
+    ignoreErrors:
+        # because the test is skipped
+        -
+            message: '#Unreachable statement#'
+            path: %currentWorkingDirectory%/tests/Api/TopicTest.php

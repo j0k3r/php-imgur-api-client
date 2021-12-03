@@ -12,23 +12,22 @@ use Imgur\HttpClient\HttpClient;
 
 class ImageTest extends ApiTestCase
 {
-    public function testBaseReal()
+    public function testBaseReal(): void
     {
         $this->expectException(\Imgur\Exception\ErrorException::class);
         $this->expectExceptionMessage('Authentication required');
 
-        $guzzleClient = new GuzzleClient(['base_uri' => 'https://api.imgur.com/3/']);
-        $httpClient = new HttpClient([], $guzzleClient);
+        $httpClient = new HttpClient();
         $client = new Client(null, $httpClient);
         $image = new Image($client);
 
         $image->image('ZOY11VC');
     }
 
-    public function testBaseWithResponse()
+    public function testBaseWithResponse(): void
     {
         $mock = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json'], json_encode([
+            new Response(200, ['Content-Type' => 'application/json'], (string) json_encode([
                 'data' => [
                     'id' => 'ZOY11VC',
                     'title' => null,
@@ -60,7 +59,7 @@ class ImageTest extends ApiTestCase
         $handler = HandlerStack::create($mock);
         $guzzleClient = new GuzzleClient(['handler' => $handler]);
 
-        $httpClient = new HttpClient([], $guzzleClient);
+        $httpClient = new HttpClient([], $guzzleClient, $handler);
         $client = new Client(null, $httpClient);
         $image = new Image($client);
 
@@ -90,7 +89,7 @@ class ImageTest extends ApiTestCase
         $this->assertArrayHasKey('link', $result);
     }
 
-    public function testImage()
+    public function testImage(): void
     {
         $expectedValue = [
             'data' => [
@@ -100,7 +99,7 @@ class ImageTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiImageMock();
         $api->expects($this->once())
             ->method('get')
             ->with('image/ZOY11VC')
@@ -109,7 +108,7 @@ class ImageTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->image('ZOY11VC'));
     }
 
-    public function testUploadWithUrl()
+    public function testUploadWithUrl(): void
     {
         $expectedValue = [
             'data' => true,
@@ -117,7 +116,7 @@ class ImageTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiImageMock();
         $api->expects($this->once())
             ->method('post')
             ->with('image')
@@ -126,7 +125,7 @@ class ImageTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->upload(['type' => 'url', 'image' => 'http://i.imgur.com/ZOY11VC.png']));
     }
 
-    public function testUploadWithFile()
+    public function testUploadWithFile(): void
     {
         $expectedValue = [
             'data' => true,
@@ -134,7 +133,7 @@ class ImageTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiImageMock();
         $api->expects($this->once())
             ->method('post')
             ->with('image')
@@ -143,23 +142,23 @@ class ImageTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->upload(['type' => 'file', 'image' => __DIR__ . '/ZOY11VC.png']));
     }
 
-    public function testUploadWithBadType()
+    public function testUploadWithBadType(): void
     {
         $this->expectException(\Imgur\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('is wrong. Possible values are');
 
-        $this->getApiMock()->upload(['type' => 'other', 'image' => 'http://i.imgur.com/ZOY11VC.png']);
+        $this->getApiImageMock()->upload(['type' => 'other', 'image' => 'http://i.imgur.com/ZOY11VC.png']);
     }
 
-    public function testUploadWithUrlParamMissing()
+    public function testUploadWithUrlParamMissing(): void
     {
         $this->expectException(\Imgur\Exception\MissingArgumentException::class);
         $this->expectExceptionMessage('parameters is missing');
 
-        $this->getApiMock()->upload([]);
+        $this->getApiImageMock()->upload([]);
     }
 
-    public function testDeleteImage()
+    public function testDeleteImage(): void
     {
         $expectedValue = [
             'data' => true,
@@ -167,7 +166,7 @@ class ImageTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiImageMock();
         $api->expects($this->once())
             ->method('delete')
             ->with('image/ZOY11VC')
@@ -176,7 +175,7 @@ class ImageTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->deleteImage('ZOY11VC'));
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $expectedValue = [
             'data' => true,
@@ -184,7 +183,7 @@ class ImageTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiImageMock();
         $api->expects($this->once())
             ->method('post')
             ->with('image/ZOY11VC')
@@ -193,7 +192,7 @@ class ImageTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->update('ZOY11VC', ['title' => 'hihihi']));
     }
 
-    public function testFavorite()
+    public function testFavorite(): void
     {
         $expectedValue = [
             'data' => true,
@@ -201,17 +200,12 @@ class ImageTest extends ApiTestCase
             'status' => 200,
         ];
 
-        $api = $this->getApiMock();
+        $api = $this->getApiImageMock();
         $api->expects($this->once())
             ->method('post')
             ->with('image/ZOY11VC/favorite')
             ->willReturn($expectedValue);
 
         $this->assertSame($expectedValue, $api->favorite('ZOY11VC'));
-    }
-
-    protected function getApiClass()
-    {
-        return 'Imgur\Api\Image';
     }
 }

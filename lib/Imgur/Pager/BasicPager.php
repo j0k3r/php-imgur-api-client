@@ -11,33 +11,27 @@ namespace Imgur\Pager;
  */
 class BasicPager implements PagerInterface
 {
-    private $page;
-    private $resultsPerPage;
+    private int $page;
+    private int $resultsPerPage;
 
-    public function __construct($page = 1, $resultsPerPage = 10)
+    public function __construct(int $page = 1, int $resultsPerPage = 10)
     {
         $this->setPage($page ?: 1);
         $this->setResultsPerPage($resultsPerPage ?: 10);
-
-        return $this;
     }
 
     /**
      * Get the page number to be retrieved.
-     *
-     * @return int
      */
-    public function getPage()
+    public function getPage(): int
     {
         return $this->page;
     }
 
     /**
      * Get the number of results per page.
-     *
-     * @return int
      */
-    public function getResultsPerPage()
+    public function getResultsPerPage(): int
     {
         return $this->resultsPerPage;
     }
@@ -45,11 +39,9 @@ class BasicPager implements PagerInterface
     /**
      * Set the page number to be retrieved.
      *
-     * @param int $page
-     *
      * @return BasicPager
      */
-    public function setPage($page)
+    public function setPage(int $page): self
     {
         $this->page = $page;
 
@@ -59,11 +51,9 @@ class BasicPager implements PagerInterface
     /**
      * Set the number of results per page.
      *
-     * @param int $resultsPerPage
-     *
      * @return BasicPager
      */
-    public function setResultsPerPage($resultsPerPage)
+    public function setResultsPerPage(int $resultsPerPage): self
     {
         $this->resultsPerPage = $resultsPerPage;
 
