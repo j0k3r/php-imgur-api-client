@@ -5,7 +5,6 @@ namespace Imgur\tests\HttpClient;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Imgur\HttpClient\HttpClient;
 use PHPUnit\Framework\TestCase;
@@ -45,6 +44,28 @@ class HttpClientTest extends TestCase
     {
         $path = '/some/path';
         $parameters = ['a' => 'b'];
+
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json'], json_encode(['data' => 'ok !'])),
+        ]);
+        $handler = HandlerStack::create($mock);
+        $client = new GuzzleClient(['handler' => $handler]);
+
+        $httpClient = new HttpClient([], $client);
+        $response = $httpClient->post($path, $parameters);
+
+        $result = $httpClient->parseResponse($response);
+
+        $this->assertSame('ok !', $result);
+    }
+
+    public function testDoPOSTRequestWithMultipart()
+    {
+        $path = '/some/path';
+        $parameters = [
+            'a' => 'b',
+            'type' => 'file',
+        ];
 
         $mock = new MockHandler([
             new Response(200, ['Content-Type' => 'application/json'], json_encode(['data' => 'ok !'])),
@@ -117,12 +138,11 @@ class HttpClientTest extends TestCase
         $this->assertTrue($result);
     }
 
-    /**
-     * @expectedException \Imgur\Exception\RateLimitException
-     * @expectedExceptionMessage No user credits available. The limit is 10
-     */
     public function testThrowExceptionWhenApiIsExceeded()
     {
+        $this->expectException(\Imgur\Exception\RateLimitException::class);
+        $this->expectExceptionMessage('No user credits available. The limit is 10');
+
         $path = '/some/path';
         $parameters = ['a' => 'b'];
 
@@ -139,12 +159,11 @@ class HttpClientTest extends TestCase
         $httpClient->get($path, $parameters);
     }
 
-    /**
-     * @expectedException \Imgur\Exception\RateLimitException
-     * @expectedExceptionMessage No application credits available. The limit is 10 and will be reset at
-     */
     public function testThrowExceptionWhenClientApiIsExceeded()
     {
+        $this->expectException(\Imgur\Exception\RateLimitException::class);
+        $this->expectExceptionMessage('No application credits available. The limit is 10 and will be reset at');
+
         $path = '/some/path';
         $parameters = ['a' => 'b'];
 
@@ -164,12 +183,11 @@ class HttpClientTest extends TestCase
         $httpClient->get($path, $parameters);
     }
 
-    /**
-     * @expectedException \Imgur\Exception\RuntimeException
-     * @expectedExceptionMessage oops
-     */
     public function testThrowExceptionWhenBadRequestPlainError()
     {
+        $this->expectException(\Imgur\Exception\RuntimeException::class);
+        $this->expectExceptionMessage('oops');
+
         $path = '/some/path';
         $parameters = ['a' => 'b'];
 
@@ -188,12 +206,11 @@ class HttpClientTest extends TestCase
         $httpClient->get($path, $parameters);
     }
 
-    /**
-     * @expectedException \Imgur\Exception\ErrorException
-     * @expectedExceptionMessage Request to: /3/account failed with: "oops2"
-     */
     public function testThrowExceptionWhenBadRequestJsonError()
     {
+        $this->expectException(\Imgur\Exception\ErrorException::class);
+        $this->expectExceptionMessage('Request to: /3/account failed with: "oops2"');
+
         $path = '/some/path';
         $parameters = ['a' => 'b'];
 
@@ -212,12 +229,11 @@ class HttpClientTest extends TestCase
         $httpClient->get($path, $parameters);
     }
 
-    /**
-     * @expectedException \Imgur\Exception\RuntimeException
-     * @expectedExceptionMessage oops
-     */
     public function testThrowExceptionWhenBadRequestNoClientMock()
     {
+        $this->expectException(\Imgur\Exception\RuntimeException::class);
+        $this->expectExceptionMessage('oops');
+
         $path = '/some/path';
         $parameters = ['a' => 'b'];
 
@@ -236,11 +252,10 @@ class HttpClientTest extends TestCase
         $httpClient->get($path, $parameters);
     }
 
-    /*
-     * @expectedException \Imgur\Exception\ErrorException
-     */
     // public function testThrowLogicException()
     // {
+    //     $this->expectException(\Imgur\Exception\ErrorException::class);
+    //
     //     $path = '/some/path';
     //     $parameters = ['a = b'];
 

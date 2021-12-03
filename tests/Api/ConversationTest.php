@@ -12,12 +12,11 @@ use Imgur\HttpClient\HttpClient;
 
 class ConversationTest extends ApiTestCase
 {
-    /**
-     * @expectedException \Imgur\Exception\ErrorException
-     * @expectedExceptionMessage Authentication required
-     */
     public function testBaseReal()
     {
+        $this->expectException(\Imgur\Exception\ErrorException::class);
+        $this->expectExceptionMessage('Authentication required');
+
         $guzzleClient = new GuzzleClient(['base_uri' => 'https://api.imgur.com/3/']);
         $httpClient = new HttpClient([], $guzzleClient);
         $client = new Client(null, $httpClient);
@@ -118,12 +117,11 @@ class ConversationTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->messageCreate(['recipient' => 'imgur', 'body' => 'YO !']));
     }
 
-    /**
-     * @expectedException \Imgur\Exception\MissingArgumentException
-     * @expectedExceptionMessage parameters is missing
-     */
     public function testMessageCreateParamMissing()
     {
+        $this->expectException(\Imgur\Exception\MissingArgumentException::class);
+        $this->expectExceptionMessage('parameters is missing');
+
         $this->getApiMock()->messageCreate([]);
     }
 

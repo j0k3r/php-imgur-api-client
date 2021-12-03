@@ -3,6 +3,7 @@
 namespace Imgur\tests;
 
 use Imgur\Client;
+use Imgur\Exception\InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 class ClientTest extends TestCase
@@ -60,29 +61,26 @@ class ClientTest extends TestCase
         ];
     }
 
-    /**
-     * @expectedException \Imgur\Exception\InvalidArgumentException
-     */
     public function testNotGetApiInstance()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $client = new Client();
         $client->api('do_not_exist');
     }
 
-    /**
-     * @expectedException \Imgur\Exception\InvalidArgumentException
-     */
     public function testGetOptionNotDefined()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $client = new Client();
         $client->getOption('do_not_exist');
     }
 
-    /**
-     * @expectedException \Imgur\Exception\InvalidArgumentException
-     */
     public function testSetOptionNotDefined()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $client = new Client();
         $client->setOption('do_not_exist', 'value');
     }

@@ -8,6 +8,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Imgur\Api\AlbumOrImage;
 use Imgur\Client;
+use Imgur\Exception\ErrorException;
 use Imgur\HttpClient\HttpClient;
 use PHPUnit\Framework\TestCase;
 
@@ -54,12 +55,11 @@ class AlbumOrImageTest extends TestCase
         $this->assertSame('ok !', $api->find('8pCqe'));
     }
 
-    /**
-     * @expectedException \Imgur\Exception\ErrorException
-     * @expectedExceptionMessage Unable to find an album OR an image with the id
-     */
     public function testWithBadId()
     {
+        $this->expectException(ErrorException::class);
+        $this->expectExceptionMessage('id');
+
         $mock = new MockHandler([
             new Response(404, ['Content-Type' => 'application/json'], json_encode([
                 'data' => [
@@ -91,12 +91,11 @@ class AlbumOrImageTest extends TestCase
         $api->find('xxxxxxx');
     }
 
-    /**
-     * @expectedException \Imgur\Exception\ErrorException
-     * @expectedExceptionMessage oops
-     */
     public function testWithImageIdButBadResponse()
     {
+        $this->expectException(ErrorException::class);
+        $this->expectExceptionMessage('oops');
+
         $mock = new MockHandler([
             new Response(500, ['Content-Type' => 'application/json'], json_encode([
                 'data' => [
@@ -119,12 +118,11 @@ class AlbumOrImageTest extends TestCase
         $api->find('ZOY11VC');
     }
 
-    /**
-     * @expectedException \Imgur\Exception\ErrorException
-     * @expectedExceptionMessage oops
-     */
     public function testWithAlbumIdButBadResponse()
     {
+        $this->expectException(ErrorException::class);
+        $this->expectExceptionMessage('oops');
+
         $mock = new MockHandler([
             new Response(404, ['Content-Type' => 'application/json'], json_encode([
                 'data' => [

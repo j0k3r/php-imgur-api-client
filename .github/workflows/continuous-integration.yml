@@ -25,6 +25,8 @@ jobs:
           - "7.2"
           - "7.3"
           - "7.4"
+          - "8.0"
+          - "8.1"
 
     steps:
       - name: "Checkout"
@@ -37,7 +39,7 @@ jobs:
         with:
           php-version: "${{ matrix.php }}"
           coverage: "none"
-          tools: composer:v1
+          tools: composer:v2
           extensions: curl
           ini-values: "date.timezone=Europe/Paris"
         env:
@@ -69,7 +71,7 @@ jobs:
         with:
           php-version: "${{ matrix.php }}"
           coverage: "pcov"
-          tools: composer:v1
+          tools: composer:v2
           extensions: curl
           ini-values: "date.timezone=Europe/Paris"
         env:
@@ -78,14 +80,19 @@ jobs:
       - name: "Install dependencies with Composer"
         uses: "ramsey/composer-install@v1"
 
+      - name: "Setup logs"
+        run: "mkdir -p build/logs"
+
       - name: "Run PHPUnit (with coverage)"
-        run: "php vendor/bin/simple-phpunit -v --coverage-clover=coverage.clover"
+        run: "php vendor/bin/simple-phpunit -v --coverage-clover build/logs/clover.xml"
 
-      - name: "Retrieve ocular.phar"
-        run: "wget https://scrutinizer-ci.com/ocular.phar"
+      - name: "Retrieve Coveralls phar"
+        run: "wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.4.2/php-coveralls.phar"
 
-      - name: "Enable ocular.phar"
-        run: "chmod +x ocular.phar"
+      - name: "Enable Coveralls phar"
+        run: "chmod +x php-coveralls.phar"
 
       - name: "Upload coverage"
-        run: "php ocular.phar code-coverage:upload --format=php-clover coverage.clover"
+        run: "php php-coveralls.phar -v -x build/logs/clover.xml"
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}

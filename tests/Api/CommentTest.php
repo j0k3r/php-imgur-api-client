@@ -12,12 +12,11 @@ use Imgur\HttpClient\HttpClient;
 
 class CommentTest extends ApiTestCase
 {
-    /**
-     * @expectedException \Imgur\Exception\ErrorException
-     * @expectedExceptionMessage Authentication required
-     */
     public function testBaseReal()
     {
+        $this->expectException(\Imgur\Exception\ErrorException::class);
+        $this->expectExceptionMessage('Authentication required');
+
         $guzzleClient = new GuzzleClient(['base_uri' => 'https://api.imgur.com/3/']);
         $httpClient = new HttpClient([], $guzzleClient);
         $client = new Client(null, $httpClient);
@@ -115,12 +114,11 @@ class CommentTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->create(['image_id' => 'ZOY11VC', 'comment' => 'I agree']));
     }
 
-    /**
-     * @expectedException \Imgur\Exception\MissingArgumentException
-     * @expectedExceptionMessage parameters is missing
-     */
     public function testCreateParamMissing()
     {
+        $this->expectException(\Imgur\Exception\MissingArgumentException::class);
+        $this->expectExceptionMessage('parameters is missing');
+
         $this->getApiMock()->create('726305564');
     }
 
@@ -177,12 +175,11 @@ class CommentTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->createReply('726305565', ['image_id' => 'ZOY11VC', 'comment' => 'I agree']));
     }
 
-    /**
-     * @expectedException \Imgur\Exception\MissingArgumentException
-     * @expectedExceptionMessage parameters is missing
-     */
     public function testCreateReplyParamMissing()
     {
+        $this->expectException(\Imgur\Exception\MissingArgumentException::class);
+        $this->expectExceptionMessage('parameters is missing');
+
         $this->getApiMock()->createReply('726305564', []);
     }
 
@@ -203,12 +200,11 @@ class CommentTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->vote('726305564', 'up'));
     }
 
-    /**
-     * @expectedException \Imgur\Exception\InvalidArgumentException
-     * @expectedExceptionMessage is wrong. Possible values are
-     */
     public function testVoteWrongVoteValue()
     {
+        $this->expectException(\Imgur\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('is wrong. Possible values are');
+
         $this->getApiMock()->vote('726305564', 'bad vote');
     }
 

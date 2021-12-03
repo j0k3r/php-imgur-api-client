@@ -8,16 +8,16 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Imgur\Api\Gallery;
 use Imgur\Client;
+use Imgur\Exception\InvalidArgumentException;
 use Imgur\HttpClient\HttpClient;
 
 class GalleryTest extends ApiTestCase
 {
-    /**
-     * @expectedException \Imgur\Exception\ErrorException
-     * @expectedExceptionMessage Authentication required
-     */
     public function testBaseReal()
     {
+        $this->expectException(\Imgur\Exception\ErrorException::class);
+        $this->expectExceptionMessage('Authentication required');
+
         $guzzleClient = new GuzzleClient(['base_uri' => 'https://api.imgur.com/3/']);
         $httpClient = new HttpClient([], $guzzleClient);
         $client = new Client(null, $httpClient);
@@ -126,30 +126,27 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->gallery());
     }
 
-    /**
-     * @expectedException \Imgur\Exception\InvalidArgumentException
-     * @expectedExceptionMessage is wrong. Possible values are
-     */
     public function testGalleryWrongSortValue()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('is wrong. Possible values are');
+
         $this->getApiMock()->gallery('hot', 'bad sort');
     }
 
-    /**
-     * @expectedException \Imgur\Exception\InvalidArgumentException
-     * @expectedExceptionMessage is wrong. Possible values are
-     */
     public function testGalleryWrongSectionValue()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('is wrong. Possible values are');
+
         $this->getApiMock()->gallery('bad section');
     }
 
-    /**
-     * @expectedException \Imgur\Exception\InvalidArgumentException
-     * @expectedExceptionMessage is wrong. Possible values are
-     */
     public function testGalleryWrongWindowValue()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('is wrong. Possible values are');
+
         $this->getApiMock()->gallery('hot', 'viral', 0, 'bad window');
     }
 
@@ -174,21 +171,19 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->memesSubgallery());
     }
 
-    /**
-     * @expectedException \Imgur\Exception\InvalidArgumentException
-     * @expectedExceptionMessage is wrong. Possible values are
-     */
     public function testMemesSubgalleryWrongSortValue()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('is wrong. Possible values are');
+
         $this->getApiMock()->memesSubgallery('bad sort');
     }
 
-    /**
-     * @expectedException \Imgur\Exception\InvalidArgumentException
-     * @expectedExceptionMessage is wrong. Possible values are
-     */
     public function testMemesSubgalleryWrongWindowValue()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('is wrong. Possible values are');
+
         $this->getApiMock()->memesSubgallery('viral', 0, 'bad window');
     }
 
@@ -232,21 +227,19 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->subredditGalleries('pics'));
     }
 
-    /**
-     * @expectedException \Imgur\Exception\InvalidArgumentException
-     * @expectedExceptionMessage is wrong. Possible values are
-     */
     public function testSubredditGalleriesWrongSortValue()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('is wrong. Possible values are');
+
         $this->getApiMock()->subredditGalleries('pics', 'bad sort');
     }
 
-    /**
-     * @expectedException \Imgur\Exception\InvalidArgumentException
-     * @expectedExceptionMessage is wrong. Possible values are
-     */
     public function testSubredditGalleriesWrongWindowValue()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('is wrong. Possible values are');
+
         $this->getApiMock()->subredditGalleries('pics', 'time', 0, 'bad window');
     }
 
@@ -290,21 +283,19 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->galleryTag('funny'));
     }
 
-    /**
-     * @expectedException \Imgur\Exception\InvalidArgumentException
-     * @expectedExceptionMessage is wrong. Possible values are
-     */
     public function testGalleryTagWrongSortValue()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('is wrong. Possible values are');
+
         $this->getApiMock()->galleryTag('funny', 'bad sort');
     }
 
-    /**
-     * @expectedException \Imgur\Exception\InvalidArgumentException
-     * @expectedExceptionMessage is wrong. Possible values are
-     */
     public function testGalleryTagWrongWindowValue()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('is wrong. Possible values are');
+
         $this->getApiMock()->galleryTag('funny', 'time', 0, 'bad window');
     }
 
@@ -363,12 +354,11 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->galleryVoteTag('y1Od4', 'funny', 'up'));
     }
 
-    /**
-     * @expectedException \Imgur\Exception\InvalidArgumentException
-     * @expectedExceptionMessage is wrong. Possible values are
-     */
     public function testGalleryVoteTagWrongVoteValue()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('is wrong. Possible values are');
+
         $this->getApiMock()->galleryVoteTag('y1Od4', 'funny', 'bad vote');
     }
 
@@ -393,12 +383,11 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->search('20minutes'));
     }
 
-    /**
-     * @expectedException \Imgur\Exception\InvalidArgumentException
-     * @expectedExceptionMessage is wrong. Possible values are
-     */
     public function testSearchWrongValues()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('is wrong. Possible values are');
+
         $this->getApiMock()->search('pics', 'bad sort');
     }
 
@@ -440,12 +429,11 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->submitToGallery('y1Od4', ['title' => 'yo']));
     }
 
-    /**
-     * @expectedException \Imgur\Exception\MissingArgumentException
-     * @expectedExceptionMessage parameters is missing
-     */
     public function testSubmitToGalleryParamMissing()
     {
+        $this->expectException(\Imgur\Exception\MissingArgumentException::class);
+        $this->expectExceptionMessage('parameters is missing');
+
         $this->getApiMock()->submitToGallery('y1Od4', []);
     }
 
@@ -557,12 +545,11 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->vote('VOMXz', 'up'));
     }
 
-    /**
-     * @expectedException \Imgur\Exception\InvalidArgumentException
-     * @expectedExceptionMessage is wrong. Possible values are
-     */
     public function testVoteWrongVoteValue()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('is wrong. Possible values are');
+
         $this->getApiMock()->vote('VOMXz', 'bad vote');
     }
 
@@ -587,12 +574,11 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->comments('VOMXz'));
     }
 
-    /**
-     * @expectedException \Imgur\Exception\InvalidArgumentException
-     * @expectedExceptionMessage is wrong. Possible values are
-     */
     public function testCommentsWrongValues()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('is wrong. Possible values are');
+
         $this->getApiMock()->comments('VOMXz', 'bad sort');
     }
 
@@ -632,12 +618,11 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->createComment('VOMXz', ['comment' => 'yo']));
     }
 
-    /**
-     * @expectedException \Imgur\Exception\MissingArgumentException
-     * @expectedExceptionMessage parameters is missing
-     */
     public function testCreateCommentParamMissing()
     {
+        $this->expectException(\Imgur\Exception\MissingArgumentException::class);
+        $this->expectExceptionMessage('parameters is missing');
+
         $this->getApiMock()->createComment('y1Od4', []);
     }
 
@@ -658,12 +643,11 @@ class GalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->createReply('VOMXz', '123', ['comment' => 'yo']));
     }
 
-    /**
-     * @expectedException \Imgur\Exception\MissingArgumentException
-     * @expectedExceptionMessage parameters is missing
-     */
     public function testCreateReplyParamMissing()
     {
+        $this->expectException(\Imgur\Exception\MissingArgumentException::class);
+        $this->expectExceptionMessage('parameters is missing');
+
         $this->getApiMock()->createReply('y1Od4', '123', []);
     }
 

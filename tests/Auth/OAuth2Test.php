@@ -5,9 +5,9 @@ namespace Imgur\tests\Auth;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Imgur\Auth\OAuth2;
+use Imgur\Exception\AuthException;
 use Imgur\HttpClient\HttpClient;
 use PHPUnit\Framework\TestCase;
 
@@ -28,12 +28,11 @@ class OAuth2Test extends TestCase
         $this->assertSame('https://api.imgur.com/oauth2/authorize?client_id=456&response_type=code&state=draft', $auth->getAuthenticationUrl('code', 'draft'));
     }
 
-    /**
-     * @expectedException \Imgur\Exception\AuthException
-     * @expectedExceptionMessage Request for access token failed
-     */
     public function testRequestAccessTokenBadStatusCode()
     {
+        $this->expectException(AuthException::class);
+        $this->expectExceptionMessage('Request for access token failed');
+
         $mock = new MockHandler([
             new Response(400),
         ]);
@@ -78,12 +77,11 @@ class OAuth2Test extends TestCase
         $this->assertLessThanOrEqual(time(), $result['created_at']);
     }
 
-    /**
-     * @expectedException \Imgur\Exception\AuthException
-     * @expectedExceptionMessage Request for refresh access token failed
-     */
     public function testRefreshTokenBadStatusCode()
     {
+        $this->expectException(AuthException::class);
+        $this->expectExceptionMessage('Request for refresh access token failed');
+
         $mock = new MockHandler([
             new Response(400, ['Content-Type' => 'application/json'], json_encode(['data' => ['request' => '/3/account', 'error' => 'oops2', 'method' => 'GET'], 'success' => false, 'status' => 400])),
         ]);
@@ -109,23 +107,21 @@ class OAuth2Test extends TestCase
         $this->assertSame('T0K3N', $result['access_token']);
     }
 
-    /**
-     * @expectedException \Imgur\Exception\AuthException
-     * @expectedExceptionMessage Token is not a valid json string.
-     */
     public function testSetAccessTokenNull()
     {
+        $this->expectException(AuthException::class);
+        $this->expectExceptionMessage('Token is not a valid json string.');
+
         $client = new GuzzleClient();
         $auth = new OAuth2(new HttpClient([], $client), 123, 456);
         $result = $auth->setAccessToken(null);
     }
 
-    /**
-     * @expectedException \Imgur\Exception\AuthException
-     * @expectedExceptionMessage Access token could not be retrieved from the decoded json response.
-     */
     public function testSetAccessTokenEmpty()
     {
+        $this->expectException(AuthException::class);
+        $this->expectExceptionMessage('Access token could not be retrieved from the decoded json response.');
+
         $client = new GuzzleClient();
         $auth = new OAuth2(new HttpClient([], $client), 123, 456);
         $auth->setAccessToken(['data']);
