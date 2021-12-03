@@ -64,9 +64,9 @@ class OAuth2 implements AuthInterface
      */
     public function __construct(HttpClientInterface $httpClient, string $clientId, string $clientSecret)
     {
+        $this->httpClient = $httpClient;
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
-        $this->httpClient = $httpClient;
     }
 
     /**

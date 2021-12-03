@@ -120,8 +120,8 @@ class Client
         if (null === $this->authenticationClient) {
             $this->authenticationClient = new Auth\OAuth2(
                 $this->getHttpClient(),
-                $this->getOption('client_id'),
-                $this->getOption('client_secret')
+                (string) $this->getOption('client_id'),
+                (string) $this->getOption('client_secret')
             );
         }
 
