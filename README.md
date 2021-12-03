@@ -15,7 +15,7 @@ Uses [Imgur API v3](https://api.imgur.com/).
 * Branch [1.x](https://github.com/j0k3r/php-imgur-api-client/tree/1.x) use Guzzle 3 (but is not maintained)
 * Branch [2.x](https://github.com/j0k3r/php-imgur-api-client/tree/2.x) use Guzzle 5 (but is not maintained)
 * Branch [3.x](https://github.com/j0k3r/php-imgur-api-client/tree/3.x) use Guzzle 6 and PHP >= 5.6
-* Branch [master](https://github.com/j0k3r/php-imgur-api-client/tree/master) use Guzzle 7 and PHP >= 7.1.3
+* Branch [master](https://github.com/j0k3r/php-imgur-api-client/tree/master) use Guzzle 7 and PHP >= 7.2.5
 
 ## Composer
 
