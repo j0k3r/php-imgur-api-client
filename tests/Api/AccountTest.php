@@ -8,16 +8,16 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Imgur\Api\Account;
 use Imgur\Client;
+use Imgur\Exception\InvalidArgumentException;
 use Imgur\HttpClient\HttpClient;
 
 class AccountTest extends ApiTestCase
 {
-    /**
-     * @expectedException \Imgur\Exception\ErrorException
-     * @expectedExceptionMessage Authentication required
-     */
     public function testBaseReal()
     {
+        $this->expectException(\Imgur\Exception\ErrorException::class);
+        $this->expectExceptionMessage('Authentication required');
+
         $guzzleClient = new GuzzleClient(['base_uri' => 'https://api.imgur.com/3/']);
         $httpClient = new HttpClient([], $guzzleClient);
         $client = new Client(null, $httpClient);
@@ -116,12 +116,11 @@ class AccountTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->galleryFavorites());
     }
 
-    /**
-     * @expectedException \Imgur\Exception\InvalidArgumentException
-     * @expectedExceptionMessage is wrong. Possible values are
-     */
     public function testGalleryFavoritesWrongValues()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('is wrong. Possible values are');
+
         $this->getApiMock()->galleryFavorites('me', 0, 'bad sort');
     }
 
@@ -409,12 +408,11 @@ class AccountTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->comments());
     }
 
-    /**
-     * @expectedException \Imgur\Exception\InvalidArgumentException
-     * @expectedExceptionMessage is wrong. Possible values are
-     */
     public function testCommentsWrongValues()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('is wrong. Possible values are');
+
         $this->getApiMock()->comments('me', 0, 'bad sort');
     }
 
@@ -460,12 +458,11 @@ class AccountTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->commentIds());
     }
 
-    /**
-     * @expectedException \Imgur\Exception\InvalidArgumentException
-     * @expectedExceptionMessage is wrong. Possible values are
-     */
     public function testCommentIdsWrongValues()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('is wrong. Possible values are');
+
         $this->getApiMock()->commentIds('me', 0, 'bad sort');
     }
 

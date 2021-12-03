@@ -12,12 +12,11 @@ use Imgur\HttpClient\HttpClient;
 
 class ImageTest extends ApiTestCase
 {
-    /**
-     * @expectedException \Imgur\Exception\ErrorException
-     * @expectedExceptionMessage Authentication required
-     */
     public function testBaseReal()
     {
+        $this->expectException(\Imgur\Exception\ErrorException::class);
+        $this->expectExceptionMessage('Authentication required');
+
         $guzzleClient = new GuzzleClient(['base_uri' => 'https://api.imgur.com/3/']);
         $httpClient = new HttpClient([], $guzzleClient);
         $client = new Client(null, $httpClient);
@@ -144,21 +143,19 @@ class ImageTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->upload(['type' => 'file', 'image' => __DIR__ . '/ZOY11VC.png']));
     }
 
-    /**
-     * @expectedException \Imgur\Exception\InvalidArgumentException
-     * @expectedExceptionMessage is wrong. Possible values are
-     */
     public function testUploadWithBadType()
     {
+        $this->expectException(\Imgur\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('is wrong. Possible values are');
+
         $this->getApiMock()->upload(['type' => 'other', 'image' => 'http://i.imgur.com/ZOY11VC.png']);
     }
 
-    /**
-     * @expectedException \Imgur\Exception\MissingArgumentException
-     * @expectedExceptionMessage parameters is missing
-     */
     public function testUploadWithUrlParamMissing()
     {
+        $this->expectException(\Imgur\Exception\MissingArgumentException::class);
+        $this->expectExceptionMessage('parameters is missing');
+
         $this->getApiMock()->upload([]);
     }
 

@@ -8,16 +8,16 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Imgur\Api\CustomGallery;
 use Imgur\Client;
+use Imgur\Exception\InvalidArgumentException;
 use Imgur\HttpClient\HttpClient;
 
 class CustomGalleryTest extends ApiTestCase
 {
-    /**
-     * @expectedException \Imgur\Exception\ErrorException
-     * @expectedExceptionMessage Authentication required
-     */
     public function testBaseReal()
     {
+        $this->expectException(\Imgur\Exception\ErrorException::class);
+        $this->expectExceptionMessage('Authentication required');
+
         $guzzleClient = new GuzzleClient(['base_uri' => 'https://api.imgur.com/3/']);
         $httpClient = new HttpClient([], $guzzleClient);
         $client = new Client(null, $httpClient);
@@ -109,21 +109,19 @@ class CustomGalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->customGallery());
     }
 
-    /**
-     * @expectedException \Imgur\Exception\InvalidArgumentException
-     * @expectedExceptionMessage is wrong. Possible values are
-     */
     public function testCustomGalleryWrongSortValue()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('is wrong. Possible values are');
+
         $this->getApiMock()->customGallery('bad sort');
     }
 
-    /**
-     * @expectedException \Imgur\Exception\InvalidArgumentException
-     * @expectedExceptionMessage is wrong. Possible values are
-     */
     public function testCustomGalleryWrongWindowValue()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('is wrong. Possible values are');
+
         $this->getApiMock()->customGallery('viral', 0, 'bad window');
     }
 
@@ -146,21 +144,19 @@ class CustomGalleryTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->filtered());
     }
 
-    /**
-     * @expectedException \Imgur\Exception\InvalidArgumentException
-     * @expectedExceptionMessage is wrong. Possible values are
-     */
     public function testFilteredWrongSortValue()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('is wrong. Possible values are');
+
         $this->getApiMock()->filtered('bad sort');
     }
 
-    /**
-     * @expectedException \Imgur\Exception\InvalidArgumentException
-     * @expectedExceptionMessage is wrong. Possible values are
-     */
     public function testFilteredWrongWindowValue()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('is wrong. Possible values are');
+
         $this->getApiMock()->filtered('viral', 0, 'bad window');
     }
 

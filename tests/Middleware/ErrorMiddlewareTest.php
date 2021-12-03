@@ -6,6 +6,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Imgur\Exception\RateLimitException;
 use Imgur\Middleware\ErrorMiddleware;
 use PHPUnit\Framework\TestCase;
 
@@ -27,12 +28,11 @@ class ErrorMiddlewareTest extends TestCase
         $this->assertSame(200, $response->getStatusCode());
     }
 
-    /**
-     * @expectedException \Imgur\Exception\RateLimitException
-     * @expectedExceptionMessage No user credits available. The limit is 10
-     */
     public function testRateLimitUser()
     {
+        $this->expectException(RateLimitException::class);
+        $this->expectExceptionMessage('No user credits available. The limit is 10');
+
         $mock = new MockHandler([
             new Response(429, [
                 'X-RateLimit-UserRemaining' => 0,
@@ -47,12 +47,11 @@ class ErrorMiddlewareTest extends TestCase
         $handler($request, [])->wait();
     }
 
-    /**
-     * @expectedException \Imgur\Exception\RateLimitException
-     * @expectedExceptionMessage No application credits available. The limit is 10 and will be reset at 2015-09-04
-     */
     public function testRateLimitClient()
     {
+        $this->expectException(RateLimitException::class);
+        $this->expectExceptionMessage('No application credits available. The limit is 10 and will be reset at 2015-09-04');
+
         $mock = new MockHandler([
             new Response(429, [
                 'X-RateLimit-UserRemaining' => 9,
@@ -70,12 +69,11 @@ class ErrorMiddlewareTest extends TestCase
         $handler($request, [])->wait();
     }
 
-    /**
-     * @expectedException \Imgur\Exception\ErrorException
-     * @expectedExceptionMessage Request failed with: "Imgur is temporarily over capacity. Please try again later."
-     */
     public function testErrorOverCapacity()
     {
+        $this->expectException(\Imgur\Exception\ErrorException::class);
+        $this->expectExceptionMessage('Request failed with: "Imgur is temporarily over capacity. Please try again later."');
+
         $mock = new MockHandler([
             new Response(429, [
                 'X-RateLimit-UserRemaining' => 9,
@@ -92,12 +90,11 @@ class ErrorMiddlewareTest extends TestCase
         $handler($request, [])->wait();
     }
 
-    /**
-     * @expectedException \Imgur\Exception\ErrorException
-     * @expectedExceptionMessage Request to: /3/image.json failed with: "You are uploading too fast. Please wait 59 more minutes."
-     */
     public function testErrorUploadingTooFast()
     {
+        $this->expectException(\Imgur\Exception\ErrorException::class);
+        $this->expectExceptionMessage('Request to: /3/image.json failed with: "You are uploading too fast. Please wait 59 more minutes."');
+
         $mock = new MockHandler([
             new Response(429, [
                 'X-RateLimit-UserRemaining' => 9,
@@ -114,12 +111,11 @@ class ErrorMiddlewareTest extends TestCase
         $handler($request, [])->wait();
     }
 
-    /**
-     * @expectedException \Imgur\Exception\ErrorException
-     * @expectedExceptionMessage Request to: /3/image.json failed with: "Error code: 666"
-     */
     public function testErrorNoMessageInError()
     {
+        $this->expectException(\Imgur\Exception\ErrorException::class);
+        $this->expectExceptionMessage('Request to: /3/image.json failed with: "Error code: 666"');
+
         $mock = new MockHandler([
             new Response(429, [
                 'X-RateLimit-UserRemaining' => 9,
@@ -136,12 +132,11 @@ class ErrorMiddlewareTest extends TestCase
         $handler($request, [])->wait();
     }
 
-    /**
-     * @expectedException \Imgur\Exception\ErrorException
-     * @expectedExceptionMessage Request to: /here failed with: "oops"
-     */
     public function testErrorWithJson()
     {
+        $this->expectException(\Imgur\Exception\ErrorException::class);
+        $this->expectExceptionMessage('Request to: /here failed with: "oops"');
+
         $mock = new MockHandler([
             new Response(429, [
                 'X-RateLimit-UserRemaining' => 9,
@@ -158,12 +153,11 @@ class ErrorMiddlewareTest extends TestCase
         $handler($request, [])->wait();
     }
 
-    /**
-     * @expectedException \Imgur\Exception\RuntimeException
-     * @expectedExceptionMessage hihi
-     */
     public function testErrorWithoutJson()
     {
+        $this->expectException(\Imgur\Exception\RuntimeException::class);
+        $this->expectExceptionMessage('hihi');
+
         $mock = new MockHandler([
             new Response(429, [
                 'X-RateLimit-UserRemaining' => 9,
@@ -180,12 +174,11 @@ class ErrorMiddlewareTest extends TestCase
         $handler($request, [])->wait();
     }
 
-    /**
-     * @expectedException \Imgur\Exception\RateLimitException
-     * @expectedExceptionMessage No post credits available. The limit is 10 and will be reset at 2015-09-04
-     */
     public function testRateLimitPost()
     {
+        $this->expectException(RateLimitException::class);
+        $this->expectExceptionMessage('No post credits available. The limit is 10 and will be reset at 2015-09-04');
+
         $mock = new MockHandler([
             new Response(429, [
                 'X-Post-Rate-Limit-Remaining' => 0,

@@ -12,12 +12,11 @@ use Imgur\HttpClient\HttpClient;
 
 class TopicTest extends ApiTestCase
 {
-    /**
-     * @expectedException \Imgur\Exception\ErrorException
-     * @expectedExceptionMessage Authentication required
-     */
     public function testBaseReal()
     {
+        $this->expectException(\Imgur\Exception\ErrorException::class);
+        $this->expectExceptionMessage('Authentication required');
+
         $this->markTestSkipped('Topic endpoint does not always return 401 with no authentication ...');
 
         $guzzleClient = new GuzzleClient(['base_uri' => 'https://api.imgur.com/3/']);
@@ -163,21 +162,19 @@ class TopicTest extends ApiTestCase
         $this->assertSame($expectedValue, $api->galleryTopic(155));
     }
 
-    /**
-     * @expectedException \Imgur\Exception\InvalidArgumentException
-     * @expectedExceptionMessage is wrong. Possible values are
-     */
     public function testGalleryTopicWrongSortValue()
     {
+        $this->expectException(\Imgur\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('is wrong. Possible values are');
+
         $this->getApiMock()->galleryTopic(155, 'bad sort');
     }
 
-    /**
-     * @expectedException \Imgur\Exception\InvalidArgumentException
-     * @expectedExceptionMessage is wrong. Possible values are
-     */
     public function testGalleryTopicWrongWindowValue()
     {
+        $this->expectException(\Imgur\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('is wrong. Possible values are');
+
         $this->getApiMock()->galleryTopic(155, 'viral', 0, 'bad window');
     }
 
