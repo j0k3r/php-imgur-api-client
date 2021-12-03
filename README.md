@@ -1,7 +1,7 @@
 # PHP Imgur API Client
 
 ![CI](https://github.com/j0k3r/php-imgur-api-client/workflows/CI/badge.svg)
-[![Code Coverage](https://scrutinizer-ci.com/g/j0k3r/php-imgur-api-client/badges/coverage.png?branch=master)](https://scrutinizer-ci.com/g/j0k3r/php-imgur-api-client/?branch=master)
+[![Coverage Status](https://coveralls.io/repos/j0k3r/php-imgur-api-client/badge.svg?branch=master&service=github)](https://coveralls.io/github/j0k3r/php-imgur-api-client?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/j0k3r/php-imgur-api-client/badges/quality-score.png?branch=master)](https://scrutinizer-ci.com/g/j0k3r/php-imgur-api-client/?branch=master)
 [![Total Downloads](https://poser.pugx.org/j0k3r/php-imgur-api-client/downloads)](https://packagist.org/packages/j0k3r/php-imgur-api-client)
 [![License](https://poser.pugx.org/j0k3r/php-imgur-api-client/license)](https://packagist.org/packages/j0k3r/php-imgur-api-client)

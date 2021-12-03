@@ -81,13 +81,15 @@ jobs:
         uses: "ramsey/composer-install@v1"
 
       - name: "Run PHPUnit (with coverage)"
-        run: "php vendor/bin/simple-phpunit -v --coverage-clover=coverage.clover"
+        run: "php vendor/bin/simple-phpunit -v --coverage-clover clover.xml"
 
-      - name: "Retrieve ocular.phar"
-        run: "wget https://scrutinizer-ci.com/ocular.phar"
+      - name: "Retrieve Coveralls phar"
+        run: "wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.4.2/php-coveralls.phar"
 
-      - name: "Enable ocular.phar"
-        run: "chmod +x ocular.phar"
+      - name: "Enable Coveralls phar"
+        run: "chmod +x php-coveralls.phar"
 
       - name: "Upload coverage"
-        run: "php ocular.phar code-coverage:upload --format=php-clover coverage.clover"
+        run: "php php-coveralls.phar -v -x clover.xml"
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
