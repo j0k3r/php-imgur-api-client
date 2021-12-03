@@ -15,14 +15,12 @@ class OAuth2Test extends TestCase
 {
     public function testGetAuthenticationUrl(): void
     {
-        $client = new GuzzleClient();
-
-        $auth = new OAuth2(new HttpClient([], $client), '123', '456');
+        $auth = new OAuth2(new HttpClient(), '123', '456');
         $this->assertSame('https://api.imgur.com/oauth2/authorize?client_id=123&response_type=code', $auth->getAuthenticationUrl());
         $this->assertSame('https://api.imgur.com/oauth2/authorize?client_id=123&response_type=pin', $auth->getAuthenticationUrl('pin'));
         $this->assertSame('https://api.imgur.com/oauth2/authorize?client_id=123&response_type=code&state=draft', $auth->getAuthenticationUrl('code', 'draft'));
 
-        $auth = new OAuth2(new HttpClient([], $client), '456', '789');
+        $auth = new OAuth2(new HttpClient(), '456', '789');
         $this->assertSame('https://api.imgur.com/oauth2/authorize?client_id=456&response_type=pin', $auth->getAuthenticationUrl('pin'));
         $this->assertSame('https://api.imgur.com/oauth2/authorize?client_id=456&response_type=code', $auth->getAuthenticationUrl());
         $this->assertSame('https://api.imgur.com/oauth2/authorize?client_id=456&response_type=code&state=draft', $auth->getAuthenticationUrl('code', 'draft'));
@@ -39,7 +37,7 @@ class OAuth2Test extends TestCase
         $handler = HandlerStack::create($mock);
         $client = new GuzzleClient(['handler' => $handler]);
 
-        $auth = new OAuth2(new HttpClient([], $client), '123', '456');
+        $auth = new OAuth2(new HttpClient([], $client, $handler), '123', '456');
         $auth->requestAccessToken('code', null);
     }
 
@@ -51,7 +49,7 @@ class OAuth2Test extends TestCase
         $handler = HandlerStack::create($mock);
         $client = new GuzzleClient(['handler' => $handler]);
 
-        $auth = new OAuth2(new HttpClient([], $client), '123', '456');
+        $auth = new OAuth2(new HttpClient([], $client, $handler), '123', '456');
         $result = $auth->requestAccessToken('code', null);
 
         $this->assertArrayHasKey('access_token', $result);
@@ -68,7 +66,7 @@ class OAuth2Test extends TestCase
         $handler = HandlerStack::create($mock);
         $client = new GuzzleClient(['handler' => $handler]);
 
-        $auth = new OAuth2(new HttpClient([], $client), '123', '456');
+        $auth = new OAuth2(new HttpClient([], $client, $handler), '123', '456');
         $result = $auth->requestAccessToken('code', 'pin');
 
         $this->assertArrayHasKey('access_token', $result);
@@ -88,7 +86,7 @@ class OAuth2Test extends TestCase
         $handler = HandlerStack::create($mock);
         $client = new GuzzleClient(['handler' => $handler]);
 
-        $auth = new OAuth2(new HttpClient([], $client), '123', '456');
+        $auth = new OAuth2(new HttpClient([], $client, $handler), '123', '456');
         $auth->refreshToken();
     }
 
@@ -100,7 +98,7 @@ class OAuth2Test extends TestCase
         $handler = HandlerStack::create($mock);
         $client = new GuzzleClient(['handler' => $handler]);
 
-        $auth = new OAuth2(new HttpClient([], $client), '123', '456');
+        $auth = new OAuth2(new HttpClient([], $client, $handler), '123', '456');
         $result = $auth->refreshToken();
 
         $this->assertArrayHasKey('access_token', $result);
@@ -113,7 +111,7 @@ class OAuth2Test extends TestCase
         $this->expectExceptionMessage('Token is not a valid json string.');
 
         $client = new GuzzleClient();
-        $auth = new OAuth2(new HttpClient([], $client), '123', '456');
+        $auth = new OAuth2(new HttpClient(), '123', '456');
         $auth->setAccessToken(null);
     }
 
@@ -123,14 +121,14 @@ class OAuth2Test extends TestCase
         $this->expectExceptionMessage('Access token could not be retrieved from the decoded json response.');
 
         $client = new GuzzleClient();
-        $auth = new OAuth2(new HttpClient([], $client), '123', '456');
+        $auth = new OAuth2(new HttpClient(), '123', '456');
         $auth->setAccessToken(['data']);
     }
 
     public function testCheckAccessTokenExpiredFromScratch(): void
     {
         $client = new GuzzleClient();
-        $auth = new OAuth2(new HttpClient([], $client), '123', '456');
+        $auth = new OAuth2(new HttpClient(), '123', '456');
         $this->assertTrue($auth->checkAccessTokenExpired());
     }
 
@@ -142,7 +140,7 @@ class OAuth2Test extends TestCase
         $handler = HandlerStack::create($mock);
         $client = new GuzzleClient(['handler' => $handler]);
 
-        $auth = new OAuth2(new HttpClient([], $client), '123', '456');
+        $auth = new OAuth2(new HttpClient([], $client, $handler), '123', '456');
         $auth->requestAccessToken('code', null);
 
         $this->assertFalse($auth->checkAccessTokenExpired());
@@ -157,7 +155,7 @@ class OAuth2Test extends TestCase
         $handler = HandlerStack::create($mock);
         $client = new GuzzleClient(['handler' => $handler]);
 
-        $httpClient = new HttpClient([], $client);
+        $httpClient = new HttpClient([], $client, $handler, $handler);
 
         $auth = new OAuth2($httpClient, '123', '456');
         $auth->requestAccessToken('code', null);

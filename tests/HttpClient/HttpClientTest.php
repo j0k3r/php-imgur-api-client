@@ -33,7 +33,7 @@ class HttpClientTest extends TestCase
         $handler = HandlerStack::create($mock);
         $client = new GuzzleClient(['handler' => $handler]);
 
-        $httpClient = new HttpClient([], $client);
+        $httpClient = new HttpClient([], $client, $handler);
         $response = $httpClient->get($path, $parameters);
 
         $result = $httpClient->parseResponse($response);
@@ -52,7 +52,7 @@ class HttpClientTest extends TestCase
         $handler = HandlerStack::create($mock);
         $client = new GuzzleClient(['handler' => $handler]);
 
-        $httpClient = new HttpClient([], $client);
+        $httpClient = new HttpClient([], $client, $handler);
         $response = $httpClient->post($path, $parameters);
 
         $result = $httpClient->parseResponse($response);
@@ -74,7 +74,7 @@ class HttpClientTest extends TestCase
         $handler = HandlerStack::create($mock);
         $client = new GuzzleClient(['handler' => $handler]);
 
-        $httpClient = new HttpClient([], $client);
+        $httpClient = new HttpClient([], $client, $handler);
         $response = $httpClient->post($path, $parameters);
 
         $result = $httpClient->parseResponse($response);
@@ -93,7 +93,7 @@ class HttpClientTest extends TestCase
         $handler = HandlerStack::create($mock);
         $client = new GuzzleClient(['handler' => $handler]);
 
-        $httpClient = new HttpClient([], $client);
+        $httpClient = new HttpClient([], $client, $handler);
         $response = $httpClient->put($path, $parameters);
 
         $result = $httpClient->parseResponse($response);
@@ -112,7 +112,7 @@ class HttpClientTest extends TestCase
         $handler = HandlerStack::create($mock);
         $client = new GuzzleClient(['handler' => $handler]);
 
-        $httpClient = new HttpClient([], $client);
+        $httpClient = new HttpClient([], $client, $handler);
         $response = $httpClient->delete($path, $parameters);
 
         $result = $httpClient->parseResponse($response);
@@ -131,7 +131,7 @@ class HttpClientTest extends TestCase
         $handler = HandlerStack::create($mock);
         $client = new GuzzleClient(['handler' => $handler]);
 
-        $httpClient = new HttpClient([], $client);
+        $httpClient = new HttpClient([], $client, $handler);
         $response = $httpClient->performRequest($path, $options, 'HEAD');
 
         $result = $httpClient->parseResponse($response);
