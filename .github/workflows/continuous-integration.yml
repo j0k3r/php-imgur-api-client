@@ -80,8 +80,11 @@ jobs:
       - name: "Install dependencies with Composer"
         uses: "ramsey/composer-install@v1"
 
+      - name: "Setup logs"
+        run: "mkdir -p build/logs"
+
       - name: "Run PHPUnit (with coverage)"
-        run: "php vendor/bin/simple-phpunit -v --coverage-clover clover.xml"
+        run: "php vendor/bin/simple-phpunit -v --coverage-clover build/logs/clover.xml"
 
       - name: "Retrieve Coveralls phar"
         run: "wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.4.2/php-coveralls.phar"
@@ -90,6 +93,6 @@ jobs:
         run: "chmod +x php-coveralls.phar"
 
       - name: "Upload coverage"
-        run: "php php-coveralls.phar -v -x clover.xml"
+        run: "php php-coveralls.phar -v -x build/logs/clover.xml"
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
