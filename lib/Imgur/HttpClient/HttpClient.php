@@ -104,20 +104,14 @@ class HttpClient implements HttpClientInterface
 
         if (isset($parameters['query'])) {
             $options['query'] = $parameters['query'];
+            unset($parameters['query']);
         }
 
         if ('POST' === $httpMethod || 'PUT' === $httpMethod || 'DELETE' === $httpMethod) {
             if ('POST' === $httpMethod && isset($parameters['type']) && 'file' === $parameters['type']) {
-                $options['multipart'] = [
-                    [
-                        'name' => 'type',
-                        'contents' => $parameters['type'],
-                    ],
-                    [
-                        'name' => 'image',
-                        'contents' => $parameters['image'],
-                    ],
-                ];
+                foreach ($parameters as $key => $value) {
+                    $options['multipart'][] = ['name' => $key, 'contents' => $value];
+                }
             } else {
                 $options['form_params'] = $parameters;
             }

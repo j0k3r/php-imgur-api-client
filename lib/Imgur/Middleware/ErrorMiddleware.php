@@ -61,7 +61,7 @@ class ErrorMiddleware
 
         $body = (string) $response->getBody();
         $responseData = json_decode($body, true);
-        if (JSON_ERROR_NONE !== json_last_error()) {
+        if (\JSON_ERROR_NONE !== json_last_error()) {
             $responseData = $body;
         }
 
