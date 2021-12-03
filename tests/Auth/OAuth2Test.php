@@ -155,7 +155,7 @@ class OAuth2Test extends TestCase
         $handler = HandlerStack::create($mock);
         $client = new GuzzleClient(['handler' => $handler]);
 
-        $httpClient = new HttpClient([], $client, $handler, $handler);
+        $httpClient = new HttpClient([], $client, $handler);
 
         $auth = new OAuth2($httpClient, '123', '456');
         $auth->requestAccessToken('code', null);
