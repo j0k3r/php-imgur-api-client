@@ -87,8 +87,6 @@ class OAuth2 implements AuthInterface
 
     /**
      * Exchanges a code/pin for an access token.
-     *
-     * @param string $requestType
      */
     public function requestAccessToken(string $code, string $requestType = null): array
     {
@@ -165,8 +163,6 @@ class OAuth2 implements AuthInterface
 
     /**
      * Stores the access token, refresh token and expiration date.
-     *
-     * @param array $token
      *
      * @throws AuthException
      */

@@ -49,8 +49,6 @@ class Client
     }
 
     /**
-     * @param PagerInterface $pager
-     *
      * @throws InvalidArgumentException
      */
     public function api(string $name, PagerInterface $pager = null): AbstractApi
@@ -86,8 +84,6 @@ class Client
 
     /**
      * @throws InvalidArgumentException
-     *
-     * @return string
      */
     public function getOption(string $name): ?string
     {
@@ -99,8 +95,6 @@ class Client
     }
 
     /**
-     * @param mixed $value
-     *
      * @throws InvalidArgumentException
      */
     public function setOption(string $name, $value): void
@@ -130,8 +124,6 @@ class Client
 
     /**
      * Proxy method for the authentication objects URL building method.
-     *
-     * @param string $state
      */
     public function getAuthenticationUrl(string $responseType = 'code', string $state = null): string
     {
@@ -148,8 +140,6 @@ class Client
 
     /**
      * Proxy method for retrieving the access token.
-     *
-     * @return array
      */
     public function getAccessToken(): ?array
     {

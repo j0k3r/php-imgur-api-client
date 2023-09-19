@@ -90,8 +90,6 @@ abstract class ApiTestCase extends TestCase
 
     /**
      * @param class-string $class
-     *
-     * @return mixed
      */
     private function getApiMock($class)
     {
