@@ -56,41 +56,26 @@ class HttpClient implements HttpClientInterface
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function get($url, array $parameters = []): ResponseInterface
     {
         return $this->performRequest($url, $parameters, 'GET');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delete($url, array $parameters = []): ResponseInterface
     {
         return $this->performRequest($url, $parameters, 'DELETE');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function post($url, array $parameters = []): ResponseInterface
     {
         return $this->performRequest($url, $parameters, 'POST');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function put($url, array $parameters = []): ResponseInterface
     {
         return $this->performRequest($url, $parameters, 'PUT');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function performRequest($url, $parameters, $httpMethod = 'GET'): ResponseInterface
     {
         $options = [
@@ -117,9 +102,6 @@ class HttpClient implements HttpClientInterface
         return $this->client->request($httpMethod, $url, $options);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function parseResponse(ResponseInterface $response): array
     {
         $responseBody = [
@@ -134,9 +116,6 @@ class HttpClient implements HttpClientInterface
         return $responseBody['data'];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addAuthMiddleware($token, string $clientId): void
     {
         $this->stack->push(Middleware::mapRequest(function (RequestInterface $request) use ($token, $clientId) {

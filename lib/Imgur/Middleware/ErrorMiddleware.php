@@ -53,7 +53,7 @@ class ErrorMiddleware
             return $response;
         }
 
-        //check if any limit was hit
+        // check if any limit was hit
         $this->checkUserRateLimit($response);
         $this->checkClientRateLimit($response);
         $this->checkPostRateLimit($response);

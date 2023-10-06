@@ -38,8 +38,6 @@ class BasicPager implements PagerInterface
 
     /**
      * Set the page number to be retrieved.
-     *
-     * @return BasicPager
      */
     public function setPage(int $page): self
     {
@@ -50,8 +48,6 @@ class BasicPager implements PagerInterface
 
     /**
      * Set the number of results per page.
-     *
-     * @return BasicPager
      */
     public function setResultsPerPage(int $resultsPerPage): self
     {
