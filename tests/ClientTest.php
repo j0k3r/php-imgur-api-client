@@ -139,7 +139,7 @@ class ClientTest extends TestCase
         // $this->assertSame('https://api.imgur.com/oauth2/authorize?response_type=code&state=draft', $client->getAuthenticationUrl('code', 'draft'));
 
         $client = new Client();
-        $client->setOption('client_id', 123);
+        $client->setOption('client_id', '123');
         $client->setOption('client_secret', 'xx');
         $this->assertSame('https://api.imgur.com/oauth2/authorize?client_id=123&response_type=pin', $client->getAuthenticationUrl('pin'));
         $this->assertSame('https://api.imgur.com/oauth2/authorize?client_id=123&response_type=code', $client->getAuthenticationUrl());

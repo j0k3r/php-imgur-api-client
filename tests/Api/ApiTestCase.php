@@ -89,9 +89,13 @@ abstract class ApiTestCase extends TestCase
     }
 
     /**
-     * @param class-string $class
+     * @template T of object
+     *
+     * @param class-string<T> $className
+     *
+     * @return T&MockObject
      */
-    private function getApiMock($class)
+    private function getApiMock($className): object
     {
         $httpClient = $this->getMockBuilder('Imgur\HttpClient\HttpClient')
             ->disableOriginalConstructor()
@@ -111,7 +115,7 @@ abstract class ApiTestCase extends TestCase
 
         $client = new Client(null, $httpClient);
 
-        return $this->getMockBuilder($class)
+        return $this->getMockBuilder($className)
             ->onlyMethods(['get', 'post', 'put', 'delete'])
             ->setConstructorArgs([$client])
             ->getMock();
