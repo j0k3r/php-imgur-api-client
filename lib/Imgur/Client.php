@@ -97,7 +97,7 @@ class Client
     /**
      * @throws InvalidArgumentException
      */
-    public function setOption(string $name, $value): void
+    public function setOption(string $name, string $value = null): void
     {
         if (!\array_key_exists($name, $this->options)) {
             throw new InvalidArgumentException(sprintf('Undefined option called: "%s"', $name));
