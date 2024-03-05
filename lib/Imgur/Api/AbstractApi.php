@@ -23,7 +23,7 @@ abstract class AbstractApi
      */
     protected $pager;
 
-    public function __construct(Client $client, PagerInterface $pager = null)
+    public function __construct(Client $client, ?PagerInterface $pager = null)
     {
         $this->client = $client;
         $this->pager = $pager;

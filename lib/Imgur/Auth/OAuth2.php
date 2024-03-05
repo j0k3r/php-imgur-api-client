@@ -72,7 +72,7 @@ class OAuth2 implements AuthInterface
     /**
      * Generates the authentication URL to which a user should be pointed at in order to start the OAuth2 process.
      */
-    public function getAuthenticationURL(string $responseType = 'code', string $state = null): string
+    public function getAuthenticationURL(string $responseType = 'code', ?string $state = null): string
     {
         $httpQueryParameters = [
             'client_id' => $this->clientId,
@@ -88,7 +88,7 @@ class OAuth2 implements AuthInterface
     /**
      * Exchanges a code/pin for an access token.
      */
-    public function requestAccessToken(string $code, string $requestType = null): array
+    public function requestAccessToken(string $code, ?string $requestType = null): array
     {
         switch ($requestType) {
             case 'pin':
@@ -166,7 +166,7 @@ class OAuth2 implements AuthInterface
      *
      * @throws AuthException
      */
-    public function setAccessToken(array $token = null): void
+    public function setAccessToken(?array $token = null): void
     {
         if (!\is_array($token)) {
             throw new AuthException('Token is not a valid json string.');
