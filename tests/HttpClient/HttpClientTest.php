@@ -292,7 +292,7 @@ class TestHttpClient extends HttpClient
     /**
      * @return array|string|null
      */
-    public function getOption(string $name, string $default = null)
+    public function getOption(string $name, ?string $default = null)
     {
         return $this->options[$name] ?? $default;
     }

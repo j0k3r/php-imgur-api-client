@@ -37,7 +37,7 @@ class HttpClient implements HttpClientInterface
     /** @var HandlerStack */
     protected $stack;
 
-    public function __construct(array $options = [], ClientInterface $client = null, HandlerStack $stack = null)
+    public function __construct(array $options = [], ?ClientInterface $client = null, ?HandlerStack $stack = null)
     {
         $this->options = array_merge($options, $this->options);
 

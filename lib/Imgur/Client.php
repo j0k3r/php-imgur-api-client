@@ -42,7 +42,7 @@ class Client
      *
      * @param HttpClientInterface|null $httpClient Imgur http client
      */
-    public function __construct(AuthInterface $authenticationClient = null, HttpClientInterface $httpClient = null)
+    public function __construct(?AuthInterface $authenticationClient = null, ?HttpClientInterface $httpClient = null)
     {
         $this->httpClient = $httpClient;
         $this->authenticationClient = $authenticationClient;
@@ -51,7 +51,7 @@ class Client
     /**
      * @throws InvalidArgumentException
      */
-    public function api(string $name, PagerInterface $pager = null): AbstractApi
+    public function api(string $name, ?PagerInterface $pager = null): AbstractApi
     {
         if (!$this->getAccessToken()) {
             $this->sign();
@@ -97,7 +97,7 @@ class Client
     /**
      * @throws InvalidArgumentException
      */
-    public function setOption(string $name, string $value = null): void
+    public function setOption(string $name, ?string $value = null): void
     {
         if (!\array_key_exists($name, $this->options)) {
             throw new InvalidArgumentException(sprintf('Undefined option called: "%s"', $name));
@@ -125,7 +125,7 @@ class Client
     /**
      * Proxy method for the authentication objects URL building method.
      */
-    public function getAuthenticationUrl(string $responseType = 'code', string $state = null): string
+    public function getAuthenticationUrl(string $responseType = 'code', ?string $state = null): string
     {
         return $this->getAuthenticationClient()->getAuthenticationUrl($responseType, $state);
     }
