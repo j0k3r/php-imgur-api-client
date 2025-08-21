@@ -88,7 +88,7 @@ class Client
     public function getOption(string $name): ?string
     {
         if (!\array_key_exists($name, $this->options)) {
-            throw new InvalidArgumentException(sprintf('Undefined option called: "%s"', $name));
+            throw new InvalidArgumentException(\sprintf('Undefined option called: "%s"', $name));
         }
 
         return $this->options[$name];
@@ -100,7 +100,7 @@ class Client
     public function setOption(string $name, ?string $value = null): void
     {
         if (!\array_key_exists($name, $this->options)) {
-            throw new InvalidArgumentException(sprintf('Undefined option called: "%s"', $name));
+            throw new InvalidArgumentException(\sprintf('Undefined option called: "%s"', $name));
         }
 
         $this->options[$name] = $value;

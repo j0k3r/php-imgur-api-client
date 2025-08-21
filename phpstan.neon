@@ -5,9 +5,7 @@ parameters:
         - tests
 
     bootstrapFiles:
-        - vendor/bin/.phpunit/phpunit-8.5-0/vendor/autoload.php
-
-    checkMissingIterableValueType: false
+        - vendor/bin/.phpunit/phpunit-9.6-0/vendor/autoload.php
 
     ignoreErrors:
         # because the test is skipped
@@ -17,3 +15,6 @@ parameters:
         -
             message: '#Unreachable statement#'
             path: %currentWorkingDirectory%/tests/Api/ImageTest.php
+
+        -
+          identifier: missingType.iterableValue
