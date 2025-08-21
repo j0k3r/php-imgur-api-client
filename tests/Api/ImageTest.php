@@ -17,6 +17,8 @@ class ImageTest extends ApiTestCase
         $this->expectException(\Imgur\Exception\ErrorException::class);
         $this->expectExceptionMessage('Authentication required');
 
+        $this->markTestSkipped('Image endpoint does not always return 401 with no authentication ...');
+
         $httpClient = new HttpClient();
         $client = new Client(null, $httpClient);
         $image = new Image($client);

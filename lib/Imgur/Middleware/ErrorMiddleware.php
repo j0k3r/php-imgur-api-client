@@ -85,6 +85,17 @@ class ErrorMiddleware
             throw new ErrorException($message, $response->getStatusCode());
         }
 
+        if (\is_array($responseData) && isset($responseData['errors'])) {
+            $errorMessage = $responseData['errors'];
+
+            $message = '';
+            foreach ($responseData['errors'] as $error) {
+                $message .= $error['detail'];
+            }
+
+            throw new ErrorException($message, $response->getStatusCode());
+        }
+
         throw new RuntimeException(\is_array($responseData) && isset($responseData['message']) ? $responseData['message'] : $responseData, $response->getStatusCode());
     }
 

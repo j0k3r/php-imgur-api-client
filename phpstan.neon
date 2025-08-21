@@ -14,3 +14,6 @@ parameters:
         -
             message: '#Unreachable statement#'
             path: %currentWorkingDirectory%/tests/Api/TopicTest.php
+        -
+            message: '#Unreachable statement#'
+            path: %currentWorkingDirectory%/tests/Api/ImageTest.php
