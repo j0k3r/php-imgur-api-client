@@ -11,7 +11,7 @@ on:
 jobs:
   coding-standards:
     name: "CS Fixer (PHP ${{ matrix.php }})"
-    runs-on: "ubuntu-20.04"
+    runs-on: "ubuntu-latest"
 
     strategy:
       matrix:
@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v5"
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@v2"
