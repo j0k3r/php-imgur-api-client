@@ -15,14 +15,11 @@ class AccountTest extends ApiTestCase
 {
     public function testBaseReal(): void
     {
-        $this->expectException(\Imgur\Exception\ErrorException::class);
-        $this->expectExceptionMessage('Authentication required');
-
         $httpClient = new HttpClient();
         $client = new Client(null, $httpClient);
         $account = new Account($client);
 
-        $account->base();
+        $this->assertLiveAuthenticationError([$account, 'base'], 'Authentication required');
     }
 
     public function testBaseWithResponse(): void

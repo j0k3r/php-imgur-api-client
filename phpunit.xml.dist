@@ -1,32 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit backupGlobals="false"
-    backupStaticAttributes="false"
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.5/phpunit.xsd"
+    bootstrap="vendor/autoload.php"
+    cacheDirectory=".phpunit.cache"
+    backupGlobals="false"
     colors="true"
-    convertErrorsToExceptions="true"
-    convertNoticesToExceptions="true"
-    convertWarningsToExceptions="true"
     processIsolation="false"
     stopOnFailure="false"
-    bootstrap="vendor/autoload.php"
-    >
-
+>
     <testsuites>
         <testsuite name="php-imgur-api-client Test Suite">
             <directory>./tests/</directory>
         </testsuite>
     </testsuites>
 
-    <php>
-        <!-- until all deps are compatible with PHP 8.1 -->
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="weak" />
-    </php>
-
-    <filter>
-        <whitelist>
+    <source>
+        <include>
             <directory>./lib/</directory>
-            <exclude>
-                <directory>./tests</directory>
-            </exclude>
-        </whitelist>
-    </filter>
+        </include>
+    </source>
 </phpunit>

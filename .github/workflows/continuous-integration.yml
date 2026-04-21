@@ -19,10 +19,10 @@ jobs:
     strategy:
       matrix:
         php:
-          - "7.4"
-          - "8.0"
-          - "8.1"
           - "8.2"
+          - "8.3"
+          - "8.4"
+          - "8.5"
 
     steps:
       - name: "Checkout"
@@ -45,7 +45,7 @@ jobs:
         uses: "ramsey/composer-install@v3"
 
       - name: "Run PHPUnit"
-        run: "php vendor/bin/simple-phpunit -v"
+        run: "php vendor/bin/phpunit"
 
   phpunit-coverage:
     name: "PHPUnit with coverage (PHP ${{ matrix.php }})"
@@ -54,7 +54,7 @@ jobs:
     strategy:
       matrix:
         php:
-          - "7.4"
+          - "8.2"
 
     steps:
       - name: "Checkout"
@@ -80,15 +80,10 @@ jobs:
         run: "mkdir -p build/logs"
 
       - name: "Run PHPUnit (with coverage)"
-        run: "php vendor/bin/simple-phpunit -v --coverage-clover build/logs/clover.xml"
+        run: "php vendor/bin/phpunit --coverage-clover=coverage.xml"
 
-      - name: "Retrieve Coveralls phar"
-        run: "wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.4.2/php-coveralls.phar"
-
-      - name: "Enable Coveralls phar"
-        run: "chmod +x php-coveralls.phar"
-
-      - name: "Upload coverage"
-        run: "php php-coveralls.phar -v -x build/logs/clover.xml"
-        env:
-          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v6
+        with:
+          files: ./coverage.xml
+          token: ${{ secrets.CODECOV_TOKEN }}

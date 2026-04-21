@@ -15,14 +15,11 @@ class GalleryTest extends ApiTestCase
 {
     public function testBaseReal(): void
     {
-        $this->expectException(\Imgur\Exception\ErrorException::class);
-        $this->expectExceptionMessage('Authentication required');
-
         $httpClient = new HttpClient();
         $client = new Client(null, $httpClient);
         $gallery = new Gallery($client);
 
-        $gallery->gallery();
+        $this->assertLiveAuthenticationError([$gallery, 'gallery'], 'Authentication required');
     }
 
     public function testBaseWithResponse(): void

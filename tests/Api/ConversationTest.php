@@ -14,14 +14,11 @@ class ConversationTest extends ApiTestCase
 {
     public function testBaseReal(): void
     {
-        $this->expectException(\Imgur\Exception\ErrorException::class);
-        $this->expectExceptionMessage('Authentication required');
-
         $httpClient = new HttpClient();
         $client = new Client(null, $httpClient);
         $conversation = new Conversation($client);
 
-        $conversation->conversations();
+        $this->assertLiveAuthenticationError([$conversation, 'conversations'], 'Authentication required');
     }
 
     public function testBaseWithResponse(): void

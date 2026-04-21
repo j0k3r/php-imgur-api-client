@@ -5,7 +5,6 @@ namespace Imgur\tests\Middleware;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
-use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Imgur\Middleware\AuthMiddleware;
@@ -28,7 +27,7 @@ class AuthMiddlewareTest extends TestCase
         ]);
 
         $stack = new HandlerStack($mock);
-        $stack->push(Middleware::mapRequest(function (RequestInterface $request) use ($token, $clientId) {
+        $stack->push(Middleware::mapRequest(static function (RequestInterface $request) use ($token, $clientId) {
             return (new AuthMiddleware($token, $clientId))->addAuthHeader($request);
         }));
 
@@ -36,7 +35,7 @@ class AuthMiddlewareTest extends TestCase
         $request = new Request('GET', 'http://example.com?a=b');
         $promise = $handler($request, []);
 
-        $this->assertInstanceOf(PromiseInterface::class, $promise);
+        $this->assertSame(200, $promise->wait()->getStatusCode());
     }
 
     public function testDefineBeareOnGoodToken(): void
@@ -53,7 +52,7 @@ class AuthMiddlewareTest extends TestCase
         ]);
 
         $stack = new HandlerStack($mock);
-        $stack->push(Middleware::mapRequest(function (RequestInterface $request) use ($token, $clientId) {
+        $stack->push(Middleware::mapRequest(static function (RequestInterface $request) use ($token, $clientId) {
             return (new AuthMiddleware($token, $clientId))->addAuthHeader($request);
         }));
 
@@ -61,6 +60,6 @@ class AuthMiddlewareTest extends TestCase
         $request = new Request('GET', 'http://example.com?a=b');
         $promise = $handler($request, []);
 
-        $this->assertInstanceOf(PromiseInterface::class, $promise);
+        $this->assertSame(200, $promise->wait()->getStatusCode());
     }
 }

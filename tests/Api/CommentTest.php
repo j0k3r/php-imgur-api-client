@@ -14,14 +14,16 @@ class CommentTest extends ApiTestCase
 {
     public function testBaseReal(): void
     {
-        $this->expectException(\Imgur\Exception\ErrorException::class);
-        $this->expectExceptionMessage('Authentication required');
-
         $httpClient = new HttpClient();
         $client = new Client(null, $httpClient);
         $comment = new Comment($client);
 
-        $comment->comment('726305564');
+        $this->assertLiveAuthenticationError(
+            static function () use ($comment): void {
+                $comment->comment('726305564');
+            },
+            'Authentication required'
+        );
     }
 
     public function testBaseWithResponse(): void

@@ -6,6 +6,7 @@ use Imgur\Auth\OAuth2;
 use Imgur\Client;
 use Imgur\Exception\InvalidArgumentException;
 use Imgur\HttpClient\HttpClient;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -56,10 +57,9 @@ class ClientTest extends TestCase
     }
 
     /**
-     * @dataProvider getApiClassesProvider
-     *
      * @param class-string $class
      */
+    #[DataProvider('getApiClassesProvider')]
     public function testGetApiInstance(string $apiName, $class): void
     {
         $client = new Client();
@@ -69,7 +69,7 @@ class ClientTest extends TestCase
         $this->assertInstanceOf($class, $client->api($apiName));
     }
 
-    public function getApiClassesProvider(): array
+    public static function getApiClassesProvider(): array
     {
         return [
             ['account', \Imgur\Api\Account::class],
@@ -111,9 +111,7 @@ class ClientTest extends TestCase
         $client->setOption('do_not_exist', 'value');
     }
 
-    /**
-     * @dataProvider getOptions
-     */
+    #[DataProvider('getOptions')]
     public function testGetOption(string $option, string $value): void
     {
         $client = new Client();
@@ -122,7 +120,7 @@ class ClientTest extends TestCase
         $this->assertSame($value, $client->getOption($option));
     }
 
-    public function getOptions(): array
+    public static function getOptions(): array
     {
         return [
             ['base_url', 'url'],
@@ -195,12 +193,11 @@ class ClientTest extends TestCase
     /**
      * @return HttpClient&MockObject
      */
-    private function getHttpClientMock(array $methods = []): object
+    private function getHttpClientMock(): object
     {
         return $this->getMockBuilder(HttpClient::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['get', 'post', 'delete', 'performRequest', 'parseResponse'])
-            ->addMethods(array_merge_recursive(['request', 'createRequest'], $methods))
             ->getMock();
     }
 

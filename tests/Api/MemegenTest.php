@@ -14,14 +14,11 @@ class MemegenTest extends ApiTestCase
 {
     public function testBaseReal(): void
     {
-        $this->expectException(\Imgur\Exception\ErrorException::class);
-        $this->expectExceptionMessage('Authentication required');
-
         $httpClient = new HttpClient();
         $client = new Client(null, $httpClient);
         $memegen = new Memegen($client);
 
-        $memegen->defaultMemes();
+        $this->assertLiveAuthenticationError([$memegen, 'defaultMemes'], 'Authentication required');
     }
 
     public function testBaseWithResponse(): void
