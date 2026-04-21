@@ -39,7 +39,7 @@ class ErrorMiddleware
      */
     public static function error(): \Closure
     {
-        return function (callable $handler) {
+        return static function (callable $handler) {
             return new self($handler);
         };
     }

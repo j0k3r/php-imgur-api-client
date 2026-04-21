@@ -2,12 +2,29 @@
 
 namespace Imgur\tests\Api;
 
+use GuzzleHttp\Exception\ConnectException;
 use Imgur\Client;
+use Imgur\Exception\ErrorException;
+use Imgur\Exception\RateLimitException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 abstract class ApiTestCase extends TestCase
 {
+    protected function assertLiveAuthenticationError(callable $request, string $expectedMessage): void
+    {
+        try {
+            $request();
+            $this->fail('Expected the live request without authentication to fail.');
+        } catch (ConnectException $exception) {
+            $this->markTestSkipped('Live Imgur API unavailable in this environment: ' . $exception->getMessage());
+        } catch (RateLimitException $exception) {
+            $this->markTestSkipped('Live Imgur API rate limit reached: ' . $exception->getMessage());
+        } catch (ErrorException $exception) {
+            $this->assertStringContainsString($expectedMessage, $exception->getMessage());
+        }
+    }
+
     /**
      * @return \Imgur\Api\Account&MockObject
      */

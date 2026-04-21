@@ -118,7 +118,7 @@ class HttpClient implements HttpClientInterface
 
     public function addAuthMiddleware($token, string $clientId): void
     {
-        $this->stack->push(Middleware::mapRequest(function (RequestInterface $request) use ($token, $clientId) {
+        $this->stack->push(Middleware::mapRequest(static function (RequestInterface $request) use ($token, $clientId) {
             return (new AuthMiddleware($token, $clientId))->addAuthHeader($request);
         }));
     }

@@ -15,7 +15,7 @@
         {
             "name": "Jeremy Benoist",
             "email": "jeremy.benoist@gmail.com",
-            "homepage": "http://www.j0k3r.net"
+            "homepage": "https://www.j0k3r.net"
         },
         {
             "name": "Adrian Ghiuta",
@@ -34,17 +34,17 @@
         }
     },
     "require": {
-        "php": ">=7.4",
+        "php": ">=8.2",
         "ext-curl": "*",
         "guzzlehttp/guzzle": "^7.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.0",
         "phpstan/extension-installer": "^1.1",
-        "phpstan/phpstan": "^1.2",
-        "phpstan/phpstan-deprecation-rules": "^1.0",
-        "phpstan/phpstan-phpunit": "^1.0",
-        "symfony/phpunit-bridge": "^6.0"
+        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-deprecation-rules": "^2.0",
+        "phpstan/phpstan-phpunit": "^2.0",
+        "phpunit/phpunit": "^11.0"
     },
     "config": {
         "sort-packages": true,

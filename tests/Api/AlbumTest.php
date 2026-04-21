@@ -14,14 +14,16 @@ class AlbumTest extends ApiTestCase
 {
     public function testBaseReal(): void
     {
-        $this->expectException(\Imgur\Exception\ErrorException::class);
-        $this->expectExceptionMessage('The requester is not authorized to access the resource.');
-
         $httpClient = new HttpClient();
         $client = new Client(null, $httpClient);
         $album = new Album($client);
 
-        $album->album('VOMXz');
+        $this->assertLiveAuthenticationError(
+            static function () use ($album): void {
+                $album->album('VOMXz');
+            },
+            'The requester is not authorized to access the resource.'
+        );
     }
 
     public function testBaseWithResponse(): void
